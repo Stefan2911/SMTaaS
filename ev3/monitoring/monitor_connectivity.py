@@ -15,6 +15,9 @@ from pythonping import ping
 # def get_up_speed():
 #    return round(s.upload()) / CONVERSION_FACTOR
 
-
+# if request timed out -> no connection -> -1
 def get_rtt(host='8.8.8.8'):
-    return ping(host, size=10, count=5).rtt_avg_ms
+    rtt_avg_ms = ping(host, size=10, count=3, timeout=1).rtt_avg_ms
+    if rtt_avg_ms == 1000:
+        return None
+    return rtt_avg_ms
