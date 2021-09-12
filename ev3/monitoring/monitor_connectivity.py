@@ -3,7 +3,6 @@
 # import speedtest
 from pythonping import ping
 
-
 # s = speedtest.Speedtest()
 # CONVERSION_FACTOR = 1048576  # Byte to MegaByte
 
@@ -15,9 +14,12 @@ from pythonping import ping
 # def get_up_speed():
 #    return round(s.upload()) / CONVERSION_FACTOR
 
+TIMEOUT = 1000
+
+
 # if request timed out -> no connection -> -1
 def get_rtt(host='8.8.8.8'):
     rtt_avg_ms = ping(host, size=10, count=3, timeout=1).rtt_avg_ms
-    if rtt_avg_ms == 1000:
+    if rtt_avg_ms == TIMEOUT:
         return None
     return rtt_avg_ms
