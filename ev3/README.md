@@ -36,7 +36,7 @@ Error: `speedtest.SpeedtestCLIError: Insufficient memory to pre-allocate upload 
 #### pythonping (the way to go)
 
 There are two additional installation steps necessary (see installation steps above). The function delivers the average
-roundtrip time (rtt).
+round trip time (rtt).
 
 ### System Utilization
 
