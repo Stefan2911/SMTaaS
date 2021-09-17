@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-from monitor_battery_level import *
-from monitor_connectivity import *
-from monitor_system_utilization import *
+from .monitor_battery_level import *
+from .monitor_connectivity import *
+from .monitor_system_utilization import *
 
 
 class Monitor:
