@@ -4,3 +4,4 @@ paho-mqtt==1.5.1
 watchdog==2.1.5
 timeloop==1.0.2
 requests==2.26.0
+logging==0.4.9.6

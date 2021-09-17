@@ -17,13 +17,14 @@ class Monitor:
 
 
 def print_status():
-    print('battery level (in volts):', get_battery_level())
-    print('avg rtt (in ms):', get_rtt())
-    print('CPU usage (in %):', get_cpu_usage())
-    print('Used RAM (in Mb):', get_used_ram())
-    print('Available RAM (in Mb):', get_available_RAM())
-    print('Memory usage (in %):', get_memory_usage())
-    print('Disk usage (in %):', get_disk_usage())
+    m = Monitor()
+    print('battery level (in volts):', m.battery_level)
+    print('avg rtt (in ms):', m.avg_rtt)
+    print('CPU usage (in %):', m.cpu_usage)
+    print('Used RAM (in Mb):', m.used_ram)
+    print('Available RAM (in Mb):', m.available_RAM)
+    print('Memory usage (in %):', m.memory_usage)
+    print('Disk usage (in %):', m.disk_usage)
 
 
 def get_current_status():
