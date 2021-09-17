@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from monitor import *
+from monitoring.monitor import *
 
 # TODO: maybe extract constants in configuration file (e.g. yaml)
 
@@ -8,6 +8,7 @@ from monitor import *
 # TODO: define
 # T_OFF = Threshold-Offloading, T_NOFF = Threshold-Not-Offloading
 # in %
+
 T_OFF_BATTERY_LEVEL = 40
 T_NOFF_BATTERY_LEVEL = 95
 

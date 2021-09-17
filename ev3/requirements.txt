@@ -1,0 +1,6 @@
+psutil==5.8.0
+pythonping==1.1.0
+paho-mqtt==1.5.1
+watchdog==2.1.5
+timeloop==1.0.2
+requests==2.26.0
