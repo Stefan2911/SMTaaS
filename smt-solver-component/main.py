@@ -1,4 +1,4 @@
-# app.py
+#!/usr/bin/env python3
 
 from flask import Flask, request
 from pysmt.shortcuts import is_sat
