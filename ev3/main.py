@@ -4,26 +4,18 @@ from datetime import timedelta
 from timeloop import Timeloop
 
 from communication.rest.client import post_smt_problem
+from config import *
 from decision_making import get_current_decision_value
 from smt.solver import call_solver
 
-logging.basicConfig(level=logging.DEBUG)
-
-# in the following directory the SMT problems are added
-DIRECTORY_TO_OBSERVE = "/home/robot/develop/smt/watch"
-
-# how often a new decision value is calculated
-UPDATE_DECISION_VALUE_INTERVAL = 5
-
-# TODO: define value when problem should be offloaded
-OFFLOAD_THRESHOLD = 0.5
+logging.basicConfig(level=get_logging_level())
 
 tl = Timeloop()
 
-current_decision_value = 0.5
+current_decision_value = get_current_decision_value()
 
 
-@tl.job(interval=timedelta(seconds=UPDATE_DECISION_VALUE_INTERVAL))
+@tl.job(interval=timedelta(seconds=get_update_interval()))
 def update_decision_value():
     global current_decision_value
     current_decision_value = get_current_decision_value()
@@ -34,27 +26,28 @@ def update_decision_value():
 def testing():
     test_file = "./smt/examples/simple.smt2"
     logging.debug("new smt_problem")
-    if current_decision_value > OFFLOAD_THRESHOLD:
+    if current_decision_value > get_offload_threshold():
         logging.debug("offload")
-        logging.info(post_smt_problem(test_file))
+        logging.info(post_smt_problem(test_file, get_api_url()))
     else:
         logging.debug("solve on EV3")
-        logging.info(call_solver(test_file))
+        logging.info(call_solver(test_file, get_solver_installation_location()))
 
 
 def on_created(event):
     file_path = event.src_path
     logging.debug("new smt_problem: %s", file_path)
-    if current_decision_value > OFFLOAD_THRESHOLD:
+    if current_decision_value > get_offload_threshold():
         logging.debug("offload")
-        logging.info(post_smt_problem(file_path))
+        logging.info(post_smt_problem(file_path, get_api_url()))
     else:
         logging.debug("solve on EV3")
-        logging.info(call_solver(file_path))
+        logging.info(call_solver(file_path, get_solver_installation_location()))
 
 
 if __name__ == "__main__":
     tl.start(block=True)
+    # TODO: watchdog requires Python >= 3.6 which is currently not installed on EV3
     # patterns = ["*.smt2"]
     # ignore_patterns = None
     # ignore_directories = True
