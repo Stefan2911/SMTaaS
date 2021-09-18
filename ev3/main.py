@@ -22,7 +22,7 @@ def update_decision_value():
     logging.debug("updated decision value: %s", current_decision_value)
 
 
-@tl.job(interval=timedelta(seconds=0.5))
+@tl.job(interval=timedelta(seconds=2))
 def testing():
     test_file = "./smt/examples/simple.smt2"
     logging.debug("new smt_problem")
@@ -39,15 +39,16 @@ def on_created(event):
     logging.debug("new smt_problem: %s", file_path)
     if current_decision_value > get_offload_threshold():
         logging.debug("offload")
-        logging.info(post_smt_problem(file_path, get_api_url()))
+        logging.info(post_smt_problem(file_path, get_api_url()).content)
     else:
         logging.debug("solve on EV3")
         logging.info(call_solver(file_path, get_solver_installation_location()))
 
 
 if __name__ == "__main__":
-    tl.start(block=True)
+    tl.start(block=False)
     # TODO: watchdog requires Python >= 3.6 which is currently not installed on EV3
+    # watch_config()
     # patterns = ["*.smt2"]
     # ignore_patterns = None
     # ignore_directories = True
