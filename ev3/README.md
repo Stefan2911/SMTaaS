@@ -2,7 +2,7 @@
 
 ## Global Installation steps:
 
-* `pip3 install -r requirements.txt`
+* `pip3.9 install -r requirements.txt`
 
 ## Monitoring EV3
 
@@ -14,7 +14,7 @@ algorithm.
 * There is an issue with root privileges: https://github.com/alessandromaggio/pythonping/issues/27. To solve the issue
   the following steps are necessary:
   * `sudo apt-get install libcap2-bin`
-  * `sudo setcap cap_net_raw+ep $(which python3.5)`
+  * `sudo setcap cap_net_raw+ep $(which python3.9)` (depends on used python version)
 
 ### Battery Level
 
