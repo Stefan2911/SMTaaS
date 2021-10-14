@@ -1,0 +1,21 @@
+logging-level: 10 # logging.DEBUG
+
+decision-making:
+  indicators:
+    battery-level:
+      offloading-threshold: 40
+      locally-threshold: 95
+      weight: 0.25
+    connectivity:
+      offloading-threshold: 1
+      locally-threshold: 80
+      weight: 0.25
+    cpu-usage:
+      offloading-threshold: 80
+      locally-threshold: 5
+      weight: 0.25
+    memory-usage:
+      offloading-threshold: 80
+      locally-threshold: 5
+      weight: 0.25
+  offload-threshold: 0.5

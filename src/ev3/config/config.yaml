@@ -1,0 +1,6 @@
+api-url: http://10.0.0.13:5000/formulae
+
+smt:
+  watch-directory: /home/robot/develop/smt/watch  # in this directory the SMT problems are added
+  installation-location: "/home/robot/cvc4"
+

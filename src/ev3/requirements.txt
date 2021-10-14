@@ -1,0 +1,9 @@
+psutil==5.8.0
+pythonping==1.1.0
+watchdog==2.1.5
+timeloop==1.0.2
+requests==2.26.0
+pyyaml==5.4.1
+pybricks==2.0.0.post1
+python-ev3dev2==2.1.0.post1
+torch==1.9.1
