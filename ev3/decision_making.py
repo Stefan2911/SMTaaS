@@ -15,13 +15,14 @@ logging.basicConfig(level=get_logging_level())
 #  e.g. no connection and problem is bigger than (available) RAM -> depends on the following:
 # TODO: maybe integrate problem size (difficulty) in decision, if decision value is calculated for each problem?
 # a score (composite variable) is calculated based on multiple indicators (like battery level etc.)
+# this is a heuristic based solution
 def get_current_decision_value():
-    status = get_current_status()
+    state = get_current_state()
     indicator_configuration = get_indicator_configuration()
-    th = check_thresholds(status, indicator_configuration)
+    th = check_thresholds(state, indicator_configuration)
     if th is not None:
         return th
-    return combine_values(normalize_values(status), indicator_configuration)
+    return combine_values(normalize_values(state), indicator_configuration)
 
 
 def check_thresholds(status, indicator_configuration):

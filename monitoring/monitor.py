@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 
-from .monitor_battery_level import *
 from .monitor_connectivity import *
 from .monitor_system_utilization import *
 
 
 class Monitor:
     def __init__(self):
-        self.battery_level = get_battery_level()
+        self.battery_level = get_battery_percent()
         self.avg_rtt = get_rtt()
         self.cpu_usage = get_cpu_usage()
         self.used_ram = get_used_ram()
