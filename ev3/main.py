@@ -8,7 +8,8 @@ from config import *
 from decision_making import get_current_decision_value
 from smt.solver import call_solver
 
-logging.basicConfig(level=get_logging_level())
+logger = logging.getLogger('main')
+logger.setLevel(level=get_logging_level())
 
 tl = Timeloop()
 
@@ -19,30 +20,30 @@ current_decision_value = get_current_decision_value()
 def update_decision_value():
     global current_decision_value
     current_decision_value = get_current_decision_value()
-    logging.debug("updated decision value: %s", current_decision_value)
+    logger.debug("updated decision value: %s", current_decision_value)
 
 
 @tl.job(interval=timedelta(seconds=2))
 def testing():
     test_file = "./smt/examples/simple.smt2"
-    logging.debug("new smt_problem")
+    logger.debug("new smt_problem")
     if current_decision_value > get_offload_threshold():
-        logging.debug("offload")
-        logging.info(post_smt_problem(test_file, get_api_url()))
+        logger.debug("offload")
+        logger.info(post_smt_problem(test_file, get_api_url()))
     else:
-        logging.debug("solve on EV3")
-        logging.info(call_solver(test_file, get_solver_installation_location()))
+        logger.debug("solve on EV3")
+        logger.info(call_solver(test_file, get_solver_installation_location()))
 
 
 def on_created(event):
     file_path = event.src_path
-    logging.debug("new smt_problem: %s", file_path)
+    logger.debug("new smt_problem: %s", file_path)
     if current_decision_value > get_offload_threshold():
-        logging.debug("offload")
-        logging.info(post_smt_problem(file_path, get_api_url()).content)
+        logger.debug("offload")
+        logger.info(post_smt_problem(file_path, get_api_url()).content)
     else:
-        logging.debug("solve on EV3")
-        logging.info(call_solver(file_path, get_solver_installation_location()))
+        logger.debug("solve on EV3")
+        logger.info(call_solver(file_path, get_solver_installation_location()))
 
 
 if __name__ == "__main__":

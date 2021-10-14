@@ -1,4 +1,3 @@
-import logging
 from itertools import count
 
 import torch
@@ -8,8 +7,6 @@ from torch import optim
 from agent import Agent
 from decision.pytorch.model import EpsilonGreedyStrategy, DQN, Experience, ReplayMemory, QValues
 from environment_manager import EnvironmentManager
-
-logging.basicConfig(level=logging.DEBUG)
 
 batch_size = 256
 gamma = 0.999  # discount factor used in the Bellman equation

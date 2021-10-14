@@ -4,6 +4,9 @@ import time
 from ev3.communication.rest.client import post_smt_problem
 from monitoring.monitor import get_current_state
 
+logger = logging.getLogger('environment')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Environment:
     def __init__(self):
@@ -29,7 +32,7 @@ class Environment:
     def calculate_custom_reward_battery_level(self, battery_level_before_action):
         battery_level_after_action = self.state.battery_level
         difference = battery_level_after_action - battery_level_before_action
-        logging.debug("difference: %s", difference)
+        logger.debug("difference: %s", difference)
         # TODO: fine tuning necessary
         if difference == 0:
             return 5
@@ -53,13 +56,13 @@ class Environment:
         response = ''
         battery_level_before_action = self.state.battery_level
         if action == 1:
-            logging.debug("offload")
+            logger.debug("offload")
             response = post_smt_problem(self.test_smt_problem, self.api_url)
         elif action == 0:
-            logging.debug("solve locally")
+            logger.debug("solve locally")
             response = post_smt_problem(self.test_smt_problem, 'http://127.0.0.1:5000/formulae')
             # TODO: switch between containerized solution and direct system call
             # response = call_solver(test_file, get_solver_installation_location()))
-        logging.info(response)
+        logger.info(response)
         return None, self.basic_reward + self.calculate_custom_reward_battery_level(battery_level_before_action), \
                False, None
