@@ -8,6 +8,7 @@ from config import *
 from decision_making import get_current_decision_value
 from smt.solver import call_solver
 
+logging.basicConfig()
 logger = logging.getLogger('main')
 logger.setLevel(level=get_logging_level())
 

@@ -4,6 +4,7 @@ import time
 from ev3.communication.rest.client import post_smt_problem
 from monitoring.monitor import get_current_state
 
+logging.basicConfig()
 logger = logging.getLogger('environment')
 logger.setLevel(level=logging.DEBUG)
 

@@ -5,6 +5,7 @@ import logging
 from config import get_indicator_configuration, get_logging_level
 from monitoring.monitor import *
 
+logging.basicConfig()
 logger = logging.getLogger('decision_making')
 logger.setLevel(level=get_logging_level())
 
