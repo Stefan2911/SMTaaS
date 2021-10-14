@@ -1,0 +1,29 @@
+hyper-parameters:
+  batch-size: 256
+  gamma: 0.999        # discount factor used in the Bellman equation
+  eps-start: 1        # starting value of epsilon (epsilon = exploration rate)
+  eps-end: 0.01       # ending value of epsilon
+  eps-decay: 0.001    # decay rate used to decay epsilon over time
+  target-update: 10   # defines how frequently (in terms of episodes), the target network weights are updated
+  memory-size: 100000 # capacity of replay memory
+  lr: 0.001           # learning rate
+  num-episodes: 100   # number of episodes
+
+basic-reward: 1
+
+reward-modes:
+  energy-efficient:
+    active: True
+    ranges:
+      - end: 1
+        reward: 5
+      - start: 2
+        end: 3
+        reward: 1
+      - start: 4
+        reward: -1
+  fastness:
+    active: False
+  less-network-traffic:
+    active: False
+

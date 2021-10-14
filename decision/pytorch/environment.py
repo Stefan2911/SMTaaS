@@ -1,6 +1,7 @@
 import logging
 import time
 
+from decision.pytorch.config import get_reward_ranges, is_mode_active
 from ev3.communication.rest.client import post_smt_problem
 from monitoring.monitor import get_current_state
 
@@ -30,32 +31,40 @@ class Environment:
     def get_number_of_indicators(self):
         return 4  # TODO: configurable etc.
 
+    def calculate_custom_reward(self, battery_level_before_action, starting_timestamp_before_action):
+        reward = 0
+        if is_mode_active('energy-efficient'):
+            reward += self.calculate_custom_reward_battery_level(battery_level_before_action)
+        if is_mode_active('fastness'):
+            reward += self.calculate_custom_reward_fastness(starting_timestamp_before_action)
+        if is_mode_active('less-network-traffic'):
+            reward += self.calculate_custom_reward_less_network_traffic()
+        return reward
+
+    def get_custom_reward(self, mode, difference):
+        logger.debug("difference: %s", difference)
+        reward_ranges = get_reward_ranges(mode)
+        for reward_range in reward_ranges:
+            if reward_range.get('start', float('-inf')) <= difference <= reward_range.get('end', float('inf')):
+                return reward_range.get('reward', 0)
+
     def calculate_custom_reward_battery_level(self, battery_level_before_action):
         battery_level_after_action = self.state.battery_level
         difference = battery_level_after_action - battery_level_before_action
-        logger.debug("difference: %s", difference)
-        # TODO: fine tuning necessary
-        if difference == 0:
-            return 5
-        if difference == 1:
-            return 2
-        if difference > 5:
-            return -2
+        return self.get_custom_reward('energy-efficient', difference)
 
     def calculate_custom_reward_fastness(self, starting_timestamp):
         current_timestamp = time.time()
         difference = current_timestamp - starting_timestamp
-        # TODO: fine tuning necessary
-        if difference < 5:
-            return 5
-        if difference < 10:
-            return 2
-        if difference > 20:
-            return -2
+        return self.get_custom_reward('fastness', difference)
+
+    def calculate_custom_reward_less_network_traffic(self):
+        return 0  # TODO
 
     def step(self, action):
         response = ''
         battery_level_before_action = self.state.battery_level
+        timestamp_before_action = time.time()
         if action == 1:
             logger.debug("offload")
             response = post_smt_problem(self.test_smt_problem, self.api_url)
@@ -65,5 +74,6 @@ class Environment:
             # TODO: switch between containerized solution and direct system call
             # response = call_solver(test_file, get_solver_installation_location()))
         logger.info(response)
-        return None, self.basic_reward + self.calculate_custom_reward_battery_level(battery_level_before_action), \
+        return None, self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
+                                                                      timestamp_before_action), \
                False, None

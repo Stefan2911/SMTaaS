@@ -5,24 +5,18 @@ import torch.nn.functional as F
 from torch import optim
 
 from agent import Agent
+from decision.pytorch.config import get_hyper_parameters
 from decision.pytorch.model import EpsilonGreedyStrategy, DQN, Experience, ReplayMemory, QValues
 from environment_manager import EnvironmentManager
 
-batch_size = 256
-gamma = 0.999  # discount factor used in the Bellman equation
-eps_start = 1  # starting value of epsilon (epsilon = exploration rate)
-eps_end = 0.01  # ending value of epsilon
-eps_decay = 0.001  # decay rate used to decay epsilon over time
-target_update = 10  # defines how frequently (in terms of episodes), the target network weights are updated
-memory_size = 100000  # capacity of replay memory
-lr = 0.001  # learning rate
-num_episodes = 100  # number of episodes
+hyper_parameters = get_hyper_parameters()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # if cuda is selected the GPU is used
 environment_manager = EnvironmentManager(device)
-strategy = EpsilonGreedyStrategy(eps_start, eps_end, eps_decay)
+strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters['eps-end'],
+                                 hyper_parameters['eps-decay'])
 agent = Agent(strategy, environment_manager.num_actions_available(), device)
-memory = ReplayMemory(memory_size)
+memory = ReplayMemory(hyper_parameters['memory-size'])
 
 policy_net = DQN(environment_manager.get_number_of_indicators(), environment_manager.num_actions_available()).to(device)
 target_net = DQN(environment_manager.get_number_of_indicators(), environment_manager.num_actions_available()).to(device)
@@ -30,7 +24,7 @@ target_net = DQN(environment_manager.get_number_of_indicators(), environment_man
 target_net.load_state_dict(policy_net.state_dict())
 target_net.eval()
 
-optimizer = optim.Adam(params=policy_net.parameters(), lr=lr)
+optimizer = optim.Adam(params=policy_net.parameters(), lr=hyper_parameters['lr'])
 
 episode_durations = []
 
@@ -48,14 +42,14 @@ def extract_tensors(experiences):
 
 
 def optimize_model():
-    if len(memory) < batch_size:
+    if len(memory) < hyper_parameters['batch-size']:
         return
-    experiences = memory.sample(batch_size)
+    experiences = memory.sample(hyper_parameters['batch-size'])
     states, actions, rewards, next_states = extract_tensors(experiences)
 
     current_q_values = QValues.get_current(policy_net, states, actions)
     next_q_values = QValues.get_next(target_net, next_states)
-    target_q_values = (next_q_values * gamma) + rewards
+    target_q_values = (next_q_values * hyper_parameters['gamma']) + rewards
 
     loss = F.mse_loss(current_q_values, target_q_values.unsqueeze(1))
     optimizer.zero_grad()  # gradients of all weights and biases in policy_net are set to zero
@@ -65,7 +59,7 @@ def optimize_model():
 
 
 def training():
-    for episode in range(num_episodes):
+    for episode in range(hyper_parameters['num-episodes']):
         environment_manager.reset()
         state = environment_manager.get_state()
 
@@ -83,7 +77,7 @@ def training():
                 break
 
         # Update the target network, copying all weights and biases in DQN
-        if episode % target_update == 0:
+        if episode % hyper_parameters['target-update'] == 0:
             target_net.load_state_dict(policy_net.state_dict())
 
     environment_manager.close()
