@@ -14,7 +14,7 @@ hyper-parameters:
 basic-reward: 1
 
 reward-modes:
-  energy-efficient:
+  energy-aware:
     active: True
     ranges:
       - end: 1
@@ -24,8 +24,8 @@ reward-modes:
         reward: 1
       - start: 4
         reward: -1
-  fastness:
+  time-aware:
     active: False
-  less-network-traffic:
+  traffic-aware:
     active: False
 

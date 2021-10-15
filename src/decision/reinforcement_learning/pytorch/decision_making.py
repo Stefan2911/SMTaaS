@@ -21,8 +21,10 @@ strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters
 agent = Agent(strategy, environment_manager.num_actions_available(), device)
 memory = ReplayMemory(hyper_parameters['memory-size'])
 
-policy_net = DQN(environment_manager.get_number_of_indicators(), environment_manager.num_actions_available()).to(device)
-target_net = DQN(environment_manager.get_number_of_indicators(), environment_manager.num_actions_available()).to(device)
+number_of_indicators = environment_manager.get_number_of_indicators()
+number_of_actions = environment_manager.num_actions_available()
+policy_net = DQN(number_of_indicators, number_of_actions).to(device)
+target_net = DQN(number_of_indicators, number_of_actions).to(device)
 
 target_net.load_state_dict(policy_net.state_dict())
 target_net.eval()

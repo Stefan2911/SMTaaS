@@ -24,4 +24,6 @@ class Config(GeneralConfig):
         return self.data['reward-modes'][mode]['active']
 
     def get_reward_ranges(self, mode):
-        return self.data['reward-modes'][mode]['ranges']
+        if 'ranges' in self.data['reward-modes'][mode]:
+            return self.data['reward-modes'][mode]['ranges']
+        return []

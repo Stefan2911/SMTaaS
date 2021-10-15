@@ -3,7 +3,7 @@ import torch
 from src.decision.reinforcement_learning.pytorch.environment import Environment
 
 
-class EnvironmentManager():
+class EnvironmentManager:
     def __init__(self, device):
         self.device = device
         self.env = Environment()
@@ -24,9 +24,11 @@ class EnvironmentManager():
         return torch.tensor([reward], device=self.device)
 
     def get_state(self):
+        return torch.Tensor([self.__get_state_tuple()], device=self.device)
+
+    def __get_state_tuple(self):
         state = self.env.get_state()
-        return torch.Tensor([[state.battery_level, state.avg_rtt, state.cpu_usage, state.memory_usage]],
-                            device=self.device)
+        return [state.battery_level, state.avg_rtt, state.cpu_usage, state.memory_usage]
 
     def get_number_of_indicators(self):
-        return self.env.get_number_of_indicators()
+        return len(self.__get_state_tuple())

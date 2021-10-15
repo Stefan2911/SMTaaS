@@ -39,3 +39,7 @@ def get_battery_power_plugged():
     if sensors_battery is None:
         return None
     return sensors_battery.power_plugged
+
+
+def get_traffic():
+    return (psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv) / CONVERSION_FACTOR

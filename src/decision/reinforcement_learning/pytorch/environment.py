@@ -30,17 +30,16 @@ class Environment:
         self.state = get_current_state()
         # TODO: not sure what else should be done here
 
-    def get_number_of_indicators(self):
-        return 4  # TODO: configurable etc.
-
-    def calculate_custom_reward(self, battery_level_before_action, starting_timestamp_before_action):
+    def calculate_custom_reward(self, battery_level_before_action, starting_timestamp_before_action,
+                                traffic_before_action):
         reward = 0
-        if config.is_mode_active('energy-efficient'):
-            reward += self.calculate_custom_reward_battery_level(battery_level_before_action)
-        if config.is_mode_active('fastness'):
-            reward += self.calculate_custom_reward_fastness(starting_timestamp_before_action)
-        if config.is_mode_active('less-network-traffic'):
-            reward += self.calculate_custom_reward_less_network_traffic()
+        self.state = get_current_state()
+        if config.is_mode_active('energy-aware'):
+            reward += self.calculate_custom_reward_energy(battery_level_before_action)
+        if config.is_mode_active('time-aware'):
+            reward += self.calculate_custom_reward_time(starting_timestamp_before_action)
+        if config.is_mode_active('traffic-aware'):
+            reward += self.calculate_custom_reward_traffic(traffic_before_action)
         return reward
 
     def get_custom_reward(self, mode, difference):
@@ -49,24 +48,28 @@ class Environment:
         for reward_range in reward_ranges:
             if reward_range.get('start', float('-inf')) <= difference <= reward_range.get('end', float('inf')):
                 return reward_range.get('reward', 0)
+        return 0
 
-    def calculate_custom_reward_battery_level(self, battery_level_before_action):
+    def calculate_custom_reward_energy(self, battery_level_before_action):
         battery_level_after_action = self.state.battery_level
         difference = battery_level_after_action - battery_level_before_action
-        return self.get_custom_reward('energy-efficient', difference)
+        return self.get_custom_reward('energy-aware', difference)
 
-    def calculate_custom_reward_fastness(self, starting_timestamp):
-        current_timestamp = time.time()
-        difference = current_timestamp - starting_timestamp
-        return self.get_custom_reward('fastness', difference)
+    def calculate_custom_reward_time(self, timestamp_before_action):
+        timestamp_after_action = time.time()
+        difference = timestamp_after_action - timestamp_before_action
+        return self.get_custom_reward('time-aware', difference)
 
-    def calculate_custom_reward_less_network_traffic(self):
-        return 0  # TODO
+    def calculate_custom_reward_traffic(self, traffic_before_action):
+        traffic_after_action = self.state.traffic
+        difference = traffic_after_action - traffic_before_action
+        return self.get_custom_reward('traffic-aware', difference)
 
     def step(self, action):
         response = ''
         battery_level_before_action = self.state.battery_level
         timestamp_before_action = time.time()
+        traffic_before_action = self.state.traffic
         if action == 1:
             logger.debug("offload")
             response = self.client.post_smt_problem_offload(self.test_smt_problem)
@@ -77,5 +80,5 @@ class Environment:
             # response = call_solver(test_file, get_solver_installation_location()))
         logger.info(response)
         return None, self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
-                                                                      timestamp_before_action), \
+                                                                      timestamp_before_action, traffic_before_action), \
                False, None
