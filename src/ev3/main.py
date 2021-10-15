@@ -31,7 +31,7 @@ def testing():
         logger.info(client.post_smt_problem_offload(test_file))
     else:
         logger.debug("solve on EV3")
-        logger.info(call_solver(test_file, config.get_solver_installation_location()))
+        logger.info(call_solver(test_file))
 
 
 def on_created(event):
@@ -42,7 +42,7 @@ def on_created(event):
         logger.info(client.post_smt_problem_offload(file_path).content)
     else:
         logger.debug("solve on EV3")
-        logger.info(call_solver(file_path, config.get_solver_installation_location()))
+        logger.info(call_solver(file_path))
 
 
 if __name__ == "__main__":

@@ -27,3 +27,6 @@ class Config(GeneralConfig):
         if 'ranges' in self.data['reward-modes'][mode]:
             return self.data['reward-modes'][mode]['ranges']
         return []
+
+    def is_ev3(self):
+        return self.data['ev3']

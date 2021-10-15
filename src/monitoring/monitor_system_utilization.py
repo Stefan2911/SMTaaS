@@ -13,7 +13,7 @@ def get_used_ram():
     return psutil.virtual_memory().used / CONVERSION_FACTOR
 
 
-def get_available_RAM():
+def get_available_ram():
     return psutil.virtual_memory().available / CONVERSION_FACTOR
 
 

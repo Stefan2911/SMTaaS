@@ -3,6 +3,7 @@ import time
 
 from src.communication.rest.client import Client
 from src.decision.reinforcement_learning.pytorch.config.config import Config
+from src.ev3.smt.solver import call_solver
 from src.monitoring.monitor import get_current_state
 
 config = Config()
@@ -75,9 +76,10 @@ class Environment:
             response = self.client.post_smt_problem_offload(self.test_smt_problem)
         elif action == 0:
             logger.debug("solve locally")
-            response = self.client.post_smt_problem_local(self.test_smt_problem)
-            # TODO: switch between containerized solution and direct system call
-            # response = call_solver(test_file, get_solver_installation_location()))
+            if config.is_ev3():
+                response = call_solver(self.test_smt_problem)
+            else:
+                response = self.client.post_smt_problem_local(self.test_smt_problem)
         logger.info(response)
         return None, self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
                                                                       timestamp_before_action, traffic_before_action), \

@@ -29,3 +29,5 @@ reward-modes:
   traffic-aware:
     active: False
 
+ev3: False
+
