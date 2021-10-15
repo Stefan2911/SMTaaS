@@ -1,3 +1,4 @@
+import logging
 from itertools import count
 
 import torch
@@ -11,6 +12,10 @@ from src.decision.reinforcement_learning.pytorch.model import EpsilonGreedyStrat
     QValues
 
 config = Config()
+
+logging.basicConfig()
+logger = logging.getLogger('decision_making')
+logger.setLevel(level=config.get_logging_level())
 
 hyper_parameters = config.get_hyper_parameters()
 
@@ -77,12 +82,14 @@ def training():
 
             optimize_model()
 
-            if environment_manager.done:  # TODO: in our scenario never done, maybe define finite number of smt problems
+            # in our scenario done is never reached, therefore we need to define a episode length
+            if environment_manager.done or time_step == hyper_parameters['episode-length']:
                 episode_durations.append(time_step)
                 break
 
         # Update the target network, copying all weights and biases in DQN
         if episode % hyper_parameters['target-update'] == 0:
+            logger.debug('update target network')
             target_net.load_state_dict(policy_net.state_dict())
 
     environment_manager.close()
