@@ -1,3 +1,5 @@
+logging-level: 10 # logging.DEBUG
+
 decision-making:
   indicators:
     battery-level:
@@ -17,12 +19,3 @@ decision-making:
       locally-threshold: 5
       weight: 0.25
   offload-threshold: 0.5
-  update-interval: 5 # how often a new decision value is calculated (in seconds)
-
-logging-level: 10 # logging.DEBUG
-api-url: http://10.0.0.13:5000/formulae
-
-smt:
-  watch-directory: /home/robot/develop/smt/watch  # in the following directory the SMT problems are added
-  installation-location: "/home/robot/cvc4"
-

@@ -41,3 +41,8 @@ round trip time (rtt).
 ### System Utilization
 
 The `psutil` module provides information about CPU usage etc. See: https://psutil.readthedocs.io/en/latest/
+
+## Reinforcement Learning
+
+To install PyTorch:
+`pip3.9 install torch==1.9.1+cpu torchvision==0.10.1+cpu torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html`

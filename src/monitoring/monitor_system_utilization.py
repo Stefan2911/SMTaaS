@@ -24,11 +24,22 @@ def get_memory_usage():
 def get_disk_usage():
     return psutil.disk_usage('/').percent
 
+
 # DOES NOT WORK ON EV3
-# def get_battery_percent():
-#    return psutil.sensors_battery().percent
+def get_battery_percent():
+    sensors_battery = psutil.sensors_battery()
+    if sensors_battery is None:
+        return None
+    return sensors_battery.percent
 
 
 # DOES NOT WORK ON EV3
-# def get_battery_power_plugged():
-#    return psutil.sensors_battery().power_plugged
+def get_battery_power_plugged():
+    sensors_battery = psutil.sensors_battery()
+    if sensors_battery is None:
+        return None
+    return sensors_battery.power_plugged
+
+
+def get_traffic():
+    return (psutil.net_io_counters().bytes_sent + psutil.net_io_counters().bytes_recv) / CONVERSION_FACTOR
