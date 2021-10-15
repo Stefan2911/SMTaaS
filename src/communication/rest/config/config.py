@@ -1,3 +1,5 @@
+import threading
+
 import yaml
 
 from src.common.config import GeneralConfig
@@ -8,8 +10,9 @@ class Config(GeneralConfig):
         super().__init__("src/communication/rest/config/config.yaml")
         with open(self.file_path, "r") as configfile:
             self.data = yaml.load(configfile, Loader=yaml.FullLoader)
-        # TODO: call the following method in background thread:
-        # super().watch_config(self.on_modified)
+        watcher_thread = threading.Thread(target=super().watch_config)
+        watcher_thread.setDaemon(True)
+        watcher_thread.start()
 
     def get_logging_level(self):
         return self.data['logging-level']

@@ -1,3 +1,4 @@
+import os
 import time
 
 import yaml
@@ -12,10 +13,7 @@ class GeneralConfig():
         self.data = None
 
     def on_modified(self, event):
-        print(event.src_path)
-        # TODO: comparison
-        # if event.src_path == self.file_path:
-        if event.src_path == ".\config.yaml":
+        if event.src_path.endswith(os.path.basename(self.file_path)):
             with open(self.file_path, "r") as changed_configfile:
                 self.data = yaml.load(changed_configfile, Loader=yaml.FullLoader)
 
@@ -26,9 +24,8 @@ class GeneralConfig():
         case_sensitive = True
         my_event_handler = PatternMatchingEventHandler(patterns, ignore_patterns, ignore_directories, case_sensitive)
         my_event_handler.on_modified = self.on_modified
-        path = "."
         my_observer = Observer()
-        my_observer.schedule(my_event_handler, path, recursive=False)
+        my_observer.schedule(my_event_handler, os.path.dirname(self.file_path) + os.sep, recursive=False)
         my_observer.start()
         try:
             while True:
