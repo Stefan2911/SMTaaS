@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import logging
-
 from src.decision.heuristic.config.config import Config
 from src.monitoring.monitor import *
 
@@ -60,7 +58,7 @@ def check_battery_level_threshold(status, battery_configuration):
 
 
 def check_connectivity_threshold(status, connectivity_configuration):
-    if status.avg_rtt is None:  # No connection
+    if status.avg_rtt == TIMEOUT:  # No connection
         logger.debug('No connection')
         return 0
     if status.avg_rtt < connectivity_configuration['offloading-threshold']:
@@ -106,7 +104,7 @@ def normalize_values(status):
     # higher battery level should DECREASE score
     status.battery_level = 100 - status.battery_level
     # higher avg rtt should DECREASE score
-    # TODO: adapt TIMEOUT definition
+    # avg rtt is also represented as percentage value with 0% as TIMEOUT value
     status.avg_rtt = 100 - (status.avg_rtt / TIMEOUT * 100)
     # higher cpu usage should INCREASE score
     # higher memory usage should INCREASE score

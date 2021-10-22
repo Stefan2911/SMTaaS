@@ -29,7 +29,6 @@ class Environment:
 
     def close(self):
         self.state = get_current_state()
-        # TODO: not sure what else should be done here
 
     def calculate_custom_reward(self, battery_level_before_action, starting_timestamp_before_action,
                                 traffic_before_action):

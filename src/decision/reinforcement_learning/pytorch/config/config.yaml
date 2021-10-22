@@ -1,7 +1,7 @@
 logging-level: 10 # logging.DEBUG
 
 hyper-parameters:
-  batch-size: 256
+  batch-size: 64
   gamma: 0.999        # discount factor used in the Bellman equation
   eps-start: 1        # starting value of epsilon (epsilon = exploration rate)
   eps-end: 0.01       # ending value of epsilon

@@ -61,6 +61,7 @@ def optimize_model():
     next_q_values = QValues.get_next(target_net, next_states)
     target_q_values = (next_q_values * hyper_parameters['gamma']) + rewards
 
+    # mse = mean squared error
     loss = F.mse_loss(current_q_values, target_q_values.unsqueeze(1))
     optimizer.zero_grad()  # gradients of all weights and biases in policy_net are set to zero
     loss.backward()
@@ -73,9 +74,12 @@ def training():
         environment_manager.reset()
         state = environment_manager.get_state()
 
+        reward_summarized = 0
+
         for time_step in count():
             action = agent.select_action(state, policy_net)
             reward = environment_manager.take_action(action)
+            reward_summarized += reward.item()
             next_state = environment_manager.get_state()
             memory.push(Experience(state, action, next_state, reward))
             state = next_state
@@ -86,6 +90,8 @@ def training():
             if environment_manager.done or time_step == hyper_parameters['episode-length']:
                 episode_durations.append(time_step)
                 break
+
+        logger.debug('episode: %s, reward summarized: %s', episode, reward_summarized)
 
         # Update the target network, copying all weights and biases in DQN
         if episode % hyper_parameters['target-update'] == 0:

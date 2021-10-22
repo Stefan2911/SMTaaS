@@ -47,8 +47,6 @@ class DQN(nn.Module):
         self.out = nn.Linear(in_features=32, out_features=number_of_actions)
 
     def forward(self, t):
-        # TODO: maybe?
-        # t = t.flatten(start_dim=1)
         t = F.relu(self.fc1(t))
         t = F.relu(self.fc2(t))
         t = self.out(t)
@@ -64,10 +62,10 @@ class QValues:
 
     @staticmethod
     def get_next(target_net, next_states):
-        # TODO: maybe .eq(0) is false
-        final_state_locations = next_states.flatten(start_dim=1) \
-            .max(dim=1)[0].eq(0).type(torch.bool)
-        non_final_state_locations = (final_state_locations == False)
+        # TODO: maybe .eq(0) is false, due to the following:
+        # in the example final state = black screen therefore everything is zero, but in our scenario there is no final state?
+        final_state_locations = next_states.flatten(start_dim=1).max(dim=1)[0].eq(0).type(torch.bool)
+        non_final_state_locations = (final_state_locations is False)
         non_final_states = next_states[non_final_state_locations]
         batch_size = next_states.shape[0]
         values = torch.zeros(batch_size).to(QValues.device)
