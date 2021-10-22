@@ -35,20 +35,28 @@ class EpsilonGreedyStrategy():
         self.decay = decay
 
     def get_exploration_rate(self, current_step):
-        return self.end + (self.start - self.end) * math.exp(-1. * current_step * self.decay)
+        return self.end + (self.start - self.end) * math.exp(-1 * current_step * self.decay)
 
 
 class DQN(nn.Module):
     def __init__(self, number_of_indicators, number_of_actions):
         super().__init__()
 
-        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=24)
-        self.fc2 = nn.Linear(in_features=24, out_features=32)
-        self.out = nn.Linear(in_features=32, out_features=number_of_actions)
+        # TODO: fine tuning of neural network structure
+        # the following links shows some rules of thumb:
+        # https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw
+        # https://towardsdatascience.com/beginners-ask-how-many-hidden-layers-neurons-to-use-in-artificial-neural-networks-51466afa0d3e
+        # Results:
+        # number of hidden layer: in most cases one hidden layer is sufficient
+        # number of neurons in hidden layer: we use the following rule:
+        # 2/3 the size of the input layer + size of output layer
+        # = 2/3 * 4 + 2 = 4.666 = 5
+
+        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=5)
+        self.out = nn.Linear(in_features=5, out_features=number_of_actions)
 
     def forward(self, t):
         t = F.relu(self.fc1(t))
-        t = F.relu(self.fc2(t))
         t = self.out(t)
         return t
 
@@ -62,9 +70,9 @@ class QValues:
 
     @staticmethod
     def get_next(target_net, next_states):
-        # TODO: maybe .eq(0) is false, due to the following:
-        # in the example final state = black screen therefore everything is zero, but in our scenario there is no final state?
-        final_state_locations = next_states.flatten(start_dim=1).max(dim=1)[0].eq(0).type(torch.bool)
+        # In our scenario there does not exist any final state, therefore we check if the state value is -1 which
+        # is not possible to mask any state as non final states
+        final_state_locations = next_states.flatten(start_dim=1).max(dim=1)[0].eq(-1).type(torch.bool)
         non_final_state_locations = (final_state_locations is False)
         non_final_states = next_states[non_final_state_locations]
         batch_size = next_states.shape[0]

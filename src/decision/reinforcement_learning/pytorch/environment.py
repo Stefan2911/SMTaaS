@@ -40,10 +40,10 @@ class Environment:
             reward += self.calculate_custom_reward_time(starting_timestamp_before_action)
         if config.is_mode_active('traffic-aware'):
             reward += self.calculate_custom_reward_traffic(traffic_before_action)
+        logger.debug("reward: %s", reward)
         return reward
 
     def get_custom_reward(self, mode, difference):
-        logger.debug("difference: %s", difference)
         reward_ranges = config.get_reward_ranges(mode)
         for reward_range in reward_ranges:
             if reward_range.get('start', float('-inf')) <= difference <= reward_range.get('end', float('inf')):
