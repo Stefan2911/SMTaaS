@@ -5,11 +5,11 @@ import torch
 import torch.nn.functional as F
 from torch import optim
 
-from src.decision.reinforcement_learning.pytorch.agent import Agent
-from src.decision.reinforcement_learning.pytorch.config.config import Config
-from src.decision.reinforcement_learning.pytorch.environment_manager import EnvironmentManager
-from src.decision.reinforcement_learning.pytorch.model import EpsilonGreedyStrategy, DQN, Experience, ReplayMemory, \
-    QValues
+from src.decision.reinforcement_learning.deep_q_network.agent import Agent
+from src.decision.reinforcement_learning.deep_q_network.config.config import Config
+from src.decision.reinforcement_learning.deep_q_network.environment_manager import EnvironmentManager
+from src.decision.reinforcement_learning.deep_q_network.model import DQN, Experience, ReplayMemory, QValues
+from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonGreedyStrategy
 
 config = Config()
 
@@ -74,12 +74,12 @@ def training():
         environment_manager.reset()
         state = environment_manager.get_state()
 
-        reward_summarized = 0
+        rewards_current_episode = 0
 
         for time_step in count():
             action = agent.select_action(state, policy_net)
             reward = environment_manager.take_action(action)
-            reward_summarized += reward.item()
+            rewards_current_episode += reward.item()
             next_state = environment_manager.get_state()
             memory.push(Experience(state, action, next_state, reward))
             state = next_state
@@ -91,7 +91,7 @@ def training():
                 episode_durations.append(time_step)
                 break
 
-        logger.debug('episode: %s, reward summarized: %s', episode, reward_summarized)
+        logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
         # Update the target network, copying all weights and biases in DQN
         if episode % hyper_parameters['target-update'] == 0:

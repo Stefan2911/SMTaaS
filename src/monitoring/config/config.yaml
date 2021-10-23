@@ -1,0 +1,43 @@
+logging-level: 10 # logging.DEBUG
+
+indicators:
+  battery-level:
+    poor:
+      start: 0
+      end: 35
+    average:
+      start: 36
+      end: 75
+    excellent:
+      start: 76
+      end: 100
+  connectivity:
+    poor:
+      start: 0
+      end: 35
+    average:
+      start: 36
+      end: 75
+    excellent:
+      start: 76
+      end: 100
+  cpu-usage:
+    excellent:
+      start: 0
+      end: 35
+    average:
+      start: 36
+      end: 75
+    poor:
+      start: 76
+      end: 100
+  memory-usage:
+    excellent:
+      start: 0
+      end: 35
+    average:
+      start: 36
+      end: 75
+    poor:
+      start: 76
+      end: 100

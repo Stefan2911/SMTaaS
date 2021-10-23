@@ -1,12 +1,12 @@
 import torch
 
-from src.decision.reinforcement_learning.pytorch.environment import Environment
+from src.decision.reinforcement_learning.environment import Environment
 
 
 class EnvironmentManager:
     def __init__(self, device):
         self.device = device
-        self.env = Environment()
+        self.env = Environment(False)
         self.env.reset()
         self.done = False
 

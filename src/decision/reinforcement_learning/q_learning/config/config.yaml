@@ -1,0 +1,10 @@
+logging-level: 10 # logging.DEBUG
+
+hyper-parameters:
+  gamma: 0.999        # discount factor used in the Bellman equation
+  eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
+  eps-end: 0.05       # ending value of epsilon
+  eps-decay: 0.005    # decay rate used to decay epsilon over time
+  lr: 0.01            # learning rate (alpha)
+  num-episodes: 200   # number of episodes
+  episode-length: 5   # number of smt problems solved in one episode

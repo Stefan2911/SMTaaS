@@ -1,0 +1,27 @@
+logging-level: 10 # logging.DEBUG
+
+# TODO: reward model must be defined in more detail (could be done by operator)
+reward-modes:
+  energy-aware:
+    active: False
+    ranges:
+      - end: 0      # < 1 percent of battery needed
+        reward: 5
+      - start: 1    # 1 percent of battery needed
+        end: 1
+        reward: -1
+      - start: 2    # >= 2 percent of battery needed
+        reward: -1
+  time-aware:
+    active: True
+    ranges:
+      - end: 1.5      # < 1.5 seconds
+        reward: 3
+      - start: 1.5    # > 1.5 seconds
+        reward: -4
+  traffic-aware:
+    active: False
+
+basic-reward: 1
+
+ev3: False
