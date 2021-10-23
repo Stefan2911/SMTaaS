@@ -66,6 +66,7 @@ def training():
 
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
+    logger.debug(q_table)
     environment_manager.close()
 
 

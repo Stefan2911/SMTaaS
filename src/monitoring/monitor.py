@@ -52,6 +52,7 @@ class SimpleMonitor:
         for rating in Rating:
             if ranges[rating.name]['start'] <= value <= ranges[rating.name]['end']:
                 return rating
+        return Rating.poor
 
 
 class Rating(Enum):
