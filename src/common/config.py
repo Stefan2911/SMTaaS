@@ -6,7 +6,7 @@ from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 
 
-class GeneralConfig():
+class GeneralConfig:
 
     def __init__(self, file_path):
         self.file_path = file_path
