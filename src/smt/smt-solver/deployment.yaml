@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smt-solver-component
+spec:
+  selector:
+    matchLabels:
+      app: smt-solver-component
+  replicas: 5
+  template:
+    metadata:
+      labels:
+        app: smt-solver-component
+    spec:
+      containers:
+        - name: smt-solver-component
+          image: smt-solver-component
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: smt-solver-entrypoint
+spec:
+  type: LoadBalancer
+  selector:
+    app: smt-solver-component
+  ports:
+    - port: 30001
+      targetPort: 5000
+      nodePort: 30001
