@@ -1,5 +1,7 @@
 logging-level: 10 # logging.DEBUG
 
+ev3: True
+
 indicators:
   battery-level:
     poor:

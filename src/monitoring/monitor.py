@@ -3,6 +3,7 @@ import logging
 from enum import Enum
 
 from src.monitoring.config.config import Config
+from src.monitoring.monitor_battery_level_ev3 import get_battery_level_ev3
 from src.monitoring.monitor_connectivity import *
 from src.monitoring.monitor_system_utilization import *
 
@@ -55,6 +56,12 @@ class SimpleMonitor:
         return Rating.poor
 
 
+class EV3Monitor(Monitor):
+    def __init__(self):
+        super().__init__()
+        self.battery_level = get_battery_level_ev3()
+
+
 class Rating(Enum):
     poor = 0
     average = 1
@@ -64,8 +71,15 @@ class Rating(Enum):
 
 def get_current_state(simple=False):
     if simple:
-        return SimpleMonitor(Monitor())
-    return Monitor()
+        if config.is_ev3():
+            return SimpleMonitor(EV3Monitor())
+        else:
+            return SimpleMonitor(Monitor())
+    else:
+        if config.is_ev3():
+            return EV3Monitor()
+        else:
+            return Monitor()
 
 
 def map_detailed_state(monitor, simple=False):

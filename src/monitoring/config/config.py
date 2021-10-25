@@ -19,3 +19,6 @@ class Config(GeneralConfig):
 
     def get_indicator_ranges(self, indicator):
         return self.data['indicators'][indicator]
+
+    def is_ev3(self):
+        return self.data['ev3']
