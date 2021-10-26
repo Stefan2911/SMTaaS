@@ -25,7 +25,7 @@ agent = Agent(strategy, environment_manager.num_actions_available())
 action_space_size = environment_manager.num_actions_available()
 state_space_size = environment_manager.num_states_available()
 
-q_table = np.zeros((state_space_size, action_space_size), dtype=np.int8)
+q_table = np.zeros((state_space_size, action_space_size))
 
 
 def map_state_to_index(state):
