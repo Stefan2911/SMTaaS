@@ -1,4 +1,5 @@
 import logging
+import math
 from itertools import count
 
 import numpy as np
@@ -7,6 +8,7 @@ from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonG
 from src.decision.reinforcement_learning.q_learning.agent import Agent
 from src.decision.reinforcement_learning.q_learning.config.config import Config
 from src.decision.reinforcement_learning.q_learning.environment_manager import EnvironmentManager
+from src.monitoring.monitor import Rating
 
 config = Config()
 
@@ -31,9 +33,9 @@ q_table = np.zeros((state_space_size, action_space_size))
 def map_state_to_index(state):
     # e.g. (poor, poor, poor, poor) = 0
     value = 0
-    for s in state:
-        value += s.value
-    return value
+    for i, s in enumerate(state):
+        value += s.value * math.pow(len(Rating), i)
+    return int(value)
 
 
 def update_q_table(state, action, reward, new_state):
