@@ -20,5 +20,11 @@ class Config(GeneralConfig):
     def get_indicator_ranges(self, indicator):
         return self.data['indicators'][indicator]
 
+    def is_simulation_active(self):
+        return self.data['simulation']['active']
+
+    def get_simulated_value(self, indicator):
+        return self.data['simulation']['values'][indicator]
+
     def is_ev3(self):
         return self.data['ev3']

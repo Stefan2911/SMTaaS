@@ -1,7 +1,21 @@
 logging-level: 10 # logging.DEBUG
 
-ev3: True
+ev3: False
 
+# TODO adapt for experiments
+simulation:
+  active: False
+  values:
+    battery-level: 50
+    avg-rtt: 50
+    cpu-usage: 50
+    memory-usage: 50
+    used-ram: 1000
+    available-ram: 1000
+    disk-usage: 50
+    traffic: 50
+
+# TODO define ranges:
 indicators:
   battery-level:
     poor:

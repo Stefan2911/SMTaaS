@@ -16,14 +16,24 @@ logger.setLevel(level=config.get_logging_level())
 
 class Monitor:
     def __init__(self):
-        self.battery_level = get_battery_percent()
-        self.avg_rtt = get_rtt()
-        self.cpu_usage = get_cpu_usage()
-        self.used_ram = get_used_ram()
-        self.available_ram = get_available_ram()
-        self.memory_usage = get_memory_usage()
-        self.disk_usage = get_disk_usage()
-        self.traffic = get_traffic()
+        if config.is_simulation_active():
+            self.battery_level = config.get_simulated_value('battery-level')
+            self.avg_rtt = config.get_simulated_value('avg-rtt')
+            self.cpu_usage = config.get_simulated_value('cpu-usage')
+            self.used_ram = config.get_simulated_value('used-ram')
+            self.available_ram = config.get_simulated_value('available-ram')
+            self.memory_usage = config.get_simulated_value('memory-usage')
+            self.disk_usage = config.get_simulated_value('disk-usage')
+            self.traffic = config.get_simulated_value('traffic')
+        else:
+            self.battery_level = get_battery_percent()
+            self.avg_rtt = get_rtt()
+            self.cpu_usage = get_cpu_usage()
+            self.used_ram = get_used_ram()
+            self.available_ram = get_available_ram()
+            self.memory_usage = get_memory_usage()
+            self.disk_usage = get_disk_usage()
+            self.traffic = get_traffic()
 
     def print_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
@@ -59,7 +69,10 @@ class SimpleMonitor:
 class EV3Monitor(Monitor):
     def __init__(self):
         super().__init__()
-        self.battery_level = get_battery_level_ev3()
+        if config.is_simulation_active():
+            self.battery_level = config.get_simulated_value('battery-level')
+        else:
+            self.battery_level = get_battery_level_ev3()
 
 
 class Rating(Enum):
