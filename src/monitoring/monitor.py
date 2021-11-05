@@ -13,9 +13,12 @@ logging.basicConfig()
 logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
 
+# TODO: needs to be defined
+MAX_TRANSMISSION_COST = 1000
+
 
 class Monitor:
-    def __init__(self):
+    def __init__(self, problem_size):
         if config.is_simulation_active():
             self.battery_level = config.get_simulated_value('battery-level')
             self.avg_rtt = config.get_simulated_value('avg-rtt')
@@ -25,6 +28,7 @@ class Monitor:
             self.memory_usage = config.get_simulated_value('memory-usage')
             self.disk_usage = config.get_simulated_value('disk-usage')
             self.traffic = config.get_simulated_value('traffic')
+            self.transmission_cost = config.get_simulated_value('transmission-cost')
         else:
             self.battery_level = get_battery_percent()
             self.avg_rtt = get_rtt()
@@ -34,6 +38,11 @@ class Monitor:
             self.memory_usage = get_memory_usage()
             self.disk_usage = get_disk_usage()
             self.traffic = get_traffic()
+            self.transmission_cost = self.__get_transmission_cost(problem_size)
+
+    def __get_transmission_cost(self, problem_size):
+        # TODO: define costs
+        return problem_size * 10
 
     def print_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
@@ -44,6 +53,7 @@ class Monitor:
         logger.info('memory usage (percentage): %f', self.memory_usage)
         logger.info('disk usage (percentage): %f', self.disk_usage)
         logger.info('traffic: %f', self.traffic)
+        logger.info('transmission cost: %f', self.transmission_cost)
 
 
 class SimpleMonitor:
@@ -52,12 +62,15 @@ class SimpleMonitor:
         self.connectivity = self.__get_rating(monitor.avg_rtt, config.get_indicator_ranges('connectivity'))
         self.cpu_state = self.__get_rating(monitor.cpu_usage, config.get_indicator_ranges('cpu-usage'))
         self.memory_state = self.__get_rating(monitor.memory_usage, config.get_indicator_ranges('memory-usage'))
+        self.transmission_cost = self.__get_rating(monitor.transmission_cost,
+                                                   config.get_indicator_ranges('transmission-cost'))
 
     def print_state(self):
         logger.info('battery level: %s', self.battery_level)
         logger.info('connectivity: %s', self.connectivity)
         logger.info('cpu state: %s', self.cpu_state)
         logger.info('memory state: %s', self.memory_state)
+        logger.info('transmission cost: %s', self.transmission_cost)
 
     def __get_rating(self, value, ranges):
         for rating in Rating:
@@ -67,8 +80,8 @@ class SimpleMonitor:
 
 
 class EV3Monitor(Monitor):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, problem_size):
+        super().__init__(problem_size)
         if config.is_simulation_active():
             self.battery_level = config.get_simulated_value('battery-level')
         else:
@@ -82,17 +95,17 @@ class Rating(Enum):
     # TODO: could be extended with fair, good
 
 
-def get_current_state(simple=False):
+def get_current_state(problem_size, simple=False):
     if simple:
         if config.is_ev3():
-            return SimpleMonitor(EV3Monitor())
+            return SimpleMonitor(EV3Monitor(problem_size))
         else:
-            return SimpleMonitor(Monitor())
+            return SimpleMonitor(Monitor(problem_size))
     else:
         if config.is_ev3():
-            return EV3Monitor()
+            return EV3Monitor(problem_size)
         else:
-            return Monitor()
+            return Monitor(problem_size)
 
 
 def map_detailed_state(monitor, simple=False):

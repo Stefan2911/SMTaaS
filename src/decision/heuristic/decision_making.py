@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
+import os
 
-from src.decision.heuristic.config.config import Config
 from src.monitoring.monitor import *
 
 config = Config()
@@ -16,8 +16,8 @@ logger.setLevel(level=config.get_logging_level())
 # TODO: maybe integrate problem size (difficulty) in decision
 # a score (composite variable) is calculated based on multiple indicators (like battery level etc.)
 # this is a heuristic based solution
-def get_current_decision_value():
-    state = get_current_state()
+def get_current_decision_value(problem):
+    state = get_current_state(os.stat(problem).st_size)
     indicator_configuration = config.get_indicator_configuration()
     th = check_thresholds(state, indicator_configuration)
     if th is not None:
@@ -40,6 +40,9 @@ def check_thresholds(status, indicator_configuration):
     if value is not None:
         return value
     value = check_memory_usage_threshold(status, indicator_configuration['memory-usage'])
+    if value is not None:
+        return value
+    value = check_transmission_cost_threshold(status, indicator_configuration['transmission-cost'])
     if value is not None:
         return value
     return None
@@ -96,6 +99,20 @@ def check_memory_usage_threshold(status, memory_configuration):
     return None
 
 
+def check_transmission_cost_threshold(status, transmission_configuration):
+    if status.transmission_cost > transmission_configuration['offloading-threshold']:
+        logger.debug('transmission-cost offloading-threshold %s exceeded: %s',
+                     transmission_configuration['offloading-threshold'],
+                     status.memory_usage)
+        return 1
+    if status.transmission_cost < transmission_configuration['locally-threshold']:
+        logger.debug('transmission-cost locally-threshold %s undercut: %s',
+                     transmission_configuration['locally-threshold'],
+                     status.memory_usage)
+        return 0
+    return None
+
+
 def normalize_values(status):
     # battery level is already normalized (percentage)
     # cpu usage is already normalized (percentage)
@@ -106,6 +123,9 @@ def normalize_values(status):
     # higher avg rtt should DECREASE score
     # avg rtt is also represented as percentage value with 0% as TIMEOUT value
     status.avg_rtt = 100 - (status.avg_rtt / TIMEOUT * 100)
+    # higher transmission cost should DECREASE score
+    # TODO: normalize
+    status.transmission_cost = 100 - (status.transmission_cost / MAX_TRANSMISSION_COST * 100)
     # higher cpu usage should INCREASE score
     # higher memory usage should INCREASE score
     return status
@@ -116,7 +136,9 @@ def combine_values(status, configuration):
     logger.debug("normalized avg_rtt value: %s", status.avg_rtt)
     logger.debug("normalized cpu usage value: %s", status.cpu_usage)
     logger.debug("normalized memory usage value: %s", status.memory_usage)
+    logger.debug("normalized transmission cost value: %s", status.transmission_cost)
     return (status.battery_level * configuration['battery-level']['weight'] +
             status.avg_rtt * configuration['connectivity']['weight'] +
             status.cpu_usage * configuration['cpu-usage']['weight'] +
-            status.memory_usage * configuration['memory-usage']['weight']) / 100
+            status.memory_usage * configuration['memory-usage']['weight'] +
+            status.memory_usage * configuration['transmission-cost']['weight']) / 100

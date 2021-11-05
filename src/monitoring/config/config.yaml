@@ -57,3 +57,13 @@ indicators:
     poor:
       start: 76
       end: 100
+  transmission-cost:
+    excellent:
+      start: 0
+      end: 35
+    average:
+      start: 36
+      end: 75
+    poor:
+      start: 76
+      end: 100

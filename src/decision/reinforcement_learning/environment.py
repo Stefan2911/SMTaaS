@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 
 import src.monitoring.monitor
@@ -22,9 +23,9 @@ class Environment:
     def __init__(self, simple=True):
         self.action_space = 2
         self.simple = simple
-        self.detailed_state = get_current_state()
-        self.state = map_detailed_state(self.detailed_state, simple)
         self.test_smt_problem = "src/smt/examples/simple.smt2"
+        self.detailed_state = get_current_state(os.stat(self.test_smt_problem).st_size)
+        self.state = map_detailed_state(self.detailed_state, simple)
         self.basic_reward = 1
         self.client = Client()
 
@@ -32,7 +33,7 @@ class Environment:
         return self.state
 
     def reset(self):
-        self.detailed_state = get_current_state()
+        self.detailed_state = get_current_state(os.stat(self.test_smt_problem).st_size)
         self.state = map_detailed_state(self.detailed_state, self.simple)
 
     def close(self):
@@ -86,7 +87,8 @@ class Environment:
             else:
                 response = self.client.post_smt_problem_local(self.test_smt_problem)
         logger.info(response)
-        self.detailed_state = get_current_state()
+        logger.debug(os.stat(self.test_smt_problem).st_size)
+        self.detailed_state = get_current_state(os.stat(self.test_smt_problem).st_size)
         self.state = map_detailed_state(self.detailed_state, self.simple)
         return None, self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
                                                                       timestamp_before_action, traffic_before_action), \

@@ -26,7 +26,7 @@ client = Client()
 def testing():
     test_file = "src/smt/examples/simple.smt2"
     logger.debug("new smt_problem")
-    if get_current_decision_value() == 1:
+    if get_current_decision_value(test_file) == 1:
         logger.debug("offload")
         logger.info(client.post_smt_problem_offload(test_file))
     else:
@@ -37,7 +37,7 @@ def testing():
 def on_created(event):
     file_path = event.src_path
     logger.debug("new smt_problem: %s", file_path)
-    if get_current_decision_value() == 1:
+    if get_current_decision_value(file_path) == 1:
         logger.debug("offload")
         logger.info(client.post_smt_problem_offload(file_path).content)
     else:
