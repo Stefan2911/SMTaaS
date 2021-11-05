@@ -26,14 +26,14 @@ class Monitor:
         self.traffic = get_traffic()
 
     def print_state(self):
-        logger.info('battery level (in volts):', self.battery_level)
-        logger.info('avg rtt (in ms):', self.avg_rtt)
-        logger.info('CPU usage (in %):', self.cpu_usage)
-        logger.info('used RAM (in Mb):', self.used_ram)
-        logger.info('available RAM (in Mb):', self.available_ram)
-        logger.info('memory usage (in %):', self.memory_usage)
-        logger.info('disk usage (in %):', self.disk_usage)
-        logger.info('traffic:', self.traffic)
+        logger.info('battery level (in volts): %f', self.battery_level)
+        logger.info('avg rtt (in ms): %f', self.avg_rtt)
+        logger.info('CPU usage (percentage): %f', self.cpu_usage)
+        logger.info('used RAM (in Mb): %f', self.used_ram)
+        logger.info('available RAM (in Mb): %f', self.available_ram)
+        logger.info('memory usage (percentage): %f', self.memory_usage)
+        logger.info('disk usage (percentage): %f', self.disk_usage)
+        logger.info('traffic: %f', self.traffic)
 
 
 class SimpleMonitor:
