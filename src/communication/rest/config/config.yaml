@@ -1,4 +1,4 @@
 logging-level: 10 # logging.DEBUG
 
 api-url: http://10.0.0.13:5000/formulae
-local-api-url: http://127.0.0.1:5000/formulae
+local-api-url: http://10.0.0.13:5000/formulae
