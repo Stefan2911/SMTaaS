@@ -29,7 +29,7 @@ def get_disk_usage():
 def get_battery_percent():
     sensors_battery = psutil.sensors_battery()
     if sensors_battery is None:
-        return None
+        return 100  # if no battery is installed, there must be permanent power supply
     return sensors_battery.percent
 
 
