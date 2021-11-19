@@ -14,6 +14,10 @@ import src.slam.world.simulated as sworld
 from src.slam.common.enums import Message, PathId
 from src.slam.config import config
 
+logging.basicConfig()
+logger = logging.getLogger('robot')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Robot(agent.Agent):
     def __init__(self, data_queue: queue.Queue, origin: geometry.Pose = None,
@@ -47,11 +51,11 @@ class Robot(agent.Agent):
                                             turn_move_action=turn_move_action)
 
     def move_forward(self, distance: float):
-        logging.info(f"Move forward for {distance:.2f}.")
+        logger.info(f"Move forward for {distance:.2f}.")
         self.pose.move_forward(distance)
 
     def rotate(self, angle: int):
-        logging.info(f"Rotate for {angle:.2f} degrees.")
+        logger.info(f"Rotate for {angle:.2f} degrees.")
         self.pose.rotate(angle)
 
     def rotate_move_action(self, angle: int = 0, distance: float = 0.0):
@@ -59,7 +63,7 @@ class Robot(agent.Agent):
         self.move_forward(distance)
 
     def scan(self):
-        logging.info(f"Scan {self.view_angle / 2} in each direction.")
+        logger.info(f"Scan {self.view_angle / 2} in each direction.")
         self.scanner.scan_flag.set()
         while not self.shutdown_flag.is_set() and \
                 (measurement := self.observation_queue.get()) is not None:
@@ -78,18 +82,18 @@ class Robot(agent.Agent):
         while not self.data_queue.empty():
             time.sleep(0.5)
             if self.shutdown_flag.is_set():
-                logging.info("Shutdown flag set")
+                logger.info("Shutdown flag set")
                 return False
 
         if action is None:
-            logging.info("Done")
+            logger.info("Done")
             return False
 
         time.sleep(1)
 
         action.execute()
 
-        logging.info(f"\tNew pose: {self.pose}")
+        logger.info(f"\tNew pose: {self.pose}")
 
         data = datapoint.Pose(*self.pose, path_id=PathId.ROBOT_HISTORY)
         self.data_queue.put(data)
@@ -101,7 +105,7 @@ class Robot(agent.Agent):
     def die(self):
         self.scanner.shutdown_flag.set()
         self.scanner.join()
-        logging.info("Dead")
+        logger.info("Dead")
 
 
 class SimulatedRobot(Robot):

@@ -11,11 +11,15 @@ import src.slam.planner.action as action
 import src.slam.planner.path as spath
 import src.slam.world.observed as oworld
 
+logging.basicConfig()
+logger = logging.getLogger('planner')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Planner:
     def __init__(self, turn_action: action.Action, move_action: action.Action,
                  turn_move_action: action.Action):
-        logging.info(f"Using planner: {type(self).__name__}")
+        logger.info(f"Using planner: {type(self).__name__}")
         self.turn_action = turn_action
         self.move_action = move_action
         self.turn_move_action = turn_move_action
@@ -98,11 +102,11 @@ class RrtPlanner(Planner):
 
         if intermediate_goal is None:
             if self.shutdown_flag.is_set():
-                logging.info("Planning interrupted.")
+                logger.info("Planning interrupted.")
             else:
                 try_text = f"{'try' if num_allowed_tries == 1 else 'tries'}"
-                logging.warning(f"Couldn't find a reachable goal in "
-                                f"{num_allowed_tries} {try_text}")
+                logger.warning(f"Couldn't find a reachable goal in "
+                               f"{num_allowed_tries} {try_text}")
             return None
 
         return intermediate_goal
@@ -167,13 +171,13 @@ class RrtPlanner(Planner):
         if select_randomly:
             index = random.randint(0, len(candidates) - 1)
             chosen = candidates[index]
-            logging.info(f"Selected goal: {chosen.location} "
-                         f"(selected randomly)")
+            logger.info(f"Selected goal: {chosen.location} "
+                        f"(selected randomly)")
         else:
             chosen = min(candidates,
                          key=lambda p: geometry.Point(*p.location).distance_to(
                              current_pose.position))
-            logging.info(f"Selected goal: {chosen.location}")
+            logger.info(f"Selected goal: {chosen.location}")
         return geometry.Point(*chosen.location)
 
 

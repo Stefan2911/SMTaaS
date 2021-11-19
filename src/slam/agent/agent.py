@@ -6,13 +6,17 @@ import time
 
 import src.slam.common.datapoint as datapoint
 
+logging.basicConfig()
+logger = logging.getLogger('agent')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Agent(threading.Thread):
     def __init__(self, data_queue: queue.Queue):
         threading.Thread.__init__(self)
         self.data_queue = data_queue
         self.shutdown_flag = threading.Event()
-        logging.info(f"Using agent: {type(self).__name__}")
+        logger.info(f"Using agent: {type(self).__name__}")
 
     def run(self):
         success = True
@@ -24,7 +28,7 @@ class Agent(threading.Thread):
         """
         Dummy action
         """
-        logging.info("Alive")
+        logger.info("Alive")
         time.sleep(1)
         if random.random() < 0.9:
             x = random.randint(0, 10)
@@ -37,4 +41,4 @@ class Agent(threading.Thread):
         return True
 
     def die(self):
-        logging.info("Dead")
+        logger.info("Dead")

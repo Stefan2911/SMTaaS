@@ -9,6 +9,10 @@ import logging
 
 from src.slam.common.enums import RobotType
 
+logging.basicConfig()
+logger = logging.getLogger('config')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Config(object):
     # Both robots
@@ -39,7 +43,7 @@ class Config(object):
 
     def setup(self, rtype: RobotType):
         if self.rtype is not None:
-            logging.warning("Setup already completed. Nothing changed.")
+            logger.warning("Setup already completed. Nothing changed.")
             return
         self.rtype = rtype
 

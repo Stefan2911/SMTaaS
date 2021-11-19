@@ -8,8 +8,10 @@ from src.slam.common.enums import RobotType
 from src.slam.config import config
 
 if __name__ == "__main__":
-    format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+    logging_format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=logging_format, datefmt="%H:%M:%S")
+    logger = logging.getLogger('main')
+    logger.setLevel(level=logging.DEBUG)
 
     argv = sys.argv[1:]
     rtype = RobotType.SIMULATED
@@ -29,10 +31,10 @@ if __name__ == "__main__":
         try:
             os.mkdir(save_folder)
             filename = f"{save_folder}/{config.SAVE_FILENAME_PREFIX}"
-            logging.info(f"Images saved as {filename}*")
+            logger.info(f"Images saved as {filename}*")
         except OSError:
-            logging.error(f"Could not create a directory '{save_folder}'. "
-                          "Images will not be saved.")
+            logger.error(f"Could not create a directory '{save_folder}'. "
+                         "Images will not be saved.")
             save = False
 
     sdriver.run(rtype, save=save, filename=filename)

@@ -12,8 +12,12 @@ from src.slam.common.enums import GraphType, Message
 
 plt.ion()
 
+logging.basicConfig()
+logger = logging.getLogger('map')
+logger.setLevel(level=logging.DEBUG)
 
-class Map():
+
+class Map:
     def __init__(self, robot_size: float = 10.0, draw_path: bool = True,
                  filename: str = None, save_params: Dict = None):
         self.storage = storage.MapStorage(draw_path)
@@ -69,7 +73,7 @@ class Map():
 
         if save:
             if not self.filename:
-                logging.error("Filename missing")
+                logger.error("Filename missing")
             else:
                 fmt = self.save_params["format"]
                 name = f"{self.filename}{self.file_count:05d}.{fmt}"

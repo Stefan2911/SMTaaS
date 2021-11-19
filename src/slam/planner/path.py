@@ -10,6 +10,10 @@ import src.slam.planner.graph as sgraph
 import src.slam.world.observed as oworld
 from src.slam.common.enums import Existence, PathId
 
+logging.basicConfig()
+logger = logging.getLogger('pathplanner')
+logger.setLevel(level=logging.DEBUG)
+
 
 class PathPlanner:
     def __init__(self, observed_world: oworld.ObservedWorld,
@@ -47,7 +51,7 @@ class PathPlanner:
         add_point_to_path(goal, (1., 0.6, 0., 1.))
 
         if node.parent is None:
-            logging.warning(f"Path planner returned starting point")
+            logger.warning(f"Path planner returned starting point")
             return node.location
 
         color = (1., 0.6, 0., 0.3)
@@ -89,8 +93,8 @@ class PathPlanner:
                 # Do not plan too small steps
                 min_step_size *= 0.99
                 if min_step_size < self.min_step_size / 4:
-                    logging.warning(f"min_step_size reduced to a quarter "
-                                    f"({min_step_size:.2f})")
+                    logger.warning(f"min_step_size reduced to a quarter "
+                                   f"({min_step_size:.2f})")
                 continue
             step = min(self.max_step_size, distance)
             polar = geometry.Polar(angle, step)
@@ -121,7 +125,7 @@ class PathPlanner:
 
             if len(graph) > 200:
                 # Give up trying to find path to the goal
-                logging.warning(f"Couldn't find a path to node {goal}")
+                logger.warning(f"Couldn't find a path to node {goal}")
                 return None
         return None
 

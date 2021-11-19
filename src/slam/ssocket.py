@@ -2,10 +2,14 @@ import logging
 import socket
 import time
 
+logging.basicConfig()
+logger = logging.getLogger('ssocket')
+logger.setLevel(level=logging.DEBUG)
 
-class Socket():
+
+class Socket:
     def __init__(self, host, port):
-        logging.info(f"Establishing a socket to {host}:{port}")
+        logger.info(f"Establishing a socket to {host}:{port}")
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
         connected = False
@@ -16,7 +20,7 @@ class Socket():
             except OSError:
                 time.sleep(1)
         self.recv_buffer = b""
-        logging.info(f"Socket to {host}:{port} established")
+        logger.info(f"Socket to {host}:{port} established")
 
     def send(self, message: str, end_char=b"\0"):
         total = 0
@@ -43,7 +47,7 @@ class Socket():
 
     def close(self):
         self.sock.close()
-        logging.info("Socket closed")
+        logger.info("Socket closed")
 
 
 def handle_socket_error(_func=None, cleanup=None):
@@ -52,7 +56,7 @@ def handle_socket_error(_func=None, cleanup=None):
             try:
                 return func(*args, **kwargs)
             except BrokenPipeError:
-                logging.error("Socket probably closed.")
+                logger.error("Socket probably closed.")
                 if cleanup is not None:
                     cleanup()
 

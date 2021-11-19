@@ -10,6 +10,10 @@ import src.slam.ssocket as ssocket
 import src.slam.world.simulated as sworld
 from src.slam.common.enums import ObservationType
 
+logging.basicConfig()
+logger = logging.getLogger('sensor')
+logger.setLevel(level=logging.DEBUG)
+
 
 class Sensor(threading.Thread):
     def __init__(self, data_queue: queue.Queue, view_angle: int = 360,
@@ -22,13 +26,13 @@ class Sensor(threading.Thread):
         self.precision = precision
 
     def run(self):
-        logging.info(f"Turned sensor {type(self).__name__} on")
+        logger.info(f"Turned sensor {type(self).__name__} on")
         while not self.shutdown_flag.is_set():
             self.scan_flag.wait(1)
             if self.scan_flag.is_set():
                 self.scan()
                 self.scan_flag.clear()
-        logging.info("Turned sensor off")
+        logger.info("Turned sensor off")
 
 
 class DummySensor(Sensor):
@@ -42,7 +46,7 @@ class DummySensor(Sensor):
         super().__init__(data_queue, view_angle, precision)
 
     def scan(self):
-        logging.info("Scanning started")
+        logger.info("Scanning started")
         prev_measurement = 10
         start_angle = int(- self.view_angle / 2)
         for angle in range(start_angle, start_angle + self.view_angle + 1,
@@ -55,7 +59,7 @@ class DummySensor(Sensor):
             prev_measurement = new_measurement
             time.sleep(0.5)
         self.data_queue.put(None)
-        logging.info("Scanning finished")
+        logger.info("Scanning finished")
 
 
 class SimulatedSensor(Sensor):
@@ -70,7 +74,7 @@ class SimulatedSensor(Sensor):
         self.world = simulated_world
 
     def scan(self):
-        logging.info("Scanning started")
+        logger.info("Scanning started")
         start_angle = int(- self.view_angle / 2)
         for angle in range(start_angle, start_angle + self.view_angle + 1,
                            self.precision):
@@ -78,7 +82,7 @@ class SimulatedSensor(Sensor):
             self.data_queue.put(data)
             time.sleep(0.2)
         self.data_queue.put(None)
-        logging.info("Scanning finished")
+        logger.info("Scanning finished")
 
     def measure(self, angle):
         raise NotImplementedError
@@ -146,7 +150,7 @@ class LegoUSSensor(Sensor):
         time.sleep(2)  # Wait until physical sensor is actually turned
 
     def scan(self):
-        logging.info("Scanning started")
+        logger.info("Scanning started")
         num_steps = self.view_angle // self.precision + 1
         increasing = self.orientation.in_degrees() < 0
 
@@ -178,7 +182,7 @@ class LegoUSSensor(Sensor):
         self.rotate(total_rotation)
 
         self.data_queue.put(None)
-        logging.info("Scanning finished")
+        logger.info("Scanning finished")
 
     def rotate(self, angle):
         self.orientation.change(angle)

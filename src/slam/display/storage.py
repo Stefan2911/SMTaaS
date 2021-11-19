@@ -8,8 +8,12 @@ import numpy as np
 import src.slam.common.datapoint as datapoint
 from src.slam.common.enums import Existence, PathId
 
+logging.basicConfig()
+logger = logging.getLogger('storage')
+logger.setLevel(level=logging.DEBUG)
 
-class MapStorage():
+
+class MapStorage:
     def __init__(self, draw_path=True):
         self.draw_path = draw_path
         self.scatter_storage = ScatterStorage()
@@ -41,7 +45,7 @@ class MapStorage():
             self.path_storage.delete_temporary_data()
 
 
-class ScatterStorage():
+class ScatterStorage:
     def __init__(self):
         self.data = {e: ScatterStorageEntry() for e in Existence}
 
@@ -59,7 +63,7 @@ class ScatterStorage():
         self.data[Existence.TEMPORARY] = ScatterStorageEntry()
 
 
-class ScatterStorageEntry():
+class ScatterStorageEntry:
     def __init__(self):
         """
         0, 1: x, y coordinate
@@ -74,7 +78,7 @@ class ScatterStorageEntry():
         return self.data
 
 
-class HeatmapStorage():
+class HeatmapStorage:
     def __init__(self):
         """
         0, 1: x, y coordinate
@@ -99,13 +103,13 @@ class HeatmapStorage():
         return (x_data, y_data, w_data)
 
 
-class PathStorage():
+class PathStorage:
     def __init__(self):
         self.data = dict()
 
     def add_data(self, data: datapoint.DataPoint):
         if data.path_id is None:
-            logging.warning("Received path data without path_id")
+            logger.warning("Received path data without path_id")
             return
 
         if data.path_id not in self.data:
@@ -124,7 +128,7 @@ class PathStorage():
                                                       Existence.TEMPORARY)
 
 
-class PathStorageEntry():
+class PathStorageEntry:
     def __init__(self, linestyle: str = "-",
                  existence: Existence = Existence.PERMANENT):
         """

@@ -7,6 +7,10 @@ import src.slam.display.map as smap
 from src.slam.common.enums import Message, RobotType
 from src.slam.config import config
 
+logging.basicConfig()
+logger = logging.getLogger('driver')
+logger.setLevel(level=logging.DEBUG)
+
 
 def init_robot(rtype: RobotType, data_queue: queue.Queue) -> robot.Robot:
     args = [
@@ -57,7 +61,7 @@ def run(rtype: RobotType, save: bool = False, filename: str = None):
     agent.join()
 
     try:
-        logging.info("Waiting for KeyboardInterrupt")
+        logger.info("Waiting for KeyboardInterrupt")
         while True:
             map.redraw()
             time.sleep(1)
