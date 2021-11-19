@@ -40,13 +40,15 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
    to `/home/pi/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666` (`mv cvc5-391ab9df6c3fd9a3771864900c1718534c1e4666 CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666`)
 5. rerun `pysmt-install --cvc4`
 6. go to `~/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666/antlr-3.4/src/libantlr3c-3.4`
-7. `./configure --prefix=/home/pi/.smt_solvers/libantlr3c_install_dir`
+7. `./configure --prefix=/home/pi/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666/antlr-3.4`
 8. remove `-m32` from CFLAGS in makefile
-9. Comment line 167: `/* #define size_t unsigned int */`
+9. comment line 167: `/* #define size_t unsigned int */`
    in `/home/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666/antlr-3.4/src/libantlr3c-3.4/antlr3config.h`
 10. `make`
 11. `make install`
-12. `sudo apt-get install cmake libgmp3-dev`
-13. Go to directory `~/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666`
-14. `./configure.sh --antlr-dir=/home/pi/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666/antlr-3.4/src/libantlr3c-3.4`
+12. `sudo apt-get install cmake libgmp3-dev default-jdk`
+13. go to directory `~/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666`
+14. `./configure.sh --antlr-dir=/home/pi/.smt_solvers/cvc4/CVC4-391ab9df6c3fd9a3771864900c1718534c1e4666/antlr-3.4`
+15. go to `build`
+16. `make install`
 
