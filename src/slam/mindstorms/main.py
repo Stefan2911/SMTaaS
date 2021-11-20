@@ -10,7 +10,7 @@ from ev3dev2.sound import Sound
 from src.slam.mindstorms import config
 
 logging.basicConfig()
-logger = logging.getLogger('slam')
+logger = logging.getLogger('mindstorms')
 logger.setLevel(level=logging.DEBUG)
 
 DISTANCE_FACTOR = 36

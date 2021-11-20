@@ -55,8 +55,7 @@ class RrtPlanner(Planner):
                                               data_queue=data_queue,
                                               robot_size=robot_size)
 
-    def select_next_action(self, current_pose: geometry.Pose) -> \
-            action.ActionWithParams:
+    def select_next_action(self, current_pose: geometry.Pose) -> action.ActionWithParams:
         goal = self.select_new_goal(current_pose)
         if goal is None:
             return None
@@ -141,8 +140,7 @@ class RrtPlanner(Planner):
                 frontier.append(p)
         return datapoint.Frontier(min_border.x, min_border.y, frontier)
 
-    def select_from_frontier(self, frontier: datapoint.Frontier,
-                             current_pose: geometry.Pose,
+    def select_from_frontier(self, frontier: datapoint.Frontier, current_pose: geometry.Pose,
                              select_randomly: bool = False) -> geometry.Point:
         """
         Selects a point to be visited next.
@@ -182,12 +180,10 @@ class RrtPlanner(Planner):
 
 
 class DummyPlanner(Planner):
-    def __init__(self, move_action: action.Action,
-                 turn_move_action: action.Action):
+    def __init__(self, move_action: action.Action, turn_move_action: action.Action):
         super().__init__(None, move_action, turn_move_action)
 
-    def select_next_action(self, current_pose: geometry.Pose) -> \
-            action.ActionWithParams:
+    def select_next_action(self, current_pose: geometry.Pose) -> action.ActionWithParams:
         distance = random.randint(1, 10)
         if random.random() < 0.7:
             return action.ActionWithParams(self.move_action, distance)
