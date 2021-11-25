@@ -92,7 +92,6 @@ class Rating(Enum):
     poor = 0
     average = 1
     excellent = 2
-    # TODO: could be extended with fair, good
 
 
 def get_current_state(problem_size, simple=False):
