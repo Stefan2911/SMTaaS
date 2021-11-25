@@ -44,7 +44,7 @@ class Monitor:
         # TODO: define costs
         return problem_size * 10
 
-    def print_state(self):
+    def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
         logger.info('avg rtt (in ms): %f', self.avg_rtt)
         logger.info('CPU usage (percentage): %f', self.cpu_usage)
@@ -65,7 +65,7 @@ class SimpleMonitor:
         self.transmission_cost = self.__get_rating(monitor.transmission_cost,
                                                    config.get_indicator_ranges('transmission-cost'))
 
-    def print_state(self):
+    def log_state(self):
         logger.info('battery level: %s', self.battery_level)
         logger.info('connectivity: %s', self.connectivity)
         logger.info('cpu state: %s', self.cpu_state)
