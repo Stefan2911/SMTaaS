@@ -22,3 +22,6 @@ class Config(GeneralConfig):
 
     def get_offload_threshold(self):
         return self.data['decision-making']['offload-threshold']
+
+    def get_max_transmission_cost(self):
+        return self.data['max-transmission-cost']

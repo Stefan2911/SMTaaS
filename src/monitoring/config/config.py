@@ -28,3 +28,6 @@ class Config(GeneralConfig):
 
     def is_ev3(self):
         return self.data['ev3']
+
+    def get_uplink_cost(self):
+        return self.data['uplink-cost']

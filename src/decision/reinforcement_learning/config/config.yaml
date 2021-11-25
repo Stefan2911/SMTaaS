@@ -1,6 +1,7 @@
 logging-level: 10 # logging.DEBUG
 
-# TODO: reward model must be defined in more detail (could be done by operator)
+# TODO: define values
+
 reward-modes:
   energy-aware:
     active: False

@@ -126,8 +126,7 @@ def normalize_values(status):
     # avg rtt is also represented as percentage value with 0% as TIMEOUT value
     status.avg_rtt = 100 - (status.avg_rtt / TIMEOUT * 100)
     # higher transmission cost should DECREASE score
-    # TODO: normalize
-    status.transmission_cost = 100 - (status.transmission_cost / MAX_TRANSMISSION_COST * 100)
+    status.transmission_cost = 100 - (status.transmission_cost / config.get_max_transmission_cost() * 100)
     # higher cpu usage should INCREASE score
     # higher memory usage should INCREASE score
     return status

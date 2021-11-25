@@ -1,5 +1,7 @@
 logging-level: 10 # logging.DEBUG
 
+# TODO: define values
+
 decision-making:
   indicators:
     battery-level:
@@ -23,3 +25,5 @@ decision-making:
       locally-threshold: 5
       weight: 0.2
   offload-threshold: 0.5
+
+max-transmission-cost: 1000

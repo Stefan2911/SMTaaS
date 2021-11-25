@@ -13,8 +13,9 @@ logging.basicConfig()
 logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
 
-# TODO: needs to be defined
-MAX_TRANSMISSION_COST = 1000
+
+def __get_transmission_cost(problem_size):
+    return problem_size * config.get_uplink_cost()
 
 
 class Monitor:
@@ -38,11 +39,7 @@ class Monitor:
             self.memory_usage = get_memory_usage()
             self.disk_usage = get_disk_usage()
             self.traffic = get_traffic()
-            self.transmission_cost = self.__get_transmission_cost(problem_size)
-
-    def __get_transmission_cost(self, problem_size):
-        # TODO: define costs
-        return problem_size * 10
+            self.transmission_cost = __get_transmission_cost(problem_size)
 
     def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)

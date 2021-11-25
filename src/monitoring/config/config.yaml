@@ -2,7 +2,10 @@ logging-level: 10 # logging.DEBUG
 
 ev3: False
 
-# TODO adapt for experiments
+# TODO: define values
+
+uplink-cost: 0.1
+
 simulation:
   active: False
   values:
@@ -15,7 +18,6 @@ simulation:
     disk-usage: 50
     traffic: 50
 
-# TODO define ranges:
 indicators:
   battery-level:
     poor:
