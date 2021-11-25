@@ -7,8 +7,6 @@ from ev3dev2.motor import (OUTPUT_B, OUTPUT_C, OUTPUT_D, LargeMotor,
 from ev3dev2.sensor.lego import UltrasonicSensor
 from ev3dev2.sound import Sound
 
-from src.slam.mindstorms import config
-
 logging.basicConfig()
 logger = logging.getLogger('mindstorms')
 logger.setLevel(level=logging.DEBUG)
@@ -19,10 +17,11 @@ SCAN_POSITION_FACTOR = 3
 
 MAX_VALID_MEASUREMENT = 100
 
+PORT = 50000
 SOUND_ON = False
 sound = Sound()
 
-recv_buffer = b""
+receive_buffer = b""
 end_char = b"\0"
 
 
@@ -42,23 +41,23 @@ sensor_orientation = 0
 
 
 def establish_connection():
-    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        serversocket.bind((socket.gethostname(), config.PORT))
+        server_socket.bind((socket.gethostname(), PORT))
     except OSError:
         say("Could not open a socket")
         exit(1)
-    logger.debug("Hostname: " + socket.gethostname() + ", port:" + str(config.PORT))
-    serversocket.listen(1)
+    logger.debug("Hostname: " + socket.gethostname() + ", port:" + str(PORT))
+    server_socket.listen(1)
 
     say('Ready to connect!')
 
-    (clientsocket, address) = serversocket.accept()
-    return clientsocket, address
+    (cs, a) = server_socket.accept()
+    return cs, a
 
 
 logger.debug("Establishing connection")
-clientsocket, address = establish_connection()
+client_socket, address = establish_connection()
 logger.debug("Connection established")
 
 
@@ -73,15 +72,15 @@ def send_to_socket(socket, message):
 
 
 def receive_from_socket(socket):
-    global recv_buffer
-    while end_char not in recv_buffer:
+    global receive_buffer
+    while end_char not in receive_buffer:
         chunk = socket.recv(1024)
         if chunk == b"":
             raise RuntimeError("Socket connection broken")
-        recv_buffer += chunk
-    end_char_loc = recv_buffer.index(end_char)
-    msg = recv_buffer[:end_char_loc]
-    recv_buffer = recv_buffer[end_char_loc + 1:]
+        receive_buffer += chunk
+    end_char_loc = receive_buffer.index(end_char)
+    msg = receive_buffer[:end_char_loc]
+    receive_buffer = receive_buffer[end_char_loc + 1:]
     return msg.decode()
 
 
@@ -119,7 +118,7 @@ def measure_and_send(angle):
         msg = str(angle) + " " + str(distance_centimeters) + " FREE"
         logger.info("Looking at infinity " + str(angle))
 
-    send_to_socket(clientsocket, msg)
+    send_to_socket(client_socket, msg)
 
 
 def scan(precision, num_scans, increasing):
@@ -142,13 +141,13 @@ def scan(precision, num_scans, increasing):
     if next_scan_at <= total_rotation:
         measure_and_send(next_scan_at)
 
-    send_to_socket(clientsocket, "END")
+    send_to_socket(client_socket, "END")
 
 
-with clientsocket:
+with client_socket:
     try:
         while True:
-            c = receive_from_socket(clientsocket)
+            c = receive_from_socket(client_socket)
             if not c:
                 break
             command, *params = c.split(" ")
