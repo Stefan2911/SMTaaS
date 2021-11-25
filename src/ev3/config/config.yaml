@@ -1,5 +1,11 @@
 logging-level: 10 # logging.DEBUG
 
 smt:
-  watch-directory: /home/robot/develop/smt/watch  # in this directory the SMT problems are added
+  watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
+
+solver:
+  instances:
+    - http://10.0.0.13:5000/formulae
+    - http://10.0.0.16:5000/formulae
+    - http://10.0.0.19:5000/formulae
 

@@ -1,4 +1,4 @@
-# CVC4 - Installation
+# CVC4 - Installation on EV3
 
 To install CVC4 multiple steps are necessary, which are explained in the following.
 
@@ -20,3 +20,7 @@ https://www.ev3dev.org/docs/tutorials/using-docker-to-cross-compile/
 10. `./configure.sh production --antlr-dir=/src/LIBANTLR3C_INSTALL_DIR/libantlr3c-3.4 --gmp-dir=/usr/lib/arm-linux-gnueabi --static --static-binary`
 
 For details see: https://hackmd.io/@EzPfmI1gT8S-9pvnJOhNlg/Skago80uO
+
+# CVC4 - Installation on RaspberryPi
+
+`sudo apt install cvc4`

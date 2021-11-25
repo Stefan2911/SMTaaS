@@ -28,5 +28,14 @@ class Config(GeneralConfig):
             return self.data['reward-modes'][mode]['ranges']
         return []
 
-    def is_ev3(self):
-        return self.data['ev3']
+    def is_native_solver(self):
+        return self.data['solver']['native']
+
+    def get_solver_instances(self):
+        return self.data['solver']['instances']
+
+    def get_solver_instance(self, index):
+        return self.data['solver']['instances'][index]
+
+    def get_action_space(self):
+        return len(self.get_solver_instances()) + 1  # number of instances to offload + solve locally

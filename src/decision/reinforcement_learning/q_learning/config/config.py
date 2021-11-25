@@ -19,3 +19,6 @@ class Config(GeneralConfig):
 
     def get_hyper_parameters(self):
         return self.data['hyper-parameters']
+
+    def get_training_smt_problem(self):
+        return self.data['training-smt-problem']

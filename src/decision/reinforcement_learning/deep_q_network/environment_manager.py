@@ -19,9 +19,9 @@ class EnvironmentManager:
     def num_actions_available(self):
         return self.env.action_space
 
-    def take_action(self, action):
-        _, reward, self.done, _ = self.env.step(action.item())
-        return torch.tensor([reward], device=self.device)
+    def take_action(self, action, smt_problem):
+        reward, self.done, response = self.env.step(action.item(), smt_problem)
+        return torch.tensor([reward], device=self.device), response
 
     def get_state(self):
         return torch.Tensor([self.__get_state_tuple()], device=self.device)

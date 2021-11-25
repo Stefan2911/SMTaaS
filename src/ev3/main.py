@@ -6,10 +6,8 @@ from timeloop import Timeloop
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 
-from src.communication.rest.client import Client
-from src.decision.heuristic.decision_making import get_current_decision_value
+from src.decision.processing_ev3 import process
 from src.ev3.config.config import Config
-from src.ev3.smt.solver import call_solver
 
 config = Config()
 
@@ -19,30 +17,17 @@ logger.setLevel(level=config.get_logging_level())
 
 tl = Timeloop()
 
-client = Client()
-
 
 @tl.job(interval=timedelta(seconds=2))
 def testing():
     test_file = "src/smt/examples/simple.smt2"
-    logger.debug("new smt_problem")
-    if get_current_decision_value(test_file) == 1:
-        logger.debug("offload")
-        logger.info(client.post_smt_problem_offload(test_file))
-    else:
-        logger.debug("solve on EV3")
-        logger.info(call_solver(test_file))
+    logger.debug(process(test_file))
 
 
 def on_created(event):
     file_path = event.src_path
     logger.debug("new smt_problem: %s", file_path)
-    if get_current_decision_value(file_path) == 1:
-        logger.debug("offload")
-        logger.info(client.post_smt_problem_offload(file_path).content)
-    else:
-        logger.debug("solve on EV3")
-        logger.info(call_solver(file_path))
+    logger.debug(process(file_path))
 
 
 if __name__ == "__main__":

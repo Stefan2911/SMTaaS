@@ -7,7 +7,7 @@ import src.slam.common.geometry as geometry
 from src.slam.common.enums import Existence, ObservationType
 
 
-class DataPoint():
+class DataPoint:
     def __init__(self, x, y, color=None, path_id: int = None,
                  path_style: str = "-",
                  existence: Existence = Existence.PERMANENT):

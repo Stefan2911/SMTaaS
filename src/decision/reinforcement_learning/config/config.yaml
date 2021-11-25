@@ -31,4 +31,9 @@ reward-modes:
 
 basic-reward: 1
 
-ev3: False
+solver:
+  native: True
+  instances:
+    - http://10.0.0.13:5000/formulae
+    - http://10.0.0.16:5000/formulae
+    - http://10.0.0.19:5000/formulae

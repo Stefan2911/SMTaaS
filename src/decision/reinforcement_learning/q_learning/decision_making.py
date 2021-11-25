@@ -56,7 +56,7 @@ def training():
 
         for time_step in count():
             action = agent.select_action(map_state_to_index(state), q_table)
-            reward = environment_manager.take_action(action)
+            reward, response = environment_manager.take_action(action, config.get_training_smt_problem())
             next_state = environment_manager.get_state()
             update_q_table(state, action, reward, next_state)
             rewards_current_episode += reward
@@ -70,6 +70,16 @@ def training():
 
     logger.debug(q_table)
     environment_manager.close()
+
+
+def process(smt_problem):
+    state = environment_manager.get_state()
+    action = agent.select_action(map_state_to_index(state), q_table)
+    reward, response = environment_manager.take_action(action, smt_problem)
+    next_state = environment_manager.get_state()
+    # TODO: is updating q_table necessary?
+    update_q_table(state, action, reward, next_state)
+    return response
 
 
 if __name__ == "__main__":

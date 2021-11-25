@@ -78,7 +78,7 @@ def training():
 
         for time_step in count():
             action = agent.select_action(state, policy_net)
-            reward = environment_manager.take_action(action)
+            reward = environment_manager.take_action(action, config.get_training_smt_problem())
             rewards_current_episode += reward.item()
             next_state = environment_manager.get_state()
             memory.push(Experience(state, action, next_state, reward))
@@ -99,6 +99,16 @@ def training():
             target_net.load_state_dict(policy_net.state_dict())
 
     environment_manager.close()
+
+
+def process(smt_problem):
+    state = environment_manager.get_state()
+    action = agent.select_action(state, target_net)
+    reward, response = environment_manager.take_action(action, smt_problem)
+    next_state = environment_manager.get_state()
+    # TODO: is memory push and optimize model etc. necessary?
+    memory.push(Experience(state, action, next_state, reward))
+    return response
 
 
 if __name__ == "__main__":

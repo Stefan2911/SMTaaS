@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import os
+import random
 
+from src.communication.rest.client import post_smt_problem
 from src.monitoring.monitor import *
+from src.smt.smt_solver.native.solver import call_solver
 
 config = Config()
 
@@ -13,7 +16,6 @@ logger.setLevel(level=config.get_logging_level())
 # returns a value between 0 and 1
 # 0 -> solve directly on device
 # 1 -> should be offloaded
-# TODO: maybe integrate problem size (difficulty) in decision
 # a score (composite variable) is calculated based on multiple indicators (like battery level etc.)
 # this is a heuristic based solution
 def get_current_decision_value(problem):
@@ -142,3 +144,13 @@ def combine_values(status, configuration):
             status.cpu_usage * configuration['cpu-usage']['weight'] +
             status.memory_usage * configuration['memory-usage']['weight'] +
             status.memory_usage * configuration['transmission-cost']['weight']) / 100
+
+
+def process(smt_problem):
+    if get_current_decision_value(smt_problem) == 1:
+        logger.debug("offload")
+        solver_instances = config.get_solver_instances()
+        return post_smt_problem(smt_problem, solver_instances[random.randrange(len(solver_instances))])
+    else:
+        logger.debug("solve locally")
+        return call_solver(smt_problem)

@@ -11,3 +11,5 @@ hyper-parameters:
   lr: 0.01            # learning rate
   num-episodes: 200   # number of episodes
   episode-length: 5   # number of smt problems solved in one episode
+
+training-smt-problem: src/smt/examples/simple.smt2

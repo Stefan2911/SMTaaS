@@ -18,9 +18,9 @@ class EnvironmentManager:
     def num_actions_available(self):
         return self.env.action_space
 
-    def take_action(self, action):
-        _, reward, self.done, _ = self.env.step(action)
-        return reward
+    def take_action(self, action, smt_problem):
+        reward, self.done, response = self.env.step(action, smt_problem)
+        return reward, response
 
     def get_state(self):
         return self.__get_state_tuple()
