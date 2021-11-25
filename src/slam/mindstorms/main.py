@@ -114,10 +114,10 @@ def measure_and_send(angle):
     distance_centimeters = ultrasonic_sensor.distance_centimeters
     if distance_centimeters <= MAX_VALID_MEASUREMENT:
         msg = str(angle) + " " + str(distance_centimeters)
-        print("Measured " + str(distance_centimeters) + " at " + str(angle))
+        logger.info("Measured " + str(distance_centimeters) + " at " + str(angle))
     else:
         msg = str(angle) + " " + str(distance_centimeters) + " FREE"
-        print("Looking at infinity " + str(angle))
+        logger.info("Looking at infinity " + str(angle))
 
     send_to_socket(clientsocket, msg)
 
