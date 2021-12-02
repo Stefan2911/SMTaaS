@@ -14,7 +14,7 @@ logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
 
 
-def __get_transmission_cost(problem_size):
+def _get_transmission_cost(problem_size):
     return problem_size * config.get_uplink_cost()
 
 
@@ -39,7 +39,7 @@ class Monitor:
             self.memory_usage = get_memory_usage()
             self.disk_usage = get_disk_usage()
             self.traffic = get_traffic()
-            self.transmission_cost = __get_transmission_cost(problem_size)
+            self.transmission_cost = _get_transmission_cost(problem_size)
 
     def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
