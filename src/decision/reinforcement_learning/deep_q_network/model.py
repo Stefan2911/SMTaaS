@@ -26,6 +26,7 @@ class ReplayMemory(object):
     def __len__(self):
         return len(self.memory)
 
+
 class DQN(nn.Module):
     def __init__(self, number_of_indicators, number_of_actions):
         super().__init__()

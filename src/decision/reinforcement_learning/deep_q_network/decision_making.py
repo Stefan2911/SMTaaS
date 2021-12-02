@@ -1,5 +1,6 @@
 import logging
 from itertools import count
+from os.path import isfile
 
 import torch
 import torch.nn.functional as F
@@ -28,8 +29,14 @@ memory = ReplayMemory(hyper_parameters['memory-size'])
 
 number_of_indicators = environment_manager.get_number_of_indicators()
 number_of_actions = environment_manager.num_actions_available()
+
+neural_network_location = config.get_neural_network_location()
+
 policy_net = DQN(number_of_indicators, number_of_actions).to(device)
 target_net = DQN(number_of_indicators, number_of_actions).to(device)
+
+if isfile(neural_network_location):
+    policy_net.load_state_dict(torch.load(neural_network_location))
 
 target_net.load_state_dict(policy_net.state_dict())
 target_net.eval()
@@ -78,7 +85,7 @@ def training():
 
         for time_step in count():
             action = agent.select_action(state, policy_net)
-            reward = environment_manager.take_action(action, config.get_training_smt_problem())
+            reward, response = environment_manager.take_action(action, config.get_training_smt_problem())
             rewards_current_episode += reward.item()
             next_state = environment_manager.get_state()
             memory.push(Experience(state, action, next_state, reward))
@@ -99,6 +106,7 @@ def training():
             target_net.load_state_dict(policy_net.state_dict())
 
     environment_manager.close()
+    torch.save(target_net.state_dict(), neural_network_location)
 
 
 def process(smt_problem):

@@ -13,3 +13,5 @@ hyper-parameters:
   episode-length: 5   # number of smt problems solved in one episode
 
 training-smt-problem: src/smt/sets/examples/simple.smt2
+
+neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
