@@ -11,4 +11,4 @@ hyper-parameters:
 
 training-smt-problem: src/smt/sets/examples/simple.smt2
 
-q-table-location: src/decision/reinforcement_learning/q_learning/q_table.txt
+q-table-location: src/decision/reinforcement_learning/q_learning/q_table

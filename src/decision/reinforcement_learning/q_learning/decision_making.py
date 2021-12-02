@@ -78,10 +78,9 @@ def training():
 
 
 def persist_q_table(table):
-    if isfile(q_table_location):
-        with open(config.get_q_table_location(), "w") as file:
-            for row in table:
-                np.savetxt(file, row)
+    with open(config.get_q_table_location(), "w") as file:
+        for row in table:
+            np.savetxt(file, row)
 
 
 def process(smt_problem):
