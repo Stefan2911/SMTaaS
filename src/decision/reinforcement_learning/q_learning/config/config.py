@@ -22,3 +22,6 @@ class Config(GeneralConfig):
 
     def get_training_smt_problem(self):
         return self.data['training-smt-problem']
+
+    def get_q_table_location(self):
+        return self.data['q-table-location']

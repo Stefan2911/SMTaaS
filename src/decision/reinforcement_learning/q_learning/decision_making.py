@@ -1,6 +1,7 @@
 import logging
 import math
 from itertools import count
+from os.path import isfile
 
 import numpy as np
 
@@ -27,7 +28,11 @@ agent = Agent(strategy, environment_manager.num_actions_available())
 action_space_size = environment_manager.num_actions_available()
 state_space_size = environment_manager.num_states_available()
 
-q_table = np.zeros((state_space_size, action_space_size))
+q_table_location = config.get_q_table_location()
+if isfile(q_table_location):
+    q_table = np.loadtxt(q_table_location).reshape(state_space_size, action_space_size)
+else:
+    q_table = np.zeros((state_space_size, action_space_size))
 
 
 def map_state_to_index(state):
@@ -68,8 +73,15 @@ def training():
 
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
-    logger.debug(q_table)
     environment_manager.close()
+    persist_q_table(q_table)
+
+
+def persist_q_table(table):
+    if isfile(q_table_location):
+        with open(config.get_q_table_location(), "w") as file:
+            for row in table:
+                np.savetxt(file, row)
 
 
 def process(smt_problem):
@@ -77,7 +89,6 @@ def process(smt_problem):
     action = agent.select_action(map_state_to_index(state), q_table)
     reward, response = environment_manager.take_action(action, smt_problem)
     next_state = environment_manager.get_state()
-    # TODO: is updating q_table necessary?
     update_q_table(state, action, reward, next_state)
     return response
 
