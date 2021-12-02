@@ -9,4 +9,6 @@ hyper-parameters:
   num-episodes: 100   # number of episodes
   episode-length: 5   # number of smt problems solved in one episode
 
-training-smt-problem: src/smt/examples/simple.smt2
+training-smt-problem: src/smt/sets/examples/simple.smt2
+
+q-table-location: src/decision/reinforcement_learning/q_learning/q_table.txt

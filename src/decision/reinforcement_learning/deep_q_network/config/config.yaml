@@ -12,4 +12,4 @@ hyper-parameters:
   num-episodes: 200   # number of episodes
   episode-length: 5   # number of smt problems solved in one episode
 
-training-smt-problem: src/smt/examples/simple.smt2
+training-smt-problem: src/smt/sets/examples/simple.smt2

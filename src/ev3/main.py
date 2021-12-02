@@ -20,7 +20,7 @@ tl = Timeloop()
 
 @tl.job(interval=timedelta(seconds=2))
 def testing():
-    test_file = "src/smt/examples/simple.smt2"
+    test_file = "src/smt/sets/examples/simple.smt2"
     logger.debug(process(test_file))
 
 
