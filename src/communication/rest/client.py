@@ -16,5 +16,5 @@ logger.setLevel(level=config.get_logging_level())
 
 def post_smt_problem(smt_file, url):
     with open(smt_file, 'rb') as file:
-        response = requests.post(url, files={FORM_DATA_PARAM_KEY: file})
+        response = requests.post(url, files={FORM_DATA_PARAM_KEY: file}, timeout=60)  # 1 minute
         return response
