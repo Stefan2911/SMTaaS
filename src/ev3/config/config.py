@@ -19,9 +19,3 @@ class Config(GeneralConfig):
 
     def get_directory_to_observe(self):
         return self.data['smt']['watch-directory']
-
-    def get_solver_instances(self):
-        return self.data['solver']['instances']
-
-    def get_solver_instance(self, index):
-        return self.data['solver']['instances'][index]
