@@ -2,7 +2,7 @@ import os
 import sys
 import time
 
-from src.decision.processing import process
+from src.decision.processing_ev3 import process
 
 start = time.time()
 problem_directory = sys.argv[1]
