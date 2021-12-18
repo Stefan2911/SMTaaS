@@ -206,4 +206,10 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
       robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
+
+# Module Architecture
+
+[pydeps](https://pydeps.readthedocs.io/en/latest/)  is a tool to visualize python module dependencies. The following
+command can be used to show the dependencies of this project:
+`pydeps --cluster .\src\ -x src.slam`
      
