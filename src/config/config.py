@@ -61,8 +61,8 @@ class Config:
     def get_basic_reward(self):
         return self.data['decision']['reinforcement-learning']['basic-reward']
 
-    def get_training_smt_problem(self):
-        return self.data['decision']['reinforcement-learning']['training-smt-problem']
+    def get_training_problem_directory(self):
+        return self.data['decision']['reinforcement-learning']['training-smt-problem-directory']
 
     def is_mode_active(self, mode):
         return self.data['decision']['reinforcement-learning']['reward-modes'][mode]['active']
@@ -84,14 +84,17 @@ class Config:
     def get_action_space(self):
         return len(self.get_solver_instances()) + 1  # number of instances to offload + solve locally
 
-    # decision reinforcement learning q-learning
-    def get_hyper_parameters(self, mode):
-        return self.data['decision']['reinforcement-learning'][mode]['hyper-parameters']
+    def get_common_hyper_parameters(self):
+        return self.data['decision']['reinforcement-learning']['common-hyper-parameters']
 
+    # decision reinforcement learning q-learning
     def get_q_table_location(self):
         return self.data['decision']['reinforcement-learning']['q-learning']['q-table-location']
 
     # decision reinforcement learning dqn
+    def get_dqn_hyper_parameters(self):
+        return self.data['decision']['reinforcement-learning']['deep-q-network']['hyper-parameters']
+
     def get_neural_network_location(self):
         return self.data['decision']['reinforcement-learning']['deep-q-network']['neural-network-location']
 

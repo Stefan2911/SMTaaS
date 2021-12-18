@@ -188,13 +188,13 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
 1. Define reward model `decision.reinforcement-learning.reward-modes`
-3. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
-4. RaspberryPi's:
+2. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
+3. RaspberryPi's:
    * Set `smt.final-node` to `False`
    * Set `smt.decision-mode` to `deep_q_network`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
-5. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
-6.
+4. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
+5.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
@@ -203,6 +203,23 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
       robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
+
+### Training Q-Learning
+
+1. Define reward model `decision.reinforcement-learning.reward-modes`
+2. Define hyper parameters `decision.reinforcement-learning.common-hyper-parameters`
+3.
+   * On robot: `python3 -m src.decision.reinforcement_learning.q_learning.decision_making`
+   * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.q_learning.decision_making`
+
+### Training DQN
+
+1. Define reward model `decision.reinforcement-learning.reward-modes`
+2. Define hyper parameters `decision.reinforcement-learning.common-hyper-parameters`
+3. Define dqn specific hyper parameters `decision.reinforcement-learning.deep-q-network.hyper-parameters`
+4.
+   * On robot: `python3 -m src.decision.reinforcement_learning.deep_q_network.decision_making`
+   * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making`
 
 # Module Architecture
 

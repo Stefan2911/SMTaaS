@@ -1,5 +1,5 @@
 import logging
-from itertools import count
+import os
 from os.path import isfile
 
 import torch
@@ -18,14 +18,15 @@ logging.basicConfig()
 logger = logging.getLogger('decision_making')
 logger.setLevel(level=config.get_logging_level())
 
-hyper_parameters = config.get_hyper_parameters('deep-q-network')
+hyper_parameters = config.get_common_hyper_parameters()
+dqn_hyper_parameters = config.get_dqn_hyper_parameters()
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # if cuda is selected the GPU is used
 environment_manager = EnvironmentManager(device)
 strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters['eps-end'],
                                  hyper_parameters['eps-decay'])
 agent = Agent(strategy, environment_manager.num_actions_available(), device)
-memory = ReplayMemory(hyper_parameters['memory-size'])
+memory = ReplayMemory(dqn_hyper_parameters['memory-size'])
 
 number_of_indicators = environment_manager.get_number_of_indicators()
 number_of_actions = environment_manager.num_actions_available()
@@ -43,8 +44,6 @@ target_net.eval()
 
 optimizer = optim.Adam(params=policy_net.parameters(), lr=hyper_parameters['lr'])
 
-episode_durations = []
-
 
 def extract_tensors(experiences):
     # Convert batch of Experiences to Experience of batches
@@ -59,9 +58,9 @@ def extract_tensors(experiences):
 
 
 def optimize_model():
-    if len(memory) < hyper_parameters['batch-size']:
+    if len(memory) < dqn_hyper_parameters['batch-size']:
         return
-    experiences = memory.sample(hyper_parameters['batch-size'])
+    experiences = memory.sample(dqn_hyper_parameters['batch-size'])
     states, actions, rewards, next_states = extract_tensors(experiences)
 
     current_q_values = QValues.get_current(policy_net, states, actions)
@@ -77,15 +76,17 @@ def optimize_model():
 
 
 def training():
+    training_problem_directory = config.get_training_problem_directory()
+
     for episode in range(hyper_parameters['num-episodes']):
         environment_manager.reset()
         state = environment_manager.get_state()
 
         rewards_current_episode = 0
 
-        for time_step in count():
+        for filename in os.listdir(training_problem_directory):
             action = agent.select_action(state, policy_net)
-            reward, response = environment_manager.take_action(action, config.get_training_smt_problem())
+            reward, response = environment_manager.take_action(action, training_problem_directory + os.sep + filename)
             rewards_current_episode += reward.item()
             next_state = environment_manager.get_state()
             memory.push(Experience(state, action, next_state, reward))
@@ -93,15 +94,10 @@ def training():
 
             optimize_model()
 
-            # in our scenario done is never reached, therefore we need to define a episode length
-            if environment_manager.done or time_step == hyper_parameters['episode-length']:
-                episode_durations.append(time_step)
-                break
-
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
         # Update the target network, copying all weights and biases in DQN
-        if episode % hyper_parameters['target-update'] == 0:
+        if episode % dqn_hyper_parameters['target-update'] == 0:
             logger.debug('update target network')
             target_net.load_state_dict(policy_net.state_dict())
 

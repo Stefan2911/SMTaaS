@@ -68,39 +68,31 @@ decision:
         active: False
     basic-reward: 1
 
-    training-smt-problem: src/smt/sets/examples/simple.smt2
+    training-smt-problem-directory: src/smt/sets/training/
 
     solver:
       native: True
       instances:
         - http://10.0.0.16:5000/formulae
         - http://10.0.0.19:5000/formulae
-        - http://194.182.171.9:5000/formulae
+        # - http://194.182.171.9:5000/formulae
+
+    common-hyper-parameters:
+      gamma: 0.999        # discount factor used in the Bellman equation
+      eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
+      eps-end: 0.05       # ending value of epsilon
+      eps-decay: 0.005    # decay rate used to decay epsilon over time
+      lr: 0.05            # learning rate (alpha)
+      num-episodes: 1     # number of episodes
 
     q-learning:
-      hyper-parameters:
-        gamma: 0.999        # discount factor used in the Bellman equation
-        eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
-        eps-end: 0.05       # ending value of epsilon
-        eps-decay: 0.005    # decay rate used to decay epsilon over time
-        lr: 0.05            # learning rate (alpha)
-        num-episodes: 100   # number of episodes
-        episode-length: 5   # number of smt problems solved in one episode
-
-      q-table-location: src/decision/reinforcement_learning/q_learning/q_table
+      q-table-location: src/decision/reinforcement_learning/q_learning/q_table.npy
 
     deep-q-network:
       hyper-parameters:
         batch-size: 64
-        gamma: 0.999        # discount factor used in the Bellman equation
-        eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
-        eps-end: 0.05       # ending value of epsilon
-        eps-decay: 0.005    # decay rate used to decay epsilon over time
         target-update: 5    # defines how frequently (in terms of episodes), the target network weights are updated
         memory-size: 100000 # capacity of replay memory
-        lr: 0.01            # learning rate
-        num-episodes: 200   # number of episodes
-        episode-length: 5   # number of smt problems solved in one episode
 
       neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
 
@@ -182,7 +174,7 @@ monitoring:
 
 smt:
   solver-location: "/usr/bin/cvc4"
-  final-node: False # no further decision making
+  final-node: False # if True -> no further decision-making
   decision-mode: q_learning
 
 evaluation:
