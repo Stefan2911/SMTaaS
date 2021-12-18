@@ -181,7 +181,6 @@ monitoring:
         end: 100
 
 smt:
-  # solver-location: "/home/robot/cvc4"
   solver-location: "/usr/bin/cvc4"
   final-node: False # no further decision making
   decision-mode: q_learning

@@ -118,6 +118,8 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 # Evaluation
 
 * Copy/Deploy evaluation & training sets on robot
+* Configuration file is located in: `src/config/config.yaml`
+* Set `smt.solver-location` to solver location e.g. `/usr/bin/cvc4`
 
 ### Evaluation CLI on robot:
 
@@ -138,10 +140,9 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 
 ### Dedicated Edge Device (DED only / RaspberryPi only)
 
-1. Define instances in always_offload.py
+1. Configure instances `evaluation.ded-instances`
 2. RaspberryPi's:
-   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `smt.final-node` in `src/config/config.yaml` to `True`
+   * Set `smt.final-node` to `True`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 3.
    1. Goal time: Start on
@@ -167,16 +168,14 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 
 ### Q-Learning
 
-1. Define model in `src/config/config.yaml`
-2. Upload config `src/config/config.yaml` to RaspberryPis and EV3
-3. Set `decision.reinforcement-learning.solver.instances` in `src/config/config.yaml` on RaspberryPis and EV3
-4. RaspberryPi's:
-   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `smt.final-node` in `src/config/config.yaml` to `False`
-   * Set `smt.decision-mode` in `src/config/config.yaml` to `q-learning`
+1. Configure model
+3. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
+5. RaspberryPi's:
+   * Set `smt.final-node` to `False`
+   * Set `smt.decision-mode` to `q-learning`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
-5. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
-6.
+6. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
+7.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
@@ -188,13 +187,11 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
-1. Define model in `src/config/config.yaml`
-2. Upload config `src/config/config.yaml` to RaspberryPis and EV3
-3. Set `decision.reinforcement-learning.solver.instances` in `src/config/config.yaml` on RaspberryPis and EV3
+1. Define reward model `decision.reinforcement-learning.reward-modes`
+3. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
 4. RaspberryPi's:
-   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `smt.final-node` in `src/config/config.yaml` to `False`
-   * Set `smt.decision-mode` in `src/config/config.yaml` to `deep_q_network`
+   * Set `smt.final-node` to `False`
+   * Set `smt.decision-mode` to `deep_q_network`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 5. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 6.
