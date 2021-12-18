@@ -1,7 +1,7 @@
 logging-level: 10 # logging.DEBUG
 
 client:
-  simulated-additional-latency: 0 # additional waiting for client in ms
+  simulated-additional-latency: 0 # additional waiting for client in seconds
 
 decision:
   heuristic:
