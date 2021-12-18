@@ -1,4 +1,0 @@
-solver-location: "/home/robot/cvc4"
-# solver-location: "/usr/bin/cvc4"
-
-final-node: True # no further decision making

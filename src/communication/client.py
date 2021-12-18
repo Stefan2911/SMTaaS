@@ -3,7 +3,7 @@ import logging
 
 import requests
 
-from src.communication.rest.config.config import Config
+from src.config.config import Config
 
 FORM_DATA_PARAM_KEY = "formula_file"
 

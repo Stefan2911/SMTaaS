@@ -3,8 +3,8 @@ import tempfile
 
 from flask import Flask, request
 
+from src.config.config import Config
 from src.decision.processing import process
-from src.smt.smt_solver.native.config.config import Config
 from src.smt.smt_solver.native.solver import call_solver
 
 app = Flask(__name__)

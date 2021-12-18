@@ -2,7 +2,7 @@
 
 import subprocess
 
-from src.smt.smt_solver.native.config.config import Config
+from src.config.config import Config
 
 config = Config()
 

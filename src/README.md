@@ -131,27 +131,25 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 1.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> robot_only`
-      *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple energy 10 robot_only`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 robot_only`
    2. Goal energy: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> robot_only`
-
-   * e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple 5`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5`
 
 ### Dedicated Edge Device (DED only / RaspberryPi only)
 
 1. Define instances in always_offload.py
 2. RaspberryPi's:
-   * Set `solver-location` in `src/smt/smt_solver/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `final-node` in `src/smt/smt_solver/config/config.yaml` to `True`
+   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
+   * Set `smt.final-node` in `src/config/config.yaml` to `True`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 3.
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> ded_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple time 10 ded_only`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 ded_only`
    2. Goal energy: Start on
       robot `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> ded_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple energy 5 ded_only`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 ded_only`
 
 ### Cloud only
 
@@ -161,51 +159,51 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation time <problem-directory> time <set repetition> cloud_only`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple time 10 cloud_only`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 cloud_only`
    2. Goal energy: Start on
       robot `python3 -m src.evaluation.evaluation energy <problem-directory> energy <unload_percentage> cloud_only`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple energy 5 cloud_only`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 cloud_only`
 
 ### Q-Learning
 
-1. Define model in `src/decision/reinforcement_learning/config.yaml`
-2. Upload config `src/decision/reinforcement_learning/config.yaml` to RaspberryPis and EV3
-3. Set `solver/instances` in `src/decision/reinforcement_learning/config.yaml` on RaspberryPis and EV3
+1. Define model in `src/config/config.yaml`
+2. Upload config `src/config/config.yaml` to RaspberryPis and EV3
+3. Set `decision.reinforcement-learning.solver.instances` in `src/config/config.yaml` on RaspberryPis and EV3
 4. RaspberryPi's:
-   * Set `solver-location` in `src/smt/smt_solver/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `final-node` in `src/smt/smt_solver/config/config.yaml` to `False`
-   * Set `decision-mode` in `src/smt/smt_solver/config/config.yaml` to `q-learning`
+   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
+   * Set `smt.final-node` in `src/config/config.yaml` to `False`
+   * Set `smt.decision-mode` in `src/config/config.yaml` to `q-learning`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 5. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 6.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple time 10 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
    2. Goal energy: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple energy 5 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
 
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
-1. Define model in `src/decision/reinforcement_learning/config.yaml`
-2. Upload config `src/decision/reinforcement_learning/config.yaml` to RaspberryPis and EV3
-3. Set `solver/instances` in `src/decision/reinforcement_learning/config.yaml` on RaspberryPis and EV3
+1. Define model in `src/config/config.yaml`
+2. Upload config `src/config/config.yaml` to RaspberryPis and EV3
+3. Set `decision.reinforcement-learning.solver.instances` in `src/config/config.yaml` on RaspberryPis and EV3
 4. RaspberryPi's:
-   * Set `solver-location` in `src/smt/smt_solver/config/config.yaml` to `/usr/bin/cvc4`
-   * Set `final-node` in `src/smt/smt_solver/config/config.yaml` to `False`
-   * Set `decision-mode` in `src/smt/smt_solver/config/config.yaml` to `deep_q_network`
+   * Set `smt.solver-location` in `src/config/config.yaml` to `/usr/bin/cvc4`
+   * Set `smt.final-node` in `src/config/config.yaml` to `False`
+   * Set `smt.decision-mode` in `src/config/config.yaml` to `deep_q_network`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 5. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 6.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple time 10 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
    2. Goal energy: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/develop/src/smt/sets/evaluation/simple energy 5 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
      

@@ -2,7 +2,7 @@
 import logging
 from enum import Enum
 
-from src.monitoring.config.config import Config
+from src.config.config import Config
 from src.monitoring.monitor_battery_level_ev3 import get_battery_level_ev3
 from src.monitoring.monitor_connectivity import *
 from src.monitoring.monitor_system_utilization import *

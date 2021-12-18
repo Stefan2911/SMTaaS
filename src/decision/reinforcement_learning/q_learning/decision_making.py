@@ -5,9 +5,9 @@ from os.path import isfile
 
 import numpy as np
 
+from src.config.config import Config
 from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonGreedyStrategy
 from src.decision.reinforcement_learning.q_learning.agent import Agent
-from src.decision.reinforcement_learning.q_learning.config.config import Config
 from src.decision.reinforcement_learning.q_learning.environment_manager import EnvironmentManager
 from src.monitoring.monitor import Rating
 
@@ -17,7 +17,7 @@ logging.basicConfig()
 logger = logging.getLogger('decision_making')
 logger.setLevel(level=config.get_logging_level())
 
-hyper_parameters = config.get_hyper_parameters()
+hyper_parameters = config.get_hyper_parameters('q-learning')
 
 strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters['eps-end'],
                                  hyper_parameters['eps-decay'])

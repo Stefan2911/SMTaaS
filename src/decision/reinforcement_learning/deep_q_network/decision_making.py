@@ -6,8 +6,8 @@ import torch
 import torch.nn.functional as F
 from torch import optim
 
+from src.config.config import Config
 from src.decision.reinforcement_learning.deep_q_network.agent import Agent
-from src.decision.reinforcement_learning.deep_q_network.config.config import Config
 from src.decision.reinforcement_learning.deep_q_network.environment_manager import EnvironmentManager
 from src.decision.reinforcement_learning.deep_q_network.model import DQN, Experience, ReplayMemory, QValues
 from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonGreedyStrategy
@@ -18,7 +18,7 @@ logging.basicConfig()
 logger = logging.getLogger('decision_making')
 logger.setLevel(level=config.get_logging_level())
 
-hyper_parameters = config.get_hyper_parameters()
+hyper_parameters = config.get_hyper_parameters('deep-q-network')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # if cuda is selected the GPU is used
 environment_manager = EnvironmentManager(device)

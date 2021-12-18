@@ -3,8 +3,8 @@ import os
 import time
 
 import src.monitoring.monitor
-from src.communication.rest.client import post_smt_problem
-from src.decision.reinforcement_learning.config.config import Config
+from src.communication.client import post_smt_problem
+from src.config.config import Config
 from src.monitoring.monitor import get_current_state, map_detailed_state
 from src.smt.smt_solver.native.solver import call_solver
 

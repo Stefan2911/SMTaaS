@@ -1,0 +1,194 @@
+logging-level: 10 # logging.DEBUG
+
+client:
+  simulated-additional-latency: 0 # additional waiting for client in ms
+
+decision:
+  heuristic:
+    indicators:
+      battery-level:
+        offloading-threshold: 40
+        locally-threshold: 95
+        weight: 0.20
+      connectivity:
+        offloading-threshold: 1
+        locally-threshold: 80
+        weight: 0.20
+      cpu-usage:
+        offloading-threshold: 80
+        locally-threshold: 5
+        weight: 0.20
+      memory-usage:
+        offloading-threshold: 80
+        locally-threshold: 5
+        weight: 0.2
+      transmission-cost:
+        offloading-threshold: 80
+        locally-threshold: 5
+        weight: 0.2
+      offload-threshold: 0.5
+    max-transmission-cost: 1000
+
+  reinforcement-learning:
+    reward-modes:
+      energy-aware:
+        active: False
+        ranges:
+          - end: 0      # < 1 percent of battery needed
+            reward: 5
+          - start: 1    # 1 percent of battery needed
+            end: 1
+            reward: -1
+          - start: 2    # >= 2 percent of battery needed
+            reward: -1
+      time-aware:
+        active: True
+        ranges:
+          - start: 0
+            end: 0.4
+            reward: 16
+          - start: 0.5
+            end: 0.9
+            reward: 8
+          - start: 1.0
+            end: 1.4
+            reward: 4
+          - start: 1.5
+            end: 1.9
+            reward: 2
+          - start: 2.0
+            end: 2.4
+            reward: 1
+          - start: 3
+            end: 9
+            reward: -2
+          - start: 10
+            reward: -10
+      traffic-aware:
+        active: False
+    basic-reward: 1
+
+    training-smt-problem: src/smt/sets/examples/simple.smt2
+
+    solver:
+      native: True
+      instances:
+        - http://10.0.0.16:5000/formulae
+        - http://10.0.0.19:5000/formulae
+        - http://194.182.171.9:5000/formulae
+
+    q-learning:
+      hyper-parameters:
+        gamma: 0.999        # discount factor used in the Bellman equation
+        eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
+        eps-end: 0.05       # ending value of epsilon
+        eps-decay: 0.005    # decay rate used to decay epsilon over time
+        lr: 0.05            # learning rate (alpha)
+        num-episodes: 100   # number of episodes
+        episode-length: 5   # number of smt problems solved in one episode
+
+      q-table-location: src/decision/reinforcement_learning/q_learning/q_table
+
+    deep-q-network:
+      hyper-parameters:
+        batch-size: 64
+        gamma: 0.999        # discount factor used in the Bellman equation
+        eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
+        eps-end: 0.05       # ending value of epsilon
+        eps-decay: 0.005    # decay rate used to decay epsilon over time
+        target-update: 5    # defines how frequently (in terms of episodes), the target network weights are updated
+        memory-size: 100000 # capacity of replay memory
+        lr: 0.01            # learning rate
+        num-episodes: 200   # number of episodes
+        episode-length: 5   # number of smt problems solved in one episode
+
+      neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
+
+ev3:
+  smt:
+    watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
+
+monitoring:
+  ev3: False
+
+  # TODO: define values
+
+  uplink-cost: 0.1
+
+  simulation:
+    active: False
+    values:
+      battery-level: 50
+      avg-rtt: 50
+      cpu-usage: 50
+      memory-usage: 50
+      used-ram: 1000
+      available-ram: 1000
+      disk-usage: 50
+      traffic: 50
+      transmission-cost: 10
+
+  indicators:
+    battery-level:
+      poor:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      excellent:
+        start: 76
+        end: 100
+    connectivity:
+      poor:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      excellent:
+        start: 76
+        end: 100
+    cpu-usage:
+      excellent:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      poor:
+        start: 76
+        end: 100
+    memory-usage:
+      excellent:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      poor:
+        start: 76
+        end: 100
+    transmission-cost:
+      excellent:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      poor:
+        start: 76
+        end: 100
+
+smt:
+  # solver-location: "/home/robot/cvc4"
+  solver-location: "/usr/bin/cvc4"
+  final-node: False # no further decision making
+  decision-mode: q_learning
+
+evaluation:
+  cloud-instances:
+    - http://194.182.171.9:5000/formulae
+  ded-instances:
+    - http://10.0.0.19:5000/formulae
+    - http://10.0.0.16:5000/formulae

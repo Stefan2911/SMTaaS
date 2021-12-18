@@ -2,7 +2,7 @@
 import os
 import random
 
-from src.communication.rest.client import post_smt_problem
+from src.communication.client import post_smt_problem
 from src.monitoring.monitor import *
 from src.smt.smt_solver.native.solver import call_solver
 

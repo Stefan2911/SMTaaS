@@ -1,4 +1,0 @@
-logging-level: 10 # logging.DEBUG
-
-smt:
-  watch-directory: /home/robot/watch/  # in this directory the SMT problems are added

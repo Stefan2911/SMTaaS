@@ -6,8 +6,8 @@ from timeloop import Timeloop
 from watchdog.events import PatternMatchingEventHandler
 from watchdog.observers import Observer
 
+from src.config.config import Config
 from src.decision.processing_ev3 import process
-from src.ev3.config.config import Config
 
 config = Config()
 
