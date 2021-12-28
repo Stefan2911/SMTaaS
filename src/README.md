@@ -106,7 +106,16 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 
 # Cloud
 
+### VM's
+
+* 4 core, 8 GB RAM VM at Frankfurt (194.182.171.9)
+* 2 core, 8 GB RAM VM at TU Wien (128.131.57.103)
+* 4 core, 8 GB RAM VM at TU Wien (128.131.57.122)
+* 8 core, 8 GB RAM VM at TU Wien (128.131.57.123)
+
 ### Setup
+
+#### Ubuntu based VM:
 
 1. Connect via ssh
 2. `sudo apt-get update`
@@ -115,7 +124,33 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 5. `sudo docker run -p 5000:5000 stefanh96/master-thesis:latest`
 6. Open necessary ports to make service reachable remotely
 
+#### CentOS based VM:
+
+1. Connect via ssh
+2. `sudo yum update`
+3. `sudo yum install docker`
+4. (Maybe necessary: `systemctl start docker`)
+5. `sudo docker pull stefanh96/master-thesis:latest` and select docker.io repository
+6. `sudo docker run -p 5000:5000 stefanh96/master-thesis:latest`
+7. `sudo systemctl disable --now firewalld.service`
+
+### TU Wien Cloud VM's
+
+1. Install ppp on RaspberryPi's: `sudo apt-get install ppp`
+2. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@<VM-IP> /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.2:10.10.10.1`
+   1.
+   e.g. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.122 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.2:10.10.10.1`
+
 # Evaluation
+
+### Get information about setup
+
+* Get information about RAM: `cat /proc/meminfo`
+* Get information about disk space: `df -h`
+* Get information about CPU('s): `cat /proc/cpuinfo` or `lscpu`
+* Get information about OS: `cat /etc/os-release` and `cat /proc/version`
+
+### General
 
 * Copy/Deploy evaluation & training sets on robot
 * Configuration file is located in: `src/config/config.yaml`
@@ -154,7 +189,7 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 
 ### Cloud only
 
-1. Define instances in always_offload.py
+1. Configure instances `evaluation.cloud-instances`
 2. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 3.
    1. Goal time: Start on
