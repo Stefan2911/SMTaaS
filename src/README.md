@@ -136,10 +136,10 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 
 ### TU Wien Cloud VM's
 
-1. Install ppp on RaspberryPi's: `sudo apt-get install ppp`
-2. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@<VM-IP> /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.2:10.10.10.1`
-   1.
-   e.g. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.122 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.2:10.10.10.1`
+1. Install ppp on RaspberryPi's/EV3: `sudo apt-get install ppp`
+2. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.123 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.1:10.10.20.1`
+3. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.122 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.4:10.10.20.4`
+4. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.103 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.3:10.10.20.3`
 
 # Evaluation
 
@@ -193,11 +193,11 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 2. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 3.
    1. Goal time: Start on
-      robot `python3 -m src.evaluation.evaluation time <problem-directory> time <set repetition> cloud_only`
+      robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> cloud_only`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 cloud_only`
    2. Goal energy: Start on
-      robot `python3 -m src.evaluation.evaluation energy <problem-directory> energy <unload_percentage> cloud_only`
+      robot `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> cloud_only`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 cloud_only`
 
