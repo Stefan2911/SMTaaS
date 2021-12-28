@@ -72,11 +72,13 @@ decision:
 
     solver:
       native: True
-      instances:
-        - http://10.0.0.16:5000/formulae
-        - http://10.0.0.19:5000/formulae
-        # - http://194.182.171.9:5000/formulae
-
+      instances: # comment not used instances
+        - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
+        - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
+        - http://10.10.20.4:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
+        - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
+        - http://10.0.0.19:5000/formulae      # RPi
+        - http://10.0.0.16:5000/formulae      # RPi
     common-hyper-parameters:
       gamma: 0.999        # discount factor used in the Bellman equation
       eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
