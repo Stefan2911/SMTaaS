@@ -19,7 +19,7 @@ logger.setLevel(level=config.get_logging_level())
 # a score (composite variable) is calculated based on multiple indicators (like battery level etc.)
 # this is a heuristic based solution
 def get_current_decision_value(problem):
-    state = get_current_state(os.stat(problem).st_size)
+    state = get_current_state(os.stat(problem).st_size / 1000)  # problem size in KB
     indicator_configuration = config.get_indicator_configuration()
     th = check_thresholds(state, indicator_configuration)
     if th is not None:

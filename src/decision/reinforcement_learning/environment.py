@@ -65,7 +65,7 @@ class Environment:
 
     def reset(self):
         problem_size = 0  # after reset no concrete problem is given
-        self.detailed_state = get_current_state(os.stat(problem_size).st_size)
+        self.detailed_state = get_current_state(os.stat(problem_size).st_size / 1000)  # problem size in KB
         self.state = map_detailed_state(self.detailed_state, self.simple)
 
     def close(self):
@@ -102,7 +102,7 @@ class Environment:
         timestamp_before_action = time.time()
         traffic_before_action = self.detailed_state.traffic
         response = _handle_action(action, smt_problem)
-        self.detailed_state = get_current_state(os.stat(smt_problem).st_size)
+        self.detailed_state = get_current_state(os.stat(smt_problem).st_size / 1000)  # problem size in KB
         self.state = map_detailed_state(self.detailed_state, self.simple)
         return self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
                                                                 timestamp_before_action,

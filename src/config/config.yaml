@@ -107,7 +107,7 @@ monitoring:
 
   # TODO: define values
 
-  uplink-cost: 0.1
+  uplink-cost: 1 # costs per KB
 
   simulation:
     active: False
@@ -123,7 +123,7 @@ monitoring:
       transmission-cost: 10
 
   indicators:
-    battery-level:
+    battery-level: # in %
       poor:
         start: 0
         end: 35
@@ -133,17 +133,7 @@ monitoring:
       excellent:
         start: 76
         end: 100
-    connectivity:
-      poor:
-        start: 0
-        end: 35
-      average:
-        start: 36
-        end: 75
-      excellent:
-        start: 76
-        end: 100
-    cpu-usage:
+    connectivity: # in ms
       excellent:
         start: 0
         end: 35
@@ -153,7 +143,17 @@ monitoring:
       poor:
         start: 76
         end: 100
-    memory-usage:
+    cpu-usage: # in %
+      excellent:
+        start: 0
+        end: 35
+      average:
+        start: 36
+        end: 75
+      poor:
+        start: 76
+        end: 100
+    memory-usage: # in %
       excellent:
         start: 0
         end: 35
