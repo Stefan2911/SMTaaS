@@ -4,9 +4,11 @@ import psutil
 
 CONVERSION_FACTOR = 1048576  # Byte to MegaByte
 
+psutil.cpu_percent(interval=None)
+
 
 def get_cpu_usage():
-    return psutil.cpu_percent(interval=1)
+    return psutil.cpu_percent(interval=None)
 
 
 def get_used_ram():
@@ -31,14 +33,6 @@ def get_battery_percent():
     if sensors_battery is None:
         return 100  # if no battery is installed, there must be permanent power supply
     return sensors_battery.percent
-
-
-# DOES NOT WORK ON EV3
-def get_battery_power_plugged():
-    sensors_battery = psutil.sensors_battery()
-    if sensors_battery is None:
-        return None
-    return sensors_battery.power_plugged
 
 
 def get_traffic():
