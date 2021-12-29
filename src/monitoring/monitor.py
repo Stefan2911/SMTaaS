@@ -24,33 +24,36 @@ class Monitor:
             self.battery_level = config.get_simulated_value('battery-level')
             self.avg_rtt = config.get_simulated_value('avg-rtt')
             self.cpu_usage = config.get_simulated_value('cpu-usage')
-            self.used_ram = config.get_simulated_value('used-ram')
-            self.available_ram = config.get_simulated_value('available-ram')
             self.memory_usage = config.get_simulated_value('memory-usage')
-            self.disk_usage = config.get_simulated_value('disk-usage')
             self.traffic = config.get_simulated_value('traffic')
             self.transmission_cost = config.get_simulated_value('transmission-cost')
+            # currently not used information
+            # self.used_ram = config.get_simulated_value('used-ram')
+            # self.available_ram = config.get_simulated_value('available-ram')
+            # self.disk_usage = config.get_simulated_value('disk-usage')
         else:
             self.battery_level = get_battery_percent()
             self.avg_rtt = get_rtt()
             self.cpu_usage = get_cpu_usage()
-            self.used_ram = get_used_ram()
-            self.available_ram = get_available_ram()
             self.memory_usage = get_memory_usage()
-            self.disk_usage = get_disk_usage()
             self.traffic = get_traffic()
             self.transmission_cost = _get_transmission_cost(problem_size)
+            # currently not used information
+            # self.used_ram = get_used_ram()
+            # self.available_ram = get_available_ram()
+            # self.disk_usage = get_disk_usage()
 
     def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
         logger.info('avg rtt (in ms): %f', self.avg_rtt)
         logger.info('CPU usage (percentage): %f', self.cpu_usage)
-        logger.info('used RAM (in Mb): %f', self.used_ram)
-        logger.info('available RAM (in Mb): %f', self.available_ram)
         logger.info('memory usage (percentage): %f', self.memory_usage)
-        logger.info('disk usage (percentage): %f', self.disk_usage)
         logger.info('traffic: %f', self.traffic)
         logger.info('transmission cost: %f', self.transmission_cost)
+        # currently not used information
+        # logger.info('used RAM (in Mb): %f', self.used_ram)
+        # logger.info('available RAM (in Mb): %f', self.available_ram)
+        # logger.info('disk usage (percentage): %f', self.disk_usage)
 
 
 class SimpleMonitor:
