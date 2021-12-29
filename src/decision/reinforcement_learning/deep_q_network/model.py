@@ -59,12 +59,11 @@ class QValues:
 
     @staticmethod
     def get_next(target_net, next_states):
-        # In our scenario there does not exist any final state, therefore we check if the state value is -1 which
-        # is not possible to mask any state as non final states
-        final_state_locations = next_states.flatten(start_dim=1).max(dim=1)[0].eq(-1).type(torch.bool)
-        non_final_state_locations = (final_state_locations is False)
-        non_final_states = next_states[non_final_state_locations]
+        # Compute a mask of non-final states and concatenate the batch elements
+        # (a final state would've been the one after which simulation ended, in our case there is no final state)
+        non_final_mask = torch.tensor(tuple(map(lambda s: s is not None, next_states)),
+                                      device=QValues.device, dtype=torch.bool)
         batch_size = next_states.shape[0]
-        values = torch.zeros(batch_size).to(QValues.device)
-        values[non_final_state_locations] = target_net(non_final_states).max(dim=1)[0].detach()
+        values = torch.zeros(batch_size, device=QValues.device)
+        values[non_final_mask] = target_net(next_states).max(1)[0].detach()
         return values
