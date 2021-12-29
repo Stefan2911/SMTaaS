@@ -110,8 +110,8 @@ def process(smt_problem):
     action = agent.select_action(state, target_net)
     reward, response = environment_manager.take_action(action, smt_problem)
     next_state = environment_manager.get_state()
-    # TODO: is memory push and optimize model etc. necessary?
     memory.push(Experience(state, action, next_state, reward))
+    optimize_model()
     return response
 
 
