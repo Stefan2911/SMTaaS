@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import logging
+import time
 from enum import Enum
 
 from src.config.config import Config
@@ -31,15 +32,33 @@ class Monitor:
             self.traffic = config.get_simulated_value('traffic')
             self.transmission_cost = config.get_simulated_value('transmission-cost')
         else:
+            start = time.time()
             self.battery_level = get_battery_percent()
+            logger.debug('needed time for getting battery level: %s', time.time() - start)
+            start = time.time()
             self.avg_rtt = get_rtt()
+            logger.debug('needed time for getting rtt: %s', time.time() - start)
+            start = time.time()
             self.cpu_usage = get_cpu_usage()
+            logger.debug('needed time for getting cpu usage: %s', time.time() - start)
+            start = time.time()
             self.used_ram = get_used_ram()
+            logger.debug('needed time for getting used ram: %s', time.time() - start)
+            start = time.time()
             self.available_ram = get_available_ram()
+            logger.debug('needed time for getting available ram: %s', time.time() - start)
+            start = time.time()
             self.memory_usage = get_memory_usage()
+            logger.debug('needed time for getting memory usage: %s', time.time() - start)
+            start = time.time()
             self.disk_usage = get_disk_usage()
+            logger.debug('needed time for getting disk usage: %s', time.time() - start)
+            start = time.time()
             self.traffic = get_traffic()
+            logger.debug('needed time for getting traffic: %s', time.time() - start)
+            start = time.time()
             self.transmission_cost = _get_transmission_cost(problem_size)
+            logger.debug('needed time for getting transmission cost: %s', time.time() - start)
 
     def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
