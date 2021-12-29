@@ -80,12 +80,12 @@ decision:
         - http://10.0.0.19:5000/formulae      # RPi
         - http://10.0.0.16:5000/formulae      # RPi
     common-hyper-parameters:
-      gamma: 0.999        # discount factor used in the Bellman equation
+      gamma: 0.9          # discount factor used in the Bellman equation
       eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
-      eps-end: 0.05       # ending value of epsilon
-      eps-decay: 0.005    # decay rate used to decay epsilon over time
-      lr: 0.05            # learning rate (alpha)
-      num-episodes: 1     # number of episodes
+      eps-end: 0.1        # ending value of epsilon
+      eps-decay: 0.02     # decay rate used to decay epsilon over time
+      lr: 0.5             # learning rate (alpha)
+      num-episodes: 10    # number of episodes
 
     q-learning:
       q-table-location: src/decision/reinforcement_learning/q_learning/q_table.npy

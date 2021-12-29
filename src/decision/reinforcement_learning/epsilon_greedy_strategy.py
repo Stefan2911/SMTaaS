@@ -1,7 +1,7 @@
 import math
 
 
-class EpsilonGreedyStrategy():
+class EpsilonGreedyStrategy:
     def __init__(self, start, end, decay):
         self.start = start
         self.end = end
