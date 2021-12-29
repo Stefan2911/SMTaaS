@@ -63,6 +63,7 @@ def training():
         rewards_current_episode = 0
 
         for filename in os.listdir(training_problem_directory):
+            start_process_time = time.time()
             start_action_selection_time = time.time()
             action = agent.select_action(map_state_to_index(state), q_table)
             logger.debug('needed time for action selection: %s', time.time() - start_action_selection_time)
@@ -73,6 +74,7 @@ def training():
             logger.debug('needed time for updating q table: %s', time.time() - start_updating_q_table)
             rewards_current_episode += reward
             state = next_state
+            logger.debug('needed time for processing (in s): %s', time.time() - start_process_time)
 
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
