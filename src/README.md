@@ -260,9 +260,8 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 1. Define reward model `decision.reinforcement-learning.reward-modes`
 2. Define hyper parameters `decision.reinforcement-learning.common-hyper-parameters`
 3. Define dqn specific hyper parameters `decision.reinforcement-learning.deep-q-network.hyper-parameters`
-4.
-   * On robot: `python3 -m src.decision.reinforcement_learning.deep_q_network.decision_making`
-   * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making`
+4. On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making` (DQN on EV3 not
+   possible)
 
 # Module Architecture
 
