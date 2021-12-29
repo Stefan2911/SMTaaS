@@ -1,6 +1,7 @@
 import logging
 import math
 import os
+import time
 from os.path import isfile
 
 import numpy as np
@@ -80,11 +81,15 @@ def persist_q_table(table):
 
 
 def process(smt_problem):
+    start_action_selection_time = time.time()
     state = environment_manager.get_state()
     action = agent.select_action(map_state_to_index(state), q_table)
+    logger.debug('needed time for action selection: %s', time.time() - start_action_selection_time)
     reward, response = environment_manager.take_action(action, smt_problem)
     next_state = environment_manager.get_state()
+    start_updating_q_table = time.time()
     update_q_table(state, action, reward, next_state)
+    logger.debug('needed time for updating q table: %s', time.time() - start_updating_q_table)
     return response
 
 

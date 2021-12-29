@@ -102,8 +102,13 @@ class Environment:
         timestamp_before_action = time.time()
         traffic_before_action = self.detailed_state.traffic
         response = _handle_action(action, smt_problem)
+        start_getting_state_information_time = time.time()
         self.detailed_state = get_current_state(os.stat(smt_problem).st_size / 1000)  # problem size in KB
         self.state = map_detailed_state(self.detailed_state, self.simple)
-        return self.basic_reward + self.calculate_custom_reward(battery_level_before_action,
-                                                                timestamp_before_action,
-                                                                traffic_before_action), False, response
+        logger.debug('needed time for getting state: %s', time.time() - start_getting_state_information_time)
+        start_custom_reward_calculation_time = time.time()
+        custom_reward = self.calculate_custom_reward(battery_level_before_action, timestamp_before_action,
+                                                     traffic_before_action)
+        logger.debug('needed time for custom reward calculation: %s',
+                     time.time() - start_custom_reward_calculation_time)
+        return self.basic_reward + custom_reward, False, response
