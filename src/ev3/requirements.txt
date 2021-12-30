@@ -4,6 +4,5 @@ watchdog==2.1.5 # better approach: sudo apt-get install python3-watchdog
 timeloop==1.0.2
 requests==2.26.0
 pyyaml==5.4.1
-pybricks==2.0.0.post1
 python-ev3dev2==2.1.0.post1
 numpy==1.21.3 # better approach: sudo apt-get install python3-numpy
