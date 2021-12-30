@@ -267,5 +267,5 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 
 [pydeps](https://pydeps.readthedocs.io/en/latest/)  is a tool to visualize python module dependencies. The following
 command can be used to show the dependencies of this project:
-`pydeps --cluster .\src\ -x src.slam`
+`pydeps --cluster --min-cluster-size=2 --max-cluster-size=3 --keep-target-cluster .\src\ -x src.slam --rmprefix src. --reverse --noise-level 1`
      
