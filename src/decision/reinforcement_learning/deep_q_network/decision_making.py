@@ -107,7 +107,8 @@ def training():
 
 def process(smt_problem):
     state = environment_manager.get_state()
-    action = agent.select_action(state, target_net)
+    # exploration is only done during training
+    action = agent.select_action(state, target_net, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
     next_state = environment_manager.get_state()
     memory.push(Experience(state, action, next_state, reward))

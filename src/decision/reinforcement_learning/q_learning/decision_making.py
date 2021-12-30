@@ -81,7 +81,8 @@ def persist_q_table(table):
 
 def process(smt_problem):
     state = environment_manager.get_state()
-    action = agent.select_action(map_state_to_index(state), q_table)
+    # exploration is only done during training
+    action = agent.select_action(map_state_to_index(state), q_table, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
     next_state = environment_manager.get_state()
     update_q_table(state, action, reward, next_state)
