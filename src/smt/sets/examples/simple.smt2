@@ -1,4 +1,4 @@
-(set-logic ALL)
-(declare-fun x () Int)
-(assert (= (+ x x) (* x 2)))
+(set-logic QF_UF)
+(declare-const p Bool)
+(assert (and p (not p)))
 (check-sat)
