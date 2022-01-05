@@ -1,4 +1,5 @@
 import os
+import random
 import threading
 import time
 
@@ -102,6 +103,11 @@ class Config:
         return self.data['ev3']['smt']['watch-directory']
 
     # monitoring
+    def get_connectivity_checking_host(self):
+        hosts = self.data['monitoring']['connectivity']['hosts']
+        random_index = random.randrange(len(hosts))
+        return hosts[random_index]
+
     def get_indicator_ranges(self, indicator):
         return self.data['monitoring']['indicators'][indicator]
 
@@ -110,12 +116,6 @@ class Config:
 
     def get_simulated_value(self, indicator):
         return self.data['monitoring']['simulation']['values'][indicator]
-
-    def get_uplink_cost(self):
-        return self.data['monitoring']['uplink-cost']
-
-    def get_invocation_cost(self):
-        return self.data['monitoring']['invocation-cost']
 
     def get_state_update_period(self):
         return self.data['monitoring']['update-period']
@@ -133,3 +133,9 @@ class Config:
 
     def get_ded_instances(self):
         return self.data['evaluation']['ded-instances']
+
+    def get_uplink_cost(self):
+        return self.data['uplink-cost']
+
+    def get_invocation_cost(self):
+        return self.data['invocation-cost']

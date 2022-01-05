@@ -116,14 +116,22 @@ ev3:
   smt:
     watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
 
+uplink-cost: 1 # costs per KB
+invocation-cost: 10 # costs per invocation
+
 monitoring:
 
   update-period: 5 # in seconds
 
-  # TODO: define values
+  connectivity:
+    hosts:
+      - 194.182.171.9 # Ubuntu VM at Frankfurt
+      - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
+      - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
+      - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
+      - 10.0.0.19     # RPi
+      - 10.0.0.16     # RPi
 
-  uplink-cost: 1 # costs per KB
-  invocation-cost: 10 # costs per invocation
 
   simulation:
     active: False
@@ -152,13 +160,13 @@ monitoring:
     connectivity: # in ms
       excellent:
         start: 0
-        end: 35
+        end: 50
       average:
-        start: 36
-        end: 75
+        start: 51
+        end: 150
       poor:
-        start: 76
-        end: 100
+        start: 151
+        end: 500
     cpu-usage: # in %
       excellent:
         start: 0

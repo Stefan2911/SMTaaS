@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import os
 import random
 
 from src.communication.client import post_smt_problem
+from src.decision.state import get_current_state
 from src.monitoring.monitor import *
 from src.smt.smt_solver.native.solver import call_solver
 
@@ -19,7 +19,7 @@ logger.setLevel(level=config.get_logging_level())
 # a score (composite variable) is calculated based on multiple indicators (like battery level etc.)
 # this is a heuristic based solution
 def get_current_decision_value(problem):
-    state = get_current_state(os.stat(problem).st_size / 1000)  # problem size in KB
+    state = get_current_state(problem)
     indicator_configuration = config.get_indicator_configuration()
     th = check_thresholds(state, indicator_configuration)
     if th is not None:

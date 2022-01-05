@@ -3,7 +3,6 @@ import logging
 from datetime import timedelta
 from enum import Enum
 
-from src.monitoring.monitor_battery_level_ev3 import get_battery_level_ev3
 from timeloop import Timeloop
 
 from src.config.config import Config
@@ -17,10 +16,6 @@ tl = Timeloop()
 logging.basicConfig()
 logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
-
-
-def _get_offload_cost(problem_size):
-    return problem_size * config.get_uplink_cost() + config.get_invocation_cost()
 
 
 class Monitor:
@@ -41,7 +36,7 @@ class Monitor:
                 self.battery_level = get_battery_level_ev3()
             else:
                 self.battery_level = get_battery_level()
-            self.avg_rtt = get_rtt()
+            self.avg_rtt = get_rtt(config.get_connectivity_checking_host())
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
@@ -106,19 +101,12 @@ global_simple_monitor = None
 update_state()
 
 
-def get_current_state(problem_size, simple=False):
-    if simple:
-        global_simple_monitor.offload_cost = _get_offload_cost(problem_size)
-        return global_simple_monitor
-    else:
-        global_monitor.offload_cost = _get_offload_cost(problem_size)
-        return global_monitor
+def get_monitor():
+    return global_monitor
 
 
-def map_detailed_state(monitor, simple=False):
-    if simple:
-        return SimpleMonitor(monitor)
-    return monitor
+def get_simple_monitor():
+    return global_simple_monitor
 
 
 def get_number_of_rating_classes():
