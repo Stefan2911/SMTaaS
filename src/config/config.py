@@ -121,6 +121,9 @@ class Config:
     def get_invocation_cost(self):
         return self.data['monitoring']['invocation-cost']
 
+    def get_state_update_period(self):
+        return self.data['monitoring']['update-period']
+
     # smt
     def get_solver_location(self):
         return self.data['smt']['solver-location']

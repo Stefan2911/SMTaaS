@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 import logging
+from datetime import timedelta
 from enum import Enum
 
-from src.config.config import Config
 from src.monitoring.monitor_battery_level_ev3 import get_battery_level_ev3
+from timeloop import Timeloop
+
+from src.config.config import Config
 from src.monitoring.monitor_connectivity import *
 from src.monitoring.monitor_system_utilization import *
 
 config = Config()
+
+tl = Timeloop()
 
 logging.basicConfig()
 logger = logging.getLogger('monitor')
@@ -19,7 +24,7 @@ def _get_offload_cost(problem_size):
 
 
 class Monitor:
-    def __init__(self, problem_size):
+    def __init__(self):
         if config.is_simulation_active():
             self.battery_level = config.get_simulated_value('battery-level')
             self.avg_rtt = config.get_simulated_value('avg-rtt')
@@ -32,12 +37,15 @@ class Monitor:
             # self.available_ram = config.get_simulated_value('available-ram')
             # self.disk_usage = config.get_simulated_value('disk-usage')
         else:
-            self.battery_level = get_battery_percent()
+            if config.is_ev3():
+                self.battery_level = get_battery_level_ev3()
+            else:
+                self.battery_level = get_battery_level()
             self.avg_rtt = get_rtt()
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
-            self.offload_cost = _get_offload_cost(problem_size)
+            self.offload_cost = 0
             # currently not used information
             # self.used_ram = get_used_ram()
             # self.available_ram = get_available_ram()
@@ -79,32 +87,32 @@ class SimpleMonitor:
         return Rating.poor
 
 
-class EV3Monitor(Monitor):
-    def __init__(self, problem_size):
-        super().__init__(problem_size)
-        if config.is_simulation_active():
-            self.battery_level = config.get_simulated_value('battery-level')
-        else:
-            self.battery_level = get_battery_level_ev3()
-
-
 class Rating(Enum):
     poor = 0
     average = 1
     excellent = 2
 
 
+@tl.job(interval=timedelta(seconds=config.get_state_update_period()))
+def update_state():
+    global global_monitor
+    global global_simple_monitor
+    global_monitor = Monitor()
+    global_simple_monitor = SimpleMonitor(global_monitor)
+
+
+global_monitor = None
+global_simple_monitor = None
+update_state()
+
+
 def get_current_state(problem_size, simple=False):
     if simple:
-        if config.is_ev3():
-            return SimpleMonitor(EV3Monitor(problem_size))
-        else:
-            return SimpleMonitor(Monitor(problem_size))
+        global_simple_monitor.offload_cost = _get_offload_cost(problem_size)
+        return global_simple_monitor
     else:
-        if config.is_ev3():
-            return EV3Monitor(problem_size)
-        else:
-            return Monitor(problem_size)
+        global_monitor.offload_cost = _get_offload_cost(problem_size)
+        return global_monitor
 
 
 def map_detailed_state(monitor, simple=False):

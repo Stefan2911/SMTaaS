@@ -105,6 +105,8 @@ ev3:
 monitoring:
   ev3: False
 
+  update-period: 5 # in seconds
+
   # TODO: define values
 
   uplink-cost: 1 # costs per KB
