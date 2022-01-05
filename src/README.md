@@ -270,7 +270,7 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 Add latency:
 `sudo tc qdisc add dev wlan0 root netem delay <additional latency>ms`
 Delete latency:
-`sudo tc qdisc delete dev wlan0 root netem delay <additional latency> 100ms`
+`sudo tc qdisc delete dev wlan0 root netem delay <additional latency>ms`
 
 # Module Architecture
 
