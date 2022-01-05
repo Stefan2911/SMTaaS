@@ -43,10 +43,6 @@ class Config:
     def get_logging_level(self):
         return self.data['logging-level']
 
-    # client
-    def get_simulated_additional_latency(self):
-        return self.data['client']['simulated-additional-latency']
-
     # decision heuristic
     def get_indicator_configuration(self):
         return self.data['decision']['heuristic']['indicators']
@@ -99,6 +95,9 @@ class Config:
         return self.data['decision']['reinforcement-learning']['deep-q-network']['neural-network-location']
 
     # ev3
+    def is_ev3(self):
+        return self.data['ev3']['in-use']
+
     def get_directory_to_observe(self):
         return self.data['ev3']['smt']['watch-directory']
 
@@ -111,9 +110,6 @@ class Config:
 
     def get_simulated_value(self, indicator):
         return self.data['monitoring']['simulation']['values'][indicator]
-
-    def is_ev3(self):
-        return self.data['monitoring']['ev3']
 
     def get_uplink_cost(self):
         return self.data['monitoring']['uplink-cost']

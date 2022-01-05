@@ -263,6 +263,15 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 4. On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making` (DQN on EV3 not
    possible)
 
+## Simulation
+
+### RaspberryPis
+
+Add latency:
+`sudo tc qdisc add dev wlan0 root netem delay <additional latency>ms`
+Delete latency:
+`sudo tc qdisc delete dev wlan0 root netem delay <additional latency> 100ms`
+
 # Module Architecture
 
 [pydeps](https://pydeps.readthedocs.io/en/latest/)  is a tool to visualize python module dependencies. The following
