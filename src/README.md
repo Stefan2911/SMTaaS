@@ -163,6 +163,8 @@ It is important that IP addresses are not used twice!
 * Copy/Deploy evaluation & training sets on robot
 * Configuration file is located in: `src/config/config.yaml`
 * Set `smt.solver-location` to solver location e.g. `/usr/bin/cvc4`
+* Set `monitor.connectivity.hosts` to hosts which are randomly chosen for connectivity check (possible improvement would
+  be to add a state for each offload instance)
 
 ### Evaluation CLI on robot:
 
@@ -254,6 +256,13 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
 3.
    * On robot: `python3 -m src.decision.reinforcement_learning.q_learning.decision_making`
    * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.q_learning.decision_making`
+
+Printing Q-Table on RaspberryPi:
+
+1. ``python3``
+2. ``import numpy as np``
+3. ``table = np.load("src/decision/reinforcement_learning/q_learning/q_table.npy")``
+4. ``print(table)``
 
 ### Training DQN
 

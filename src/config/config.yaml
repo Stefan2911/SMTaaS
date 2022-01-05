@@ -56,27 +56,21 @@ decision:
             reward: -1
       time-aware:
         active: True
-        ranges:
+        ranges: # start inclusive, # end exclusive
           - start: 0
             end: 0.4
             reward: 16
-          - start: 0.5
+          - start: 0.4
             end: 0.9
             reward: 8
-          - start: 1.0
+          - start: 0.9
             end: 1.4
             reward: 4
-          - start: 1.5
-            end: 1.9
-            reward: 2
-          - start: 2.0
-            end: 2.4
-            reward: 1
-          - start: 3
-            end: 9
+          - start: 1.4
+            end: 2
             reward: -2
-          - start: 10
-            reward: -10
+          - start: 2
+            reward: -5
       traffic-aware:
         active: False
     basic-reward: 1

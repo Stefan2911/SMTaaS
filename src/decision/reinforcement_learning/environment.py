@@ -36,7 +36,7 @@ def _solve_locally(smt_problem):
 def _get_custom_reward(mode, difference):
     reward_ranges = config.get_reward_ranges(mode)
     for reward_range in reward_ranges:
-        if reward_range.get('start', float('-inf')) <= difference <= reward_range.get('end', float('inf')):
+        if reward_range.get('start', float('-inf')) <= difference < reward_range.get('end', float('inf')):
             return reward_range.get('reward', 0)
     return 0
 
