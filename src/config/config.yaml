@@ -22,12 +22,12 @@ decision:
         offloading-threshold: 80
         locally-threshold: 5
         weight: 0.2
-      transmission-cost:
+      offload-cost:
         offloading-threshold: 80
         locally-threshold: 5
         weight: 0.2
       offload-threshold: 0.5
-    max-transmission-cost: 1000
+    max-offload-cost: 1000
 
   reinforcement-learning:
     reward-modes:
@@ -108,6 +108,7 @@ monitoring:
   # TODO: define values
 
   uplink-cost: 1 # costs per KB
+  invocation-cost: 10 # costs per invocation
 
   simulation:
     active: False
@@ -120,7 +121,7 @@ monitoring:
       available-ram: 1000
       disk-usage: 50
       traffic: 50
-      transmission-cost: 10
+      offload-cost: 10
 
   indicators:
     battery-level: # in %
@@ -163,7 +164,7 @@ monitoring:
       poor:
         start: 76
         end: 100
-    transmission-cost:
+    offload-cost:
       excellent:
         start: 0
         end: 35

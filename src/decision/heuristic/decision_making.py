@@ -44,7 +44,7 @@ def check_thresholds(status, indicator_configuration):
     value = check_memory_usage_threshold(status, indicator_configuration['memory-usage'])
     if value is not None:
         return value
-    value = check_transmission_cost_threshold(status, indicator_configuration['transmission-cost'])
+    value = check_offload_cost_threshold(status, indicator_configuration['offload-cost'])
     if value is not None:
         return value
     return None
@@ -101,15 +101,15 @@ def check_memory_usage_threshold(status, memory_configuration):
     return None
 
 
-def check_transmission_cost_threshold(status, transmission_configuration):
-    if status.transmission_cost > transmission_configuration['offloading-threshold']:
-        logger.debug('transmission-cost offloading-threshold %s exceeded: %s',
-                     transmission_configuration['offloading-threshold'],
+def check_offload_cost_threshold(status, offload_configuration):
+    if status.offload_cost > offload_configuration['offloading-threshold']:
+        logger.debug('offload-cost offloading-threshold %s exceeded: %s',
+                     offload_configuration['offloading-threshold'],
                      status.memory_usage)
         return 1
-    if status.transmission_cost < transmission_configuration['locally-threshold']:
-        logger.debug('transmission-cost locally-threshold %s undercut: %s',
-                     transmission_configuration['locally-threshold'],
+    if status.offload_cost < offload_configuration['locally-threshold']:
+        logger.debug('offload-cost locally-threshold %s undercut: %s',
+                     offload_configuration['locally-threshold'],
                      status.memory_usage)
         return 0
     return None
@@ -125,8 +125,8 @@ def normalize_values(status):
     # higher avg rtt should DECREASE score
     # avg rtt is also represented as percentage value with 0% as TIMEOUT value
     status.avg_rtt = 100 - (status.avg_rtt / TIMEOUT * 100)
-    # higher transmission cost should DECREASE score
-    status.transmission_cost = 100 - (status.transmission_cost / config.get_max_transmission_cost() * 100)
+    # higher offload cost should DECREASE score
+    status.offload_cost = 100 - (status.offload_cost / config.get_max_offload_cost() * 100)
     # higher cpu usage should INCREASE score
     # higher memory usage should INCREASE score
     return status
@@ -137,12 +137,12 @@ def combine_values(status, configuration):
     logger.debug("normalized avg_rtt value: %s", status.avg_rtt)
     logger.debug("normalized cpu usage value: %s", status.cpu_usage)
     logger.debug("normalized memory usage value: %s", status.memory_usage)
-    logger.debug("normalized transmission cost value: %s", status.transmission_cost)
+    logger.debug("normalized offload cost value: %s", status.offload_cost)
     return (status.battery_level * configuration['battery-level']['weight'] +
             status.avg_rtt * configuration['connectivity']['weight'] +
             status.cpu_usage * configuration['cpu-usage']['weight'] +
             status.memory_usage * configuration['memory-usage']['weight'] +
-            status.memory_usage * configuration['transmission-cost']['weight']) / 100
+            status.memory_usage * configuration['offload-cost']['weight']) / 100
 
 
 def process(smt_problem):

@@ -54,8 +54,8 @@ class Config:
     def get_offload_threshold(self):
         return self.data['decision']['heuristic']['offload-threshold']
 
-    def get_max_transmission_cost(self):
-        return self.data['decision']['heuristic']['max-transmission-cost']
+    def get_max_offload_cost(self):
+        return self.data['decision']['heuristic']['max-offload-cost']
 
     # decision reinforcement learning
     def get_basic_reward(self):
@@ -117,6 +117,9 @@ class Config:
 
     def get_uplink_cost(self):
         return self.data['monitoring']['uplink-cost']
+
+    def get_invocation_cost(self):
+        return self.data['monitoring']['invocation-cost']
 
     # smt
     def get_solver_location(self):

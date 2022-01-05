@@ -14,8 +14,8 @@ logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
 
 
-def _get_transmission_cost(problem_size):
-    return problem_size * config.get_uplink_cost()
+def _get_offload_cost(problem_size):
+    return problem_size * config.get_uplink_cost() + config.get_invocation_cost()
 
 
 class Monitor:
@@ -26,7 +26,7 @@ class Monitor:
             self.cpu_usage = config.get_simulated_value('cpu-usage')
             self.memory_usage = config.get_simulated_value('memory-usage')
             self.traffic = config.get_simulated_value('traffic')
-            self.transmission_cost = config.get_simulated_value('transmission-cost')
+            self.offload_cost = config.get_simulated_value('offload-cost')
             # currently not used information
             # self.used_ram = config.get_simulated_value('used-ram')
             # self.available_ram = config.get_simulated_value('available-ram')
@@ -37,7 +37,7 @@ class Monitor:
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
-            self.transmission_cost = _get_transmission_cost(problem_size)
+            self.offload_cost = _get_offload_cost(problem_size)
             # currently not used information
             # self.used_ram = get_used_ram()
             # self.available_ram = get_available_ram()
@@ -49,7 +49,7 @@ class Monitor:
         logger.info('CPU usage (percentage): %f', self.cpu_usage)
         logger.info('memory usage (percentage): %f', self.memory_usage)
         logger.info('traffic: %f', self.traffic)
-        logger.info('transmission cost: %f', self.transmission_cost)
+        logger.info('offload cost: %f', self.offload_cost)
         # currently not used information
         # logger.info('used RAM (in Mb): %f', self.used_ram)
         # logger.info('available RAM (in Mb): %f', self.available_ram)
@@ -62,15 +62,15 @@ class SimpleMonitor:
         self.connectivity = self.__get_rating(monitor.avg_rtt, config.get_indicator_ranges('connectivity'))
         self.cpu_state = self.__get_rating(monitor.cpu_usage, config.get_indicator_ranges('cpu-usage'))
         self.memory_state = self.__get_rating(monitor.memory_usage, config.get_indicator_ranges('memory-usage'))
-        self.transmission_cost = self.__get_rating(monitor.transmission_cost,
-                                                   config.get_indicator_ranges('transmission-cost'))
+        self.offload_cost = self.__get_rating(monitor.offload_cost,
+                                              config.get_indicator_ranges('offload-cost'))
 
     def log_state(self):
         logger.info('battery level: %s', self.battery_level)
         logger.info('connectivity: %s', self.connectivity)
         logger.info('cpu state: %s', self.cpu_state)
         logger.info('memory state: %s', self.memory_state)
-        logger.info('transmission cost: %s', self.transmission_cost)
+        logger.info('offload cost: %s', self.offload_cost)
 
     def __get_rating(self, value, ranges):
         for rating in Rating:
