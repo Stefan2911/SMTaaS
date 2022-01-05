@@ -39,11 +39,12 @@ def evaluate():
     elif goal == 'time':
         iterations = int(sys.argv[3])
     approach = sys.argv[4]
-    start_time = time.time()
+
     start_battery_level = get_battery_level_ev3()
     end_battery_level = start_battery_level - float(unload_percentage)
     problems_solved = 0
 
+    start_time = time.time()
     if goal == 'energy':
         files = os.listdir(problem_directory)
         file_index = 0
