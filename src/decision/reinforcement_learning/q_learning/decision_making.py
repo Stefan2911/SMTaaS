@@ -30,16 +30,17 @@ state_space_size = environment_manager.num_states_available()
 
 q_table_location = config.get_q_table_location()
 if isfile(q_table_location):
-    q_table = np.load(q_table_location).reshape(state_space_size, action_space_size)
+    q_table = np.load(q_table_location)
 else:
     q_table = np.zeros((state_space_size, action_space_size))
 
 
 def map_state_to_index(state):
-    # e.g. (poor, poor, poor, poor) = 0
+    # e.g. (poor, poor, poor, poor, poor) = 0
     value = 0
+    base = len(Rating)
     for i, s in enumerate(state):
-        value += s.value * math.pow(len(Rating), i)
+        value += s.value * math.pow(base, i)
     return int(value)
 
 
