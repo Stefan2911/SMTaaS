@@ -257,9 +257,9 @@ If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd param
    * On robot: `python3 -m src.decision.reinforcement_learning.q_learning.decision_making`
    * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.q_learning.decision_making`
 
-Printing Q-Table on RaspberryPi:
+Printing Q-Table on EV3/RaspberryPi:
 
-1. ``python3``
+1. ``python3`` (EV3), ``python3.7`` (RaspberryPi)
 2. ``import numpy as np``
 3. ``table = np.load("src/decision/reinforcement_learning/q_learning/q_table.npy")``
 4. ``print(table)``
@@ -276,10 +276,22 @@ Printing Q-Table on RaspberryPi:
 
 ### RaspberryPis
 
+#### Latency
+
 Add latency:
 `sudo tc qdisc add dev wlan0 root netem delay <additional latency>ms`
 Delete latency:
 `sudo tc qdisc delete dev wlan0 root netem delay <additional latency>ms`
+Delete all rules:
+`sudo tc qdisc del dev wlan0 root`
+
+Add latency IP-specific:
+
+1. `sudo tc qdisc add dev wlan0 root handle 1: prio`
+2. `sudo tc qdisc add dev wlan0 parent 1:3 handle 30: netem delay <additional latency>ms`
+3. `sudo tc filter add dev wlan0 protocol ip parent 1:0 prio 3 u32 match ip dst <ip>/32 flowid 1:3`
+
+Or call created script: `./change_latency.sh <latency>ms`
 
 # Module Architecture
 
