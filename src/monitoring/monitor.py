@@ -18,15 +18,23 @@ logger = logging.getLogger('monitor')
 logger.setLevel(level=config.get_logging_level())
 
 
-class Monitor:
+class State:
     def __init__(self):
+        self.offload_cost = 0
+        self.problem_complexity = 0
+
+
+class Monitor(State):
+    def __init__(self):
+        super().__init__()
         if config.is_simulation_active():
             self.battery_level = config.get_simulated_value('battery-level')
             self.avg_rtt = config.get_simulated_value('avg-rtt')
             self.cpu_usage = config.get_simulated_value('cpu-usage')
             self.memory_usage = config.get_simulated_value('memory-usage')
             self.traffic = config.get_simulated_value('traffic')
-            self.offload_cost = config.get_simulated_value('offload-cost')
+            super.offload_cost = config.get_simulated_value('offload-cost')
+            super.problem_complexity = config.get_simulated_value('problem-complexity')
             # currently not used information
             # self.used_ram = config.get_simulated_value('used-ram')
             # self.available_ram = config.get_simulated_value('available-ram')
@@ -40,7 +48,6 @@ class Monitor:
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
-            self.offload_cost = 0
             # currently not used information
             # self.used_ram = get_used_ram()
             # self.available_ram = get_available_ram()
@@ -53,20 +60,29 @@ class Monitor:
         logger.info('memory usage (percentage): %f', self.memory_usage)
         logger.info('traffic: %f', self.traffic)
         logger.info('offload cost: %f', self.offload_cost)
+        logger.info('problem complexity: %f', self.problem_complexity)
         # currently not used information
         # logger.info('used RAM (in Mb): %f', self.used_ram)
         # logger.info('available RAM (in Mb): %f', self.available_ram)
         # logger.info('disk usage (percentage): %f', self.disk_usage)
 
 
-class SimpleMonitor:
+def get_rating(value, ranges):
+    if ranges is None or value is None:
+        return Rating.poor
+    for rating in Rating:
+        if ranges[rating.name]['start'] <= value <= ranges[rating.name]['end']:
+            return rating
+    return Rating.poor
+
+
+class SimpleMonitor(State):
     def __init__(self, monitor):
-        self.battery_level = self.__get_rating(monitor.battery_level, config.get_indicator_ranges('battery-level'))
-        self.connectivity = self.__get_rating(monitor.avg_rtt, config.get_indicator_ranges('connectivity'))
-        self.cpu_state = self.__get_rating(monitor.cpu_usage, config.get_indicator_ranges('cpu-usage'))
-        self.memory_state = self.__get_rating(monitor.memory_usage, config.get_indicator_ranges('memory-usage'))
-        self.offload_cost = self.__get_rating(monitor.offload_cost,
-                                              config.get_indicator_ranges('offload-cost'))
+        super().__init__()
+        self.battery_level = get_rating(monitor.battery_level, config.get_indicator_ranges('battery-level'))
+        self.connectivity = get_rating(monitor.avg_rtt, config.get_indicator_ranges('connectivity'))
+        self.cpu_state = get_rating(monitor.cpu_usage, config.get_indicator_ranges('cpu-usage'))
+        self.memory_state = get_rating(monitor.memory_usage, config.get_indicator_ranges('memory-usage'))
 
     def log_state(self):
         logger.info('battery level: %s', self.battery_level)
@@ -74,12 +90,7 @@ class SimpleMonitor:
         logger.info('cpu state: %s', self.cpu_state)
         logger.info('memory state: %s', self.memory_state)
         logger.info('offload cost: %s', self.offload_cost)
-
-    def __get_rating(self, value, ranges):
-        for rating in Rating:
-            if ranges[rating.name]['start'] <= value <= ranges[rating.name]['end']:
-                return rating
-        return Rating.poor
+        logger.info('problem complexity: %s', self.problem_complexity)
 
 
 class Rating(Enum):
@@ -91,22 +102,15 @@ class Rating(Enum):
 @tl.job(interval=timedelta(seconds=config.get_state_update_period()))
 def update_state():
     global global_monitor
-    global global_simple_monitor
     global_monitor = Monitor()
-    global_simple_monitor = SimpleMonitor(global_monitor)
 
 
 global_monitor = None
-global_simple_monitor = None
 update_state()
 
 
 def get_monitor():
     return global_monitor
-
-
-def get_simple_monitor():
-    return global_simple_monitor
 
 
 def get_number_of_rating_classes():
