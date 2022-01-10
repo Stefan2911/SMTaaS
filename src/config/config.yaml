@@ -10,7 +10,7 @@ evaluation:
   cloud-instances:
     - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
     - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
-    - http://10.10.20.4:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
+    - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
     - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
   ded-instances:
     - http://10.0.0.19:5000/formulae
@@ -61,12 +61,12 @@ decision:
             end: 0.4
             reward: 16
           - start: 0.4
-            end: 0.9
+            end: 0.8
             reward: 8
-          - start: 0.9
-            end: 1.4
+          - start: 0.8
+            end: 1.1
             reward: 4
-          - start: 1.4
+          - start: 1.1
             end: 2
             reward: -2
           - start: 2
@@ -75,7 +75,7 @@ decision:
         active: False
     basic-reward: 1
 
-    training-smt-problem-directory: src/smt/sets/training/
+    training-smt-problem-directory: src/smt/sets/training
 
     solver:
       native: True
@@ -118,7 +118,7 @@ monitoring:
   update-period: 5 # in seconds
 
   connectivity:
-    hosts:
+    hosts: # comment not used instances
       - 194.182.171.9 # Ubuntu VM at Frankfurt
       - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
       - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
@@ -189,5 +189,15 @@ monitoring:
         start: 36
         end: 75
       poor:
+        start: 76
+        end: 100
+    problem-complexity:
+      excellent: # easy
+        start: 0
+        end: 35
+      average: # medium
+        start: 36
+        end: 75
+      poor: # hard
         start: 76
         end: 100
