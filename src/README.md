@@ -293,6 +293,17 @@ Add latency IP-specific:
 
 Or call created script: `./change_latency.sh <latency>ms`
 
+### Cloud
+
+#### Latency
+
+Same as for RaspberryPi but use `eth0` as device for external VM and `ens3` for TU VM's Additional steps for TU VM's:
+
+1. `sudo yum install iproute-tc`
+2. `sudo yum install -y kernel-modules-extra` (not that easy, you need to download correct rpm file for used kernel
+   version, see `uname -r` and install downloaded file with `sudo yum localinstall`)
+3. `sudo modprobe sch_netem`
+
 # Module Architecture
 
 [pydeps](https://pydeps.readthedocs.io/en/latest/)  is a tool to visualize python module dependencies. The following
