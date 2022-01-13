@@ -43,15 +43,15 @@ problems = {
     "s3_srvr.blast.01_false-unreach-call.i.cil.c_0.smt2": 98,
     "183.smt2": 67,
     # training set:
-    "2_1.smt2": 1,
-    "small-dyn-partition-fixpoint-4.smt2": 1,
-    "agree3.smt2": 1,
-    "intersection-example-simple.proof-node3202.smt2": 1,
-    "read8.smt2": 1,
-    "storecomm_invalid_t1_np_nf_ai_00060_006.cvc.smt2": 1,
-    "nested9_true-unreach-call.i_7.smt2": 1,
-    "adacore_u__communication.adb_40_34_range_check___00.smt2": 1,
-    "adacore_u__p_max_array.ads_18_48_overflow_check___00.smt2": 1
+    "2_1.smt2": 4,
+    "small-dyn-partition-fixpoint-4.smt2": 5,
+    "agree3.smt2": 4,
+    "intersection-example-simple.proof-node3202.smt2": 2,
+    "read8.smt2": 5,
+    "storecomm_invalid_t1_np_nf_ai_00060_006.cvc.smt2": 19,
+    "nested9_true-unreach-call.i_7.smt2": 2,
+    "adacore_u__communication.adb_40_34_range_check___00.smt2": 7,
+    "adacore_u__p_max_array.ads_18_48_overflow_check___00.smt2": 7
     # there are some duplicates defined already in other sets
 }
 
