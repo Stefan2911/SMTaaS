@@ -70,7 +70,16 @@ decision:
             end: 2
             reward: -2
           - start: 2
+            end: 3
             reward: -5
+          - start: 3
+            end: 4
+            reward: -8
+          - start: 4
+            end: 5
+            reward: -10
+          - start: 5
+            reward -15
       traffic-aware:
         active: False
     basic-reward: 1
