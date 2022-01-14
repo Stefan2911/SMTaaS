@@ -6,7 +6,7 @@ import time
 from src.communication.client import post_smt_problem
 from src.config.config import Config
 from src.decision.processing_ev3 import process
-from src.monitoring.monitor_battery_level_ev3 import get_battery_level_ev3
+from src.monitoring.monitor_system_utilization import get_battery_level_ev3
 from src.smt.smt_solver.native.solver import call_solver
 
 config = Config()

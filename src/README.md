@@ -173,6 +173,11 @@ Goals: `time`, `energy`
 Approaches: `robot_only`, `ded_only`, `cloud_only`, `q_learning`
 If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd parameter is `unload percentage`
 
+### Evaluation automation:
+
+Use scripts in `sm/scripts`. You need to copy public key to not have to enter the password:
+`cat C:\Users\Acer\.ssh\id_rsa.pub | ssh user@host 'cat >> .ssh/authorized_keys'`
+
 ### Robot only (Edge only)
 
 1.
