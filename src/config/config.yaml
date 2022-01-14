@@ -79,7 +79,7 @@ decision:
             end: 5
             reward: -10
           - start: 5
-            reward -15
+            reward: -15
       traffic-aware:
         active: False
     basic-reward: 1
