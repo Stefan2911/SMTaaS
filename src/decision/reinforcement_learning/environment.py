@@ -1,11 +1,19 @@
 import logging
 import time
+from enum import Enum
 
 import src.monitoring.monitor
 from src.communication.client import post_smt_problem
 from src.config.config import Config
 from src.decision.state import map_detailed_state, get_current_state
 from src.smt.smt_solver.native.solver import call_solver
+
+
+class RewardMode(Enum):
+    time_aware = "time-aware"
+    traffic_aware = "traffic-aware"
+    energy_aware = "energy-aware"
+
 
 config = Config()
 
@@ -71,28 +79,32 @@ class Environment:
     def calculate_custom_reward(self, battery_level_before_action, starting_timestamp_before_action,
                                 traffic_before_action):
         reward = 0
-        if config.is_mode_active('energy-aware'):
+        if config.is_mode_active(RewardMode.energy_aware):
             reward += self.calculate_custom_reward_energy(battery_level_before_action)
-        if config.is_mode_active('time-aware'):
+        if config.is_mode_active(RewardMode.traffic_aware):
             reward += self.calculate_custom_reward_time(starting_timestamp_before_action)
-        if config.is_mode_active('traffic-aware'):
+        if config.is_mode_active(RewardMode.traffic_aware):
             reward += self.calculate_custom_reward_traffic(traffic_before_action)
         return reward
 
     def calculate_custom_reward_energy(self, battery_level_before_action):
         battery_level_after_action = self.detailed_state.battery_level
         difference = battery_level_after_action - battery_level_before_action
-        return _get_custom_reward('energy-aware', difference)
+        return _get_custom_reward(RewardMode.energy_aware, difference)
 
     def calculate_custom_reward_time(self, timestamp_before_action):
         timestamp_after_action = time.time()
         difference = timestamp_after_action - timestamp_before_action
-        return _get_custom_reward('time-aware', difference)
+        # TODO: call _get_custom_reward, if configuration is used
+        time_reward = 5 - difference
+        if time_reward < 0:
+            return time_reward * 2
+        return time_reward
 
     def calculate_custom_reward_traffic(self, traffic_before_action):
         traffic_after_action = self.detailed_state.traffic
         difference = traffic_after_action - traffic_before_action
-        return _get_custom_reward('traffic-aware', difference)
+        return _get_custom_reward(RewardMode.traffic_aware, difference)
 
     def step(self, action, smt_problem):
         battery_level_before_action = self.detailed_state.battery_level
