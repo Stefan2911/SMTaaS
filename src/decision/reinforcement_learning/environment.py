@@ -62,7 +62,6 @@ class Environment:
         return self.state
 
     def reset(self):
-        problem_size = 0  # after reset no concrete problem is given
         self.detailed_state = get_current_state(None)
         self.state = map_detailed_state(self.detailed_state, self.simple)
 

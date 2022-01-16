@@ -264,10 +264,10 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 
 Printing Q-Table on EV3/RaspberryPi:
 
-1. ``python3`` (EV3), ``python3.7`` (RaspberryPi)
-2. ``import numpy as np``
-3. ``table = np.load("src/decision/reinforcement_learning/q_learning/q_table.npy")``
-4. ``print(table)``
+1. `python3` (EV3), `python3.7` (RaspberryPi)
+2. `import numpy as np`
+3. `table = np.load("src/decision/reinforcement_learning/q_learning/q_table.npy")`
+4. `print(table)`
 
 ### Training DQN
 

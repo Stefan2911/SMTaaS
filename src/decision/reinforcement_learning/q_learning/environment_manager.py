@@ -30,4 +30,4 @@ class EnvironmentManager:
 
     def __get_state_tuple(self):
         state = self.env.get_state()
-        return [state.battery_level, state.connectivity, state.cpu_state, state.memory_state, state.problem_complexity]
+        return [state.connectivity, state.problem_complexity]
