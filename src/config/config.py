@@ -44,16 +44,6 @@ class Config:
     def get_logging_level(self):
         return self.data['logging-level']
 
-    # decision heuristic
-    def get_indicator_configuration(self):
-        return self.data['decision']['heuristic']['indicators']
-
-    def get_offload_threshold(self):
-        return self.data['decision']['heuristic']['offload-threshold']
-
-    def get_max_offload_cost(self):
-        return self.data['decision']['heuristic']['max-offload-cost']
-
     # decision reinforcement learning
     def get_basic_reward(self):
         return self.data['decision']['reinforcement-learning']['basic-reward']

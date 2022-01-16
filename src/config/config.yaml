@@ -17,43 +17,8 @@ evaluation:
     - http://10.0.0.16:5000/formulae
 
 decision:
-  heuristic:
-    indicators:
-      battery-level:
-        offloading-threshold: 40
-        locally-threshold: 95
-        weight: 0.20
-      connectivity:
-        offloading-threshold: 1
-        locally-threshold: 80
-        weight: 0.20
-      cpu-usage:
-        offloading-threshold: 80
-        locally-threshold: 5
-        weight: 0.20
-      memory-usage:
-        offloading-threshold: 80
-        locally-threshold: 5
-        weight: 0.2
-      offload-cost:
-        offloading-threshold: 80
-        locally-threshold: 5
-        weight: 0.2
-      offload-threshold: 0.5
-    max-offload-cost: 1000
-
   reinforcement-learning:
     reward-modes:
-      energy-aware:
-        active: False
-        ranges:
-          - end: 0      # < 1 percent of battery needed
-            reward: 5
-          - start: 1    # 1 percent of battery needed
-            end: 1
-            reward: -1
-          - start: 2    # >= 2 percent of battery needed
-            reward: -1
       time-aware:
         active: True
         ranges: # start inclusive, # end exclusive
@@ -81,6 +46,8 @@ decision:
           - start: 5
             reward: -15
       traffic-aware:
+        active: False
+      energy-aware:
         active: False
     basic-reward: 1
 
@@ -134,20 +101,6 @@ monitoring:
       - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
       - 10.0.0.19     # RPi
       - 10.0.0.16     # RPi
-
-
-  simulation:
-    active: False
-    values:
-      battery-level: 50
-      avg-rtt: 50
-      cpu-usage: 50
-      memory-usage: 50
-      used-ram: 1000
-      available-ram: 1000
-      disk-usage: 50
-      traffic: 50
-      offload-cost: 10
 
   indicators:
     battery-level: # in %
@@ -210,3 +163,16 @@ monitoring:
       poor: # hard
         start: 76
         end: 100
+
+  simulation:
+    active: False
+    values:
+      battery-level: 50
+      avg-rtt: 50
+      cpu-usage: 50
+      memory-usage: 50
+      used-ram: 1000
+      available-ram: 1000
+      disk-usage: 50
+      traffic: 50
+      offload-cost: 10
