@@ -81,7 +81,7 @@ class Environment:
         reward = 0
         if config.is_mode_active(RewardMode.energy_aware):
             reward += self.calculate_custom_reward_energy(battery_level_before_action)
-        if config.is_mode_active(RewardMode.traffic_aware):
+        if config.is_mode_active(RewardMode.time_aware):
             reward += self.calculate_custom_reward_time(starting_timestamp_before_action)
         if config.is_mode_active(RewardMode.traffic_aware):
             reward += self.calculate_custom_reward_traffic(traffic_before_action)

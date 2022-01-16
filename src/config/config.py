@@ -52,11 +52,11 @@ class Config:
         return self.data['decision']['reinforcement-learning']['training-smt-problem-directory']
 
     def is_mode_active(self, mode):
-        return self.data['decision']['reinforcement-learning']['reward-modes'][mode]['active']
+        return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['active']
 
     def get_reward_ranges(self, mode):
-        if 'ranges' in self.data['decision']['reinforcement-learning']['reward-modes'][mode]:
-            return self.data['decision']['reinforcement-learning']['reward-modes'][mode]['ranges']
+        if 'ranges' in self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]:
+            return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['ranges']
         return []
 
     def is_native_solver(self):
