@@ -35,10 +35,6 @@ class Monitor(State):
             self.traffic = config.get_simulated_value('traffic')
             super.offload_cost = config.get_simulated_value('offload-cost')
             super.problem_complexity = config.get_simulated_value('problem-complexity')
-            # currently not used information
-            # self.used_ram = config.get_simulated_value('used-ram')
-            # self.available_ram = config.get_simulated_value('available-ram')
-            # self.disk_usage = config.get_simulated_value('disk-usage')
         else:
             if config.is_ev3():
                 self.battery_level = get_battery_level_ev3()
@@ -48,10 +44,6 @@ class Monitor(State):
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
-            # currently not used information
-            # self.used_ram = get_used_ram()
-            # self.available_ram = get_available_ram()
-            # self.disk_usage = get_disk_usage()
 
     def log_state(self):
         logger.info('battery level (in volts): %f', self.battery_level)
@@ -61,10 +53,6 @@ class Monitor(State):
         logger.info('traffic: %f', self.traffic)
         logger.info('offload cost: %f', self.offload_cost)
         logger.info('problem complexity: %f', self.problem_complexity)
-        # currently not used information
-        # logger.info('used RAM (in Mb): %f', self.used_ram)
-        # logger.info('available RAM (in Mb): %f', self.available_ram)
-        # logger.info('disk usage (percentage): %f', self.disk_usage)
 
 
 def get_rating(value, ranges):
@@ -115,3 +103,6 @@ def get_monitor():
 
 def get_number_of_rating_classes():
     return len(Rating)
+
+
+tl.start()

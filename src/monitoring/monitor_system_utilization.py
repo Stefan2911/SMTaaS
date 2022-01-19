@@ -12,20 +12,8 @@ def get_cpu_usage():
     return psutil.cpu_percent(interval=None)
 
 
-def get_used_ram():
-    return psutil.virtual_memory().used / CONVERSION_FACTOR
-
-
-def get_available_ram():
-    return psutil.virtual_memory().available / CONVERSION_FACTOR
-
-
 def get_memory_usage():
     return psutil.virtual_memory().percent
-
-
-def get_disk_usage():
-    return psutil.disk_usage('/').percent
 
 
 # DOES NOT WORK ON EV3

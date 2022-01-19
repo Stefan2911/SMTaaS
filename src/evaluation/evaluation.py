@@ -26,7 +26,7 @@ def process_file(approach, problem_directory, filename):
     elif approach == 'cloud_only':
         post_smt_problem(problem_directory + os.sep + filename, random.choice(config.get_cloud_instances()))
     elif approach == 'q_learning':
-        process(problem_directory + os.sep + filename, 'q_learning')
+        process(problem_directory + os.sep + filename)
 
 
 def evaluate():
