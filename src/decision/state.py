@@ -15,7 +15,7 @@ def get_current_state(smt_problem):
     monitor = get_monitor()
     if smt_problem is not None:
         offload_cost = _get_offload_cost(os.stat(smt_problem).st_size / 1000)  # problem size in KB
-        problem_complexity = get_problem_complexity(smt_problem)
+        problem_complexity = get_problem_complexity(smt_problem, config.is_ev3())
         monitor.offload_cost = offload_cost
         monitor.problem_complexity = problem_complexity
     else:
