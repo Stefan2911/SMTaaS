@@ -169,9 +169,9 @@ It is important that IP addresses are not used twice!
 ### Evaluation CLI on robot:
 
 `python3 -m src.evaluation.evaluation <problem-directory> <goal> <set repetition | unload percentage> <approach>`
-Goals: `time`, `energy`
+Goals: `time`
 Approaches: `robot_only`, `ded_only`, `cloud_only`, `q_learning`
-If goal is `time` 3rd parameter is set repetition, if goal is `energy` 3rd parameter is `unload percentage`
+If goal is `time` 3rd parameter is set repetition
 
 ### Evaluation automation:
 
@@ -184,9 +184,6 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> robot_only`
       * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 robot_only`
-   2. Goal energy: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> robot_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5`
 
 ### Dedicated Edge Device (DED only / RaspberryPi only)
 
@@ -198,9 +195,6 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> ded_only`
       * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 ded_only`
-   2. Goal energy: Start on
-      robot `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> ded_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 ded_only`
 
 ### Cloud only
 
@@ -211,10 +205,6 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
       robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> cloud_only`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 cloud_only`
-   2. Goal energy: Start on
-      robot `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> cloud_only`
-      *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 cloud_only`
 
 ### Q-Learning
 
@@ -230,10 +220,6 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
-   2. Goal energy: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
-      *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
 
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
@@ -249,10 +235,6 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
-   2. Goal energy: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> energy <unload_percentage> q_learning`
-      *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple energy 5 q_learning`
 
 ### Training Q-Learning
 

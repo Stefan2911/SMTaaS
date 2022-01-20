@@ -47,8 +47,6 @@ decision:
             reward: -15
       traffic-aware:
         active: False
-      energy-aware:
-        active: False
     basic-reward: 1
 
     training-smt-problem-directory: src/smt/sets/training
