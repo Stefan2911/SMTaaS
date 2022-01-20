@@ -45,9 +45,6 @@ class Config:
         return self.data['logging-level']
 
     # decision reinforcement learning
-    def get_basic_reward(self):
-        return self.data['decision']['reinforcement-learning']['basic-reward']
-
     def get_training_problem_directory(self):
         return self.data['decision']['reinforcement-learning']['training-smt-problem-directory']
 

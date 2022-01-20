@@ -63,7 +63,6 @@ class Environment:
         self.simple = simple
         self.detailed_state = get_current_state(None)
         self.state = map_detailed_state(self.detailed_state, simple)
-        self.basic_reward = config.get_basic_reward()
 
     def get_state(self):
         return self.state
@@ -89,8 +88,6 @@ class Environment:
         difference = timestamp_after_action - timestamp_before_action
         # TODO: call _get_custom_reward, if configuration is used
         time_reward = 5 - difference
-        if time_reward < 0:
-            return time_reward * 2
         return time_reward
 
     def calculate_custom_reward_traffic(self, traffic_before_action):
@@ -104,5 +101,5 @@ class Environment:
         response = _handle_action(action, smt_problem)
         self.detailed_state = get_current_state(smt_problem)
         self.state = map_detailed_state(self.detailed_state, self.simple)
-        return self.basic_reward + self.calculate_custom_reward(timestamp_before_action,
-                                                                traffic_before_action), False, response
+        return self.calculate_custom_reward(timestamp_before_action,
+                                            traffic_before_action), False, response

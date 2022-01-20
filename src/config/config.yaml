@@ -21,33 +21,9 @@ decision:
     reward-modes:
       time-aware:
         active: True
-        ranges: # start inclusive, # end exclusive
-          - start: 0
-            end: 0.4
-            reward: 16
-          - start: 0.4
-            end: 0.8
-            reward: 8
-          - start: 0.8
-            end: 1.1
-            reward: 4
-          - start: 1.1
-            end: 2
-            reward: -2
-          - start: 2
-            end: 3
-            reward: -5
-          - start: 3
-            end: 4
-            reward: -8
-          - start: 4
-            end: 5
-            reward: -10
-          - start: 5
-            reward: -15
+        ranges: # start inclusive, # end exclusive, currently dynamic mode is used
       traffic-aware:
         active: False
-    basic-reward: 1
 
     training-smt-problem-directory: src/smt/sets/training
 
