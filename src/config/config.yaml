@@ -101,16 +101,6 @@ monitoring:
       - 10.0.0.16     # RPi
 
   indicators:
-    battery-level: # in %
-      poor:
-        start: 0
-        end: 35
-      average:
-        start: 36
-        end: 75
-      excellent:
-        start: 76
-        end: 100
     connectivity: # in ms
       excellent:
         start: 0

@@ -28,7 +28,6 @@ class Monitor(State):
     def __init__(self):
         super().__init__()
         if config.is_simulation_active():
-            self.battery_level = config.get_simulated_value('battery-level')
             self.avg_rtt = config.get_simulated_value('avg-rtt')
             self.cpu_usage = config.get_simulated_value('cpu-usage')
             self.memory_usage = config.get_simulated_value('memory-usage')
@@ -36,17 +35,12 @@ class Monitor(State):
             super.offload_cost = config.get_simulated_value('offload-cost')
             super.problem_complexity = config.get_simulated_value('problem-complexity')
         else:
-            if config.is_ev3():
-                self.battery_level = get_battery_level_ev3()
-            else:
-                self.battery_level = get_battery_level()
             self.avg_rtt = get_rtt(config.get_connectivity_checking_host())
             self.cpu_usage = get_cpu_usage()
             self.memory_usage = get_memory_usage()
             self.traffic = get_traffic()
 
     def log_state(self):
-        logger.info('battery level (in volts): %f', self.battery_level)
         logger.info('avg rtt (in ms): %f', self.avg_rtt)
         logger.info('CPU usage (percentage): %f', self.cpu_usage)
         logger.info('memory usage (percentage): %f', self.memory_usage)
@@ -67,13 +61,11 @@ def get_rating(value, ranges):
 class SimpleMonitor(State):
     def __init__(self, monitor):
         super().__init__()
-        self.battery_level = get_rating(monitor.battery_level, config.get_indicator_ranges('battery-level'))
         self.connectivity = get_rating(monitor.avg_rtt, config.get_indicator_ranges('connectivity'))
         self.cpu_state = get_rating(monitor.cpu_usage, config.get_indicator_ranges('cpu-usage'))
         self.memory_state = get_rating(monitor.memory_usage, config.get_indicator_ranges('memory-usage'))
 
     def log_state(self):
-        logger.info('battery level: %s', self.battery_level)
         logger.info('connectivity: %s', self.connectivity)
         logger.info('cpu state: %s', self.cpu_state)
         logger.info('memory state: %s', self.memory_state)
