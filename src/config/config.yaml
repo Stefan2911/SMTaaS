@@ -6,6 +6,11 @@ smt:
   decision-mode: q_learning
   # decision-mode: deep_q_network
 
+ev3:
+  in-use: False
+  smt:
+    watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
+
 evaluation:
   cloud-instances:
     - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
@@ -25,24 +30,27 @@ decision:
       traffic-aware:
         active: False
 
-    training-smt-problem-directory: src/smt/sets/training
+    training-smt-problem-directory-edge: src/smt/sets/training_edge
+    training-smt-problem-directory-robot: src/smt/sets/training_robot
 
     solver:
       native: True
-      instances: # comment not used instances
-        - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
-        - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
-        - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
-        - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
-        - http://10.0.0.19:5000/formulae      # RPi
-        - http://10.0.0.16:5000/formulae      # RPi
+      instances:
+        edge:
+          - http://10.0.0.19:5000/formulae      # RPi
+          - http://10.0.0.16:5000/formulae      # RPi
+        cloud:
+          - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
+          - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
+          - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
+          - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
     common-hyper-parameters:
-      gamma: 0.9          # discount factor used in the Bellman equation
+      gamma: 0.5          # discount factor used in the Bellman equation
       eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
       eps-end: 0.1        # ending value of epsilon
-      eps-decay: 0.02     # decay rate used to decay epsilon over time
+      eps-decay: 0.01     # decay rate used to decay epsilon over time
       lr: 0.5             # learning rate (alpha)
-      num-episodes: 10    # number of episodes
+      num-episodes: 40    # number of episodes
 
     q-learning:
       q-table-location: src/decision/reinforcement_learning/q_learning/q_table.npy
@@ -55,11 +63,6 @@ decision:
 
       neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
 
-ev3:
-  in-use: False
-  smt:
-    watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
-
 uplink-cost: 1 # costs per KB
 invocation-cost: 10 # costs per invocation
 
@@ -68,13 +71,15 @@ monitoring:
   update-period: 5 # in seconds
 
   connectivity:
-    hosts: # comment not used instances
-      - 194.182.171.9 # Ubuntu VM at Frankfurt
-      - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
-      - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
-      - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
-      - 10.0.0.19     # RPi
-      - 10.0.0.16     # RPi
+    hosts:
+      edge:
+        - 10.0.0.19     # RPi
+        - 10.0.0.16     # RPi
+      cloud:
+        - 194.182.171.9 # Ubuntu VM at Frankfurt
+        - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
+        - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
+        - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
 
   indicators:
     connectivity: # in ms

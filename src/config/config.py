@@ -46,7 +46,9 @@ class Config:
 
     # decision reinforcement learning
     def get_training_problem_directory(self):
-        return self.data['decision']['reinforcement-learning']['training-smt-problem-directory']
+        if self.is_ev3():
+            return self.data['decision']['reinforcement-learning']['training-smt-problem-directory-robot']
+        return self.data['decision']['reinforcement-learning']['training-smt-problem-directory-edge']
 
     def is_mode_active(self, mode):
         return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['active']
@@ -60,10 +62,14 @@ class Config:
         return self.data['decision']['reinforcement-learning']['solver']['native']
 
     def get_solver_instances(self):
-        return self.data['decision']['reinforcement-learning']['solver']['instances']
+        if self.is_ev3():
+            return self.data['decision']['reinforcement-learning']['solver']['instances']['edge']
+        return self.data['decision']['reinforcement-learning']['solver']['instances']['cloud']
 
     def get_solver_instance(self, index):
-        return self.data['decision']['reinforcement-learning']['solver']['instances'][index]
+        if self.is_ev3():
+            return self.data['decision']['reinforcement-learning']['solver']['instances']['edge'][index]
+        return self.data['decision']['reinforcement-learning']['solver']['instances']['cloud'][index]
 
     def get_action_space(self):
         return len(self.get_solver_instances()) + 1  # number of instances to offload + solve locally
@@ -91,7 +97,10 @@ class Config:
 
     # monitoring
     def get_connectivity_checking_host(self):
-        hosts = self.data['monitoring']['connectivity']['hosts']
+        if self.is_ev3():
+            hosts = self.data['monitoring']['connectivity']['hosts']['edge']
+        else:
+            hosts = self.data['monitoring']['connectivity']['hosts']['cloud']
         random_index = random.randrange(len(hosts))
         return hosts[random_index]
 
