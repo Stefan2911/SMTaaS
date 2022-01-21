@@ -16,7 +16,7 @@ def print_results(start_time, end_time, problems_solved):
     print('start time: %s, end time: %s, time needed: %s' % (time.asctime(time.localtime(start_time)),
                                                              time.asctime(time.localtime(end_time)),
                                                              time_needed))
-    print('problems solved: %s, time needed per problem: %s' % problems_solved, (time_needed / problems_solved))
+    print('problems solved: %s, time needed per problem: %s' % (problems_solved, (time_needed / problems_solved)))
 
 
 def process_file(approach, problem_directory, filename):
