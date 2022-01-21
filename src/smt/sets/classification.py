@@ -11,10 +11,10 @@ def call_solver(filename):
     return output
 
 
-for filename in os.listdir("src/smt/sets/evaluation/hard/"):
+for filename in os.listdir("src/smt/sets/training_robot/"):
     start = time.time()
     try:
-        output = call_solver("src/smt/sets/evaluation/hard/" + filename)
+        output = call_solver("src/smt/sets/training_robot/" + filename)
         end = time.time()
         print(filename, start, end, end - start, output)
     except subprocess.TimeoutExpired:
