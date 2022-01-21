@@ -48,27 +48,28 @@ def update_q_table(state, action, reward, new_state):
     # Update Q-table for Q(s,a)
     state_number = map_state_to_index(state)
     new_state_number = map_state_to_index(new_state)
-    q_table[state_number, action] = q_table[state_number, action] * (1 - hyper_parameters['lr']) + hyper_parameters[
-        'lr'] * \
+    q_table[state_number, action] = q_table[state_number, action] * (1 - hyper_parameters['lr']) \
+                                    + hyper_parameters['lr'] * \
                                     (reward + hyper_parameters['gamma'] * np.max(q_table[new_state_number, :]))
 
 
 def training():
     training_problem_directory = config.get_training_problem_directory()
+    problems = os.listdir(training_problem_directory)
 
     for episode in range(hyper_parameters['num-episodes']):
         environment_manager.reset()
-        state = environment_manager.get_state()
 
         rewards_current_episode = 0
 
-        for filename in os.listdir(training_problem_directory):
+        for i, problem in enumerate(problems):
+            smt_problem = training_problem_directory + os.sep + problem
+            state = environment_manager.get_state(smt_problem)
             action = agent.select_action(map_state_to_index(state), q_table)
-            reward, response = environment_manager.take_action(action, training_problem_directory + os.sep + filename)
-            next_state = environment_manager.get_state()
-            update_q_table(state, action, reward, next_state)
+            reward, response = environment_manager.take_action(action, smt_problem)
+            update_state_and_q_table(action, reward, state,
+                                     environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
             rewards_current_episode += reward
-            state = next_state
 
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
@@ -76,17 +77,23 @@ def training():
     persist_q_table(q_table)
 
 
+def update_state_and_q_table(action, reward, state, next_smt_problem):
+    next_state = environment_manager.get_state(next_smt_problem)
+    update_q_table(state, action, reward, next_state)
+
+
 def persist_q_table(table):
     np.save(config.get_q_table_location(), table)
 
 
 def process(smt_problem):
-    state = environment_manager.get_state()
+    state = environment_manager.get_state(smt_problem)
     # exploration is only done during training
     action = agent.select_action(map_state_to_index(state), q_table, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
-    next_state = environment_manager.get_state()
-    update_q_table(state, action, reward, next_state)
+    # updating q table not meaningful as next state does not know problem complexity
+    # next_state = environment_manager.get_state()
+    # update_q_table(state, action, reward, next_state)
     return response
 
 

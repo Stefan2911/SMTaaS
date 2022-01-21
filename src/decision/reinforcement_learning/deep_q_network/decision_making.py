@@ -77,20 +77,22 @@ def optimize_model():
 
 def training():
     training_problem_directory = config.get_training_problem_directory()
+    problems = os.listdir(training_problem_directory)
 
     for episode in range(hyper_parameters['num-episodes']):
         environment_manager.reset()
-        state = environment_manager.get_state()
 
         rewards_current_episode = 0
 
-        for filename in os.listdir(training_problem_directory):
+        for i, problem in enumerate(problems):
+            smt_problem = training_problem_directory + os.sep + problem
+            state = environment_manager.get_state(smt_problem)
             action = agent.select_action(state, policy_net)
-            reward, response = environment_manager.take_action(action, training_problem_directory + os.sep + filename)
+            reward, response = environment_manager.take_action(action, smt_problem)
             rewards_current_episode += reward.item()
-            next_state = environment_manager.get_state()
+            next_state = environment_manager.get_state(
+                environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
             memory.push(Experience(state, action, next_state, reward))
-            state = next_state
 
             optimize_model()
 
@@ -106,13 +108,14 @@ def training():
 
 
 def process(smt_problem):
-    state = environment_manager.get_state()
+    state = environment_manager.get_state(smt_problem)
     # exploration is only done during training
     action = agent.select_action(state, target_net, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
-    next_state = environment_manager.get_state()
-    memory.push(Experience(state, action, next_state, reward))
-    optimize_model()
+    # updating model not meaningful as next state does not know problem complexity
+    # next_state = environment_manager.get_state()
+    # memory.push(Experience(state, action, next_state, reward))
+    # optimize_model()
     return response
 
 

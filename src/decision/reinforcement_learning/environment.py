@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from enum import Enum
 
@@ -57,6 +58,21 @@ def _handle_action(action, smt_problem):
     return response
 
 
+def _calculate_custom_reward_time(timestamp_before_action):
+    timestamp_after_action = time.time()
+    difference = timestamp_after_action - timestamp_before_action
+    # TODO: call _get_custom_reward, if configuration is used
+    time_reward = 3 - difference
+    return time_reward
+
+
+def _calculate_custom_reward(starting_timestamp_before_action):
+    reward = 0
+    if config.is_mode_active(RewardMode.time_aware):
+        reward += _calculate_custom_reward_time(starting_timestamp_before_action)
+    return reward
+
+
 class Environment:
     def __init__(self, simple=True):
         self.action_space = config.get_action_space()
@@ -64,42 +80,27 @@ class Environment:
         self.detailed_state = get_current_state(None)
         self.state = map_detailed_state(self.detailed_state, simple)
 
-    def get_state(self):
+    def get_state(self, smt_problem):
+        self.update_state(smt_problem)
         return self.state
 
     def reset(self):
-        self.detailed_state = get_current_state(None)
-        self.state = map_detailed_state(self.detailed_state, self.simple)
+        self.update_state(None)
 
     def close(self):
         self.reset()
 
-    def calculate_custom_reward(self, starting_timestamp_before_action,
-                                traffic_before_action):
-        reward = 0
-        if config.is_mode_active(RewardMode.time_aware):
-            reward += self.calculate_custom_reward_time(starting_timestamp_before_action)
-        if config.is_mode_active(RewardMode.traffic_aware):
-            reward += self.calculate_custom_reward_traffic(traffic_before_action)
-        return reward
-
-    def calculate_custom_reward_time(self, timestamp_before_action):
-        timestamp_after_action = time.time()
-        difference = timestamp_after_action - timestamp_before_action
-        # TODO: call _get_custom_reward, if configuration is used
-        time_reward = 5 - difference
-        return time_reward
-
-    def calculate_custom_reward_traffic(self, traffic_before_action):
-        traffic_after_action = self.detailed_state.traffic
-        difference = traffic_after_action - traffic_before_action
-        return _get_custom_reward(RewardMode.traffic_aware, difference)
-
     def step(self, action, smt_problem):
         timestamp_before_action = time.time()
-        traffic_before_action = self.detailed_state.traffic
         response = _handle_action(action, smt_problem)
+        return _calculate_custom_reward(timestamp_before_action), False, response
+
+    def update_state(self, smt_problem):
         self.detailed_state = get_current_state(smt_problem)
         self.state = map_detailed_state(self.detailed_state, self.simple)
-        return self.calculate_custom_reward(timestamp_before_action,
-                                            traffic_before_action), False, response
+
+    def get_next_smt_problem(self, current_index, problems, path):
+        if current_index == len(problems):
+            return path + os.sep + problems[0]
+        else:
+            return path + os.sep + problems[++current_index]
