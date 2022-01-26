@@ -266,17 +266,17 @@ Printing Q-Table on EV3/RaspberryPi:
 #### Latency
 
 Add latency:
-`sudo tc qdisc add dev wlan0 root netem delay <additional latency>ms`
+`sudo tc qdisc add dev eth0 root netem delay <additional latency>ms`
 Delete latency:
-`sudo tc qdisc delete dev wlan0 root netem delay <additional latency>ms`
+`sudo tc qdisc delete dev eth0 root netem delay <additional latency>ms`
 Delete all rules:
-`sudo tc qdisc del dev wlan0 root`
+`sudo tc qdisc del dev eth0 root`
 
 Add latency IP-specific:
 
-1. `sudo tc qdisc add dev wlan0 root handle 1: prio`
-2. `sudo tc qdisc add dev wlan0 parent 1:3 handle 30: netem delay <additional latency>ms`
-3. `sudo tc filter add dev wlan0 protocol ip parent 1:0 prio 3 u32 match ip dst <ip>/32 flowid 1:3`
+1. `sudo tc qdisc add dev eth0 root handle 1: prio`
+2. `sudo tc qdisc add dev eth0 parent 1:3 handle 30: netem delay <additional latency>ms`
+3. `sudo tc filter add dev eth0 protocol ip parent 1:0 prio 3 u32 match ip dst <ip>/32 flowid 1:3`
 
 Or call created script: `./change_latency.sh <latency>ms`
 

@@ -22,5 +22,5 @@ evaluate_with_additional_latency 100
 evaluate_with_additional_latency 200
 evaluate_with_additional_latency 300
 
-ssh pi@10.0.0.16 "sudo tc qdisc del dev wlan0 root"
-ssh pi@10.0.0.19 "sudo tc qdisc del dev wlan0 root"
+ssh pi@10.0.0.16 "sudo tc qdisc del dev eth0 root"
+ssh pi@10.0.0.19 "sudo tc qdisc del dev eth0 root"
