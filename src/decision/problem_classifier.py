@@ -24,7 +24,7 @@ problems = {
     # medium set:
     "cruise-control.nosummaries.smt2": 21,
     "mutex1.smt2": 38,
-    "099-incremental_scheduling-15631-0.smt2:": 30,
+    "099-incremental_scheduling-15631-0.smt2": 30,
     "javafe.ast.OnDemandImportDecl.275.smt2": 45,
     "182.smt2": 37,
     "RND_6_39.smt2": 32,
@@ -95,4 +95,4 @@ def get_problem_complexity(smt_problem, is_ev3):
     name = os.path.basename(smt_problem)
     if is_ev3:
         return problems_ev3.get(name, 100)
-    return problems.get(os.path.basename(smt_problem), 100)
+    return problems.get(name, 100)
