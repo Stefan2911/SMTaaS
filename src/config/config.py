@@ -123,6 +123,9 @@ class Config:
     def is_final_node(self):
         return self.data['smt']['final-node']
 
+    def get_decision_mode(self):
+        return self.data['smt']['decision-mode']
+
     # evaluation
     def get_cloud_instances(self):
         return self.data['evaluation']['cloud-instances']

@@ -18,7 +18,7 @@ def solve_formula():
         tf.write(request.files['formula_file'].read())
         if config.is_final_node():
             return call_solver(tf.name)
-        return process(tf.name)
+        return process(tf.name, config.get_decision_mode())
 
 
 if __name__ == "__main__":
