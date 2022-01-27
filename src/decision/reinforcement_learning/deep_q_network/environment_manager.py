@@ -28,7 +28,7 @@ class EnvironmentManager:
 
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
-        return [state.avg_rtt, state.cpu_usage, state.memory_usage, state.problem_complexity]
+        return [state.avg_rtt, state.problem_complexity]
 
     def get_number_of_indicators(self):
         return len(self.__get_state_tuple(None))

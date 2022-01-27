@@ -1,10 +1,10 @@
 #!/bin/bash
 
 evaluate () {
-  ssh robot@10.0.18 "python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 cloud_only"
-  ssh robot@10.0.18 "python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/medium time 10 cloud_only"
-  ssh robot@10.0.18 "python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/hard time 10 cloud_only"
-  ssh robot@10.0.18 "python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/mixed time 10 cloud_only"
+  ssh pi@10.0.16 "python3.7 -m src.evaluation.evaluation /home/pi/src/smt/sets/evaluation/simple time 10 cloud_only"
+  ssh pi@10.0.16 "python3.7 -m src.evaluation.evaluation /home/pi/src/smt/sets/evaluation/medium time 10 cloud_only"
+  ssh pi@10.0.16 "python3.7 -m src.evaluation.evaluation /home/pi/src/smt/sets/evaluation/hard time 10 cloud_only"
+  ssh pi@10.0.16 "python3.7 -m src.evaluation.evaluation /home/pi/src/smt/sets/evaluation/mixed time 10 cloud_only"
 }
 
 add_latency () {
@@ -28,8 +28,8 @@ evaluate_with_additional_latency() {
   delete_latency "$1"
 }
 
-#echo "0ms additional latency"
-#evaluate
+echo "0ms additional latency"
+evaluate
 
 evaluate_with_additional_latency 50
 evaluate_with_additional_latency 100

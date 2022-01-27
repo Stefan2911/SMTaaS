@@ -168,7 +168,7 @@ It is important that IP addresses are not used twice!
 
 ### Evaluation CLI on robot:
 
-`python3 -m src.evaluation.evaluation <problem-directory> <goal> <set repetition | unload percentage> <approach>`
+`python3 -m src.evaluation.evaluation <problem-directory> <goal> <set repetition> <approach>`
 Goals: `time`
 Approaches: `robot_only`, `ded_only`, `cloud_only`, `q_learning`
 If goal is `time` 3rd parameter is set repetition
