@@ -5,7 +5,7 @@
 import os.path
 
 problems = {
-    "complex": 24, "simple1": 1, "simple2": 1, "simple3": 2,
+    "complex.smt2": 24, "simple1.smt2": 1, "simple2.smt2": 1, "simple3.smt2": 2,
     # simple set:
     "1_1.smt2": 3,
     "b161test0003.smt2": 2,
@@ -48,7 +48,7 @@ problems = {
 }
 
 problems_ev3 = {
-    "complex": 892, "simple1": 7, "simple2": 7, "simple3": 50,
+    "complex.smt2": 892, "simple1.smt2": 7, "simple2.smt2": 7, "simple3.smt2": 50,
     # simple set:
     "1_1.smt2": 40,
     "b161test0003.smt2": 25,
@@ -94,5 +94,5 @@ problems_ev3 = {
 def get_problem_complexity(smt_problem, is_ev3):
     name = os.path.basename(smt_problem)
     if is_ev3:
-        return problems_ev3.get(name, 100)
-    return problems.get(name, 100)
+        return problems_ev3.get(name, 99)
+    return problems.get(name, 99)

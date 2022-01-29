@@ -1,6 +1,6 @@
 import math
 
-from src.decision.reinforcement_learning.environment import Environment, get_number_of_rating_classes
+from src.decision.reinforcement_learning.environment import Environment, get_rating_classes
 
 
 class EnvironmentManager:
@@ -26,11 +26,11 @@ class EnvironmentManager:
         return self.__get_state_tuple(smt_problem)
 
     def num_states_available(self):
-        return int(math.pow(get_number_of_rating_classes(), len(self.__get_state_tuple(None))))
+        return int(math.pow(get_rating_classes(), len(self.__get_state_tuple(None))))
 
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
-        return [state.connectivity, state.problem_complexity]
+        return [state.avg_rtt, state.problem_complexity]
 
     def get_next_smt_problem(self, current_index, problems, path):
         return self.env.get_next_smt_problem(current_index, problems, path)

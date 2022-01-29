@@ -17,14 +17,17 @@ delete_latency() {
 train_with_additional_latency() {
   echo "$1 ms additional latency"
   add_latency "$1"
-  ssh pi@10.0.0.16 "python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making"
+  ssh pi@10.0.0.3 "python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making"
   delete_latency "$1"
 }
 
-echo "additional latency 0ms"
-ssh pi@10.0.0.16 "python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making"
+#echo "additional latency 0ms"
+../change_cloud_latency_periodically.sh &
+latency_task=$!
+ssh pi@10.0.0.3 "python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making"
+kill $latency_task
 
-train_with_additional_latency 50
-train_with_additional_latency 100
-train_with_additional_latency 200
-train_with_additional_latency 300
+#train_with_additional_latency 50
+#train_with_additional_latency 100
+#train_with_additional_latency 200
+#train_with_additional_latency 300

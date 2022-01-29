@@ -1,5 +1,6 @@
 import logging
 import os
+import pickle
 from os.path import isfile
 
 import torch
@@ -26,7 +27,12 @@ environment_manager = EnvironmentManager(device)
 strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters['eps-end'],
                                  hyper_parameters['eps-decay'])
 agent = Agent(strategy, environment_manager.num_actions_available(), device)
-memory = ReplayMemory(dqn_hyper_parameters['memory-size'])
+
+if isfile('memory'):
+    with open('memory', 'rb') as memory_file:
+        memory = pickle.load(memory_file)
+else:
+    memory = ReplayMemory(dqn_hyper_parameters['memory-size'])
 
 number_of_indicators = environment_manager.get_number_of_indicators()
 number_of_actions = environment_manager.num_actions_available()
@@ -104,6 +110,8 @@ def training():
             target_net.load_state_dict(policy_net.state_dict())
 
     environment_manager.close()
+    with open('memory', 'wb') as memory_file:
+        pickle.dump(memory, memory_file)
     torch.save(target_net.state_dict(), neural_network_location)
 
 

@@ -1,10 +1,30 @@
+import math
 import os
+from enum import Enum
 
 from src.config.config import Config
 from src.decision.problem_classifier import get_problem_complexity
-from src.monitoring.monitor import get_monitor, SimpleMonitor, get_rating
+from src.monitoring.monitor import get_monitor, State
 
 config = Config()
+
+
+class Rating(Enum):
+    poor = 0
+    fair = 1
+    average = 2
+    good = 3
+    excellent = 4
+
+
+def __get_rating(value):
+    if value is None:
+        return Rating.poor
+    number_of_rating_classes = get_number_of_rating_classes()
+    converted_value = math.trunc(value * number_of_rating_classes / 100)
+    if converted_value >= number_of_rating_classes:
+        converted_value = number_of_rating_classes - 1
+    return Rating(number_of_rating_classes - 1 - converted_value)
 
 
 def _get_offload_cost(problem_size):
@@ -26,9 +46,14 @@ def get_current_state(smt_problem):
 
 def map_detailed_state(monitor, simple=False):
     if simple:
-        state = SimpleMonitor(monitor)
-        state.offload_cost = get_rating(monitor.offload_cost, config.get_indicator_ranges('offload-cost'))
-        state.problem_complexity = get_rating(monitor.problem_complexity,
-                                              config.get_indicator_ranges('problem-complexity'))
+        state = State()
+        normalized_avg_rtt = monitor.avg_rtt / 3  # TODO: make 3 configurable?
+        state.avg_rtt = __get_rating(normalized_avg_rtt)
+        state.offload_cost = __get_rating(monitor.offload_cost)
+        state.problem_complexity = __get_rating(monitor.problem_complexity)
         return state
     return monitor
+
+
+def get_number_of_rating_classes():
+    return len(Rating)

@@ -259,6 +259,12 @@ Printing Q-Table on EV3/RaspberryPi:
 4. On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making` (DQN on EV3 not
    possible)
 
+Printing DQN on EV3/RaspberryPi:
+
+1. `python3.7` (RaspberryPi)
+2. `import torch`
+3. `print(torch.load("src/decision/reinforcement_learning/deep_q_network/neural_network"))`
+
 ## Simulation
 
 ### RaspberryPis

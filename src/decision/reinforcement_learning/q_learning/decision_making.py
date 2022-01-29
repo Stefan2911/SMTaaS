@@ -9,7 +9,7 @@ from src.config.config import Config
 from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonGreedyStrategy
 from src.decision.reinforcement_learning.q_learning.agent import Agent
 from src.decision.reinforcement_learning.q_learning.environment_manager import EnvironmentManager
-from src.monitoring.monitor import Rating
+from src.decision.state import Rating
 
 config = Config()
 

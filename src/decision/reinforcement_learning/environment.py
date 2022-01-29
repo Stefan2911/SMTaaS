@@ -3,10 +3,9 @@ import os
 import time
 from enum import Enum
 
-import src.monitoring.monitor
 from src.communication.client import post_smt_problem
 from src.config.config import Config
-from src.decision.state import map_detailed_state, get_current_state
+from src.decision.state import map_detailed_state, get_current_state, get_number_of_rating_classes
 from src.smt.smt_solver.native.solver import call_solver
 
 
@@ -22,8 +21,8 @@ logger = logging.getLogger('environment')
 logger.setLevel(level=config.get_logging_level())
 
 
-def get_number_of_rating_classes():
-    return src.monitoring.monitor.get_number_of_rating_classes()
+def get_rating_classes():
+    return get_number_of_rating_classes()
 
 
 def _offload(action, smt_problem):

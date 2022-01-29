@@ -96,6 +96,12 @@ class Config:
         return self.data['ev3']['smt']['watch-directory']
 
     # monitoring
+    def get_connectivity_checking_hosts(self):
+        if self.is_ev3():
+            return self.data['monitoring']['connectivity']['hosts']['edge']
+        else:
+            return self.data['monitoring']['connectivity']['hosts']['cloud']
+
     def get_connectivity_checking_host(self):
         if self.is_ev3():
             hosts = self.data['monitoring']['connectivity']['hosts']['edge']
@@ -106,12 +112,6 @@ class Config:
 
     def get_indicator_ranges(self, indicator):
         return self.data['monitoring']['indicators'][indicator]
-
-    def is_simulation_active(self):
-        return self.data['monitoring']['simulation']['active']
-
-    def get_simulated_value(self, indicator):
-        return self.data['monitoring']['simulation']['values'][indicator]
 
     def get_state_update_period(self):
         return self.data['monitoring']['update-period']

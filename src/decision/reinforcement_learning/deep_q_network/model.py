@@ -39,10 +39,10 @@ class DQN(nn.Module):
         # number of hidden layer: in most cases one hidden layer is sufficient
         # number of neurons in hidden layer: we use the following rule:
         # 2/3 the size of the input layer + size of output layer
-        # = 2/3 * 4 + 2 = 4.666 = 5
+        # = 2/3 * 5 + 2 = 5.333 = 6
 
-        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=5)
-        self.out = nn.Linear(in_features=5, out_features=number_of_actions)
+        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=6)
+        self.out = nn.Linear(in_features=6, out_features=number_of_actions)
 
     def forward(self, t):
         t = F.relu(self.fc1(t))
