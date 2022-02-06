@@ -3,7 +3,7 @@
 # latency is between cloud and RaspberryPi's
 
 evaluate () {
-  ssh pi@10.0.0.3 "python3.7 -m src.evaluation.evaluation_rpi time 10 dqn /home/pi/src/smt/sets/evaluation/simple /home/pi/src/smt/sets/evaluation/medium /home/pi/src/smt/sets/evaluation/hard /home/pi/src/smt/sets/evaluation/mixed"
+  ssh pi@10.0.0.3 "python3.7 -m src.evaluation.evaluation_rpi time 10 dqn /home/pi/src/smt/sets/training_dqn_one"
 }
 
 add_latency () {

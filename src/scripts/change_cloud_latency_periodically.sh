@@ -16,14 +16,13 @@ delete_latency() {
 
 change_latency() {
     add_latency $1
-    sleep 20
+    sleep 30
     delete_latency $1
 }
 
-
 while true
   do
-    sleep 20
+    sleep 25
     change_latency 50
     change_latency 100
     change_latency 200
