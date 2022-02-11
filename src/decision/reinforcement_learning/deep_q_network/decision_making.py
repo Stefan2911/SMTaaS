@@ -1,6 +1,5 @@
 import logging
 import os
-import pickle
 from os.path import isfile
 
 import torch
@@ -12,6 +11,7 @@ from src.decision.reinforcement_learning.deep_q_network.agent import Agent
 from src.decision.reinforcement_learning.deep_q_network.environment_manager import EnvironmentManager
 from src.decision.reinforcement_learning.deep_q_network.model import DQN, Experience, ReplayMemory, QValues
 from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonGreedyStrategy
+from src.simulation.simulation import Simulation
 
 config = Config()
 
@@ -28,12 +28,7 @@ strategy = EpsilonGreedyStrategy(hyper_parameters['eps-start'], hyper_parameters
                                  hyper_parameters['eps-decay'])
 agent = Agent(strategy, environment_manager.num_actions_available(), device)
 
-if isfile('memory'):
-    with open('memory', 'rb') as memory_file:
-        memory = pickle.load(memory_file)
-else:
-    memory = ReplayMemory(dqn_hyper_parameters['memory-size'])
-
+memory = ReplayMemory(dqn_hyper_parameters['memory-size'])
 number_of_indicators = environment_manager.get_number_of_indicators()
 number_of_actions = environment_manager.num_actions_available()
 
@@ -48,7 +43,8 @@ if isfile(neural_network_location):
 target_net.load_state_dict(policy_net.state_dict())
 target_net.eval()
 
-optimizer = optim.Adam(params=policy_net.parameters(), lr=hyper_parameters['lr'])
+# TODO: specify learning rate?
+optimizer = optim.Adam(params=policy_net.parameters())
 
 
 def extract_tensors(experiences):
@@ -81,24 +77,32 @@ def optimize_model():
     optimizer.step()
 
 
+simulation = Simulation.get_instance()
+
+
 def training():
     training_problem_directory = config.get_training_problem_directory()
     problems = os.listdir(training_problem_directory)
 
+    environment_manager.reset()  # TODO: maybe should be inside for loop
     for episode in range(hyper_parameters['num-episodes']):
-        environment_manager.reset()
-
         rewards_current_episode = 0
 
         for i, problem in enumerate(problems):
+            # TODO: maybe should be moved outside of the loop?
+            simulation.simulate_random_latency()
             smt_problem = training_problem_directory + os.sep + problem
             state = environment_manager.get_state(smt_problem)
             action = agent.select_action(state, policy_net)
             reward, response = environment_manager.take_action(action, smt_problem)
             rewards_current_episode += reward.item()
-            next_state = environment_manager.get_state(
-                environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
-            memory.push(Experience(state, action, next_state, reward))
+            # TODO:
+            # next_state = environment_manager.get_state(
+            #    environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
+            next_state = state
+            experience = Experience(state, action, next_state, reward)
+            logger.info(experience)
+            memory.push(experience)
 
             optimize_model()
 
@@ -109,9 +113,8 @@ def training():
             logger.debug('update target network')
             target_net.load_state_dict(policy_net.state_dict())
 
+    target_net.load_state_dict(policy_net.state_dict())
     environment_manager.close()
-    with open('memory', 'wb') as memory_file:
-        pickle.dump(memory, memory_file)
     torch.save(target_net.state_dict(), neural_network_location)
 
 
@@ -120,10 +123,8 @@ def process(smt_problem):
     # exploration is only done during training
     action = agent.select_action(state, target_net, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
+    logger.info("state: %s, action: %s, reward: %s", state, action, reward)
     # updating model not meaningful as next state does not know problem complexity
-    # next_state = environment_manager.get_state()
-    # memory.push(Experience(state, action, next_state, reward))
-    # optimize_model()
     return response
 
 

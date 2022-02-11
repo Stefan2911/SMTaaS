@@ -8,6 +8,7 @@ from src.config.config import Config
 from src.monitoring.monitor_connectivity import *
 
 config = Config()
+training_active = config.is_training_active()
 
 tl = Timeloop()
 
@@ -56,7 +57,10 @@ update_state()
 
 
 def get_monitor():
+    if training_active:
+        update_state()
     return global_monitor
 
 
-tl.start()
+if training_active == False:
+    tl.start()

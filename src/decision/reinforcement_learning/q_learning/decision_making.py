@@ -92,8 +92,6 @@ def process(smt_problem):
     action = agent.select_action(map_state_to_index(state), q_table, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
     # updating q table not meaningful as next state does not know problem complexity
-    # next_state = environment_manager.get_state()
-    # update_q_table(state, action, reward, next_state)
     return response
 
 

@@ -1,11 +1,12 @@
+import datetime
 import logging
 import os
-import time
 from enum import Enum
 
 from src.communication.client import post_smt_problem
 from src.config.config import Config
 from src.decision.state import map_detailed_state, get_current_state, get_number_of_rating_classes
+from src.simulation.simulation import Simulation
 from src.smt.smt_solver.native.solver import call_solver
 
 
@@ -20,14 +21,16 @@ logging.basicConfig()
 logger = logging.getLogger('environment')
 logger.setLevel(level=config.get_logging_level())
 
+simulation = Simulation.get_instance()
+
 
 def get_rating_classes():
     return get_number_of_rating_classes()
 
 
-def _offload(action, smt_problem):
+def _offload(solver_instance, smt_problem):
     logger.debug("offload")
-    response = post_smt_problem(smt_problem, config.get_solver_instance(action - 1))
+    response = post_smt_problem(smt_problem, solver_instance)
     return response
 
 
@@ -48,20 +51,11 @@ def _get_custom_reward(mode, difference):
     return 0
 
 
-def _handle_action(action, smt_problem):
-    # 0 is solving locally, 1 is first available instance to offload, 2 is second available instance and so on
-    if action == 0:
-        response = _solve_locally(smt_problem)
-    else:
-        response = _offload(action, smt_problem)
-    return response
-
-
 def _calculate_custom_reward_time(timestamp_before_action):
-    timestamp_after_action = time.time()
+    timestamp_after_action = datetime.datetime.now()
     difference = timestamp_after_action - timestamp_before_action
     # TODO: call _get_custom_reward, if configuration is used
-    time_reward = 3 - difference
+    time_reward = 4 - difference.total_seconds()
     return time_reward
 
 
@@ -90,8 +84,16 @@ class Environment:
         self.reset()
 
     def step(self, action, smt_problem):
-        timestamp_before_action = time.time()
-        response = _handle_action(action, smt_problem)
+        timestamp_before_action = datetime.datetime.now()
+        # 0 is solving locally, 1 is first available instance to offload, 2 is second available instance and so on
+        if action == 0:
+            response = _solve_locally(smt_problem)
+        else:
+            solver_instance = config.get_solver_instance(action - 1)
+            waiting_time = simulation.get_additional_waiting_time(solver_instance)
+            timestamp_before_action = timestamp_before_action - waiting_time
+            response = _offload(solver_instance, smt_problem)
+
         return _calculate_custom_reward(timestamp_before_action), False, response
 
     def update_state(self, smt_problem):

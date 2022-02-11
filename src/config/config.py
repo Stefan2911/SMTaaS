@@ -116,6 +116,9 @@ class Config:
     def get_state_update_period(self):
         return self.data['monitoring']['update-period']
 
+    def is_training_active(self):
+        return self.data['monitoring']['is-training-active']
+
     # smt
     def get_solver_location(self):
         return self.data['smt']['solver-location']

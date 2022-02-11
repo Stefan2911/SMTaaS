@@ -31,18 +31,8 @@ class DQN(nn.Module):
     def __init__(self, number_of_indicators, number_of_actions):
         super().__init__()
 
-        # TODO: fine tuning of neural network structure
-        # the following links shows some rules of thumb:
-        # https://stats.stackexchange.com/questions/181/how-to-choose-the-number-of-hidden-layers-and-nodes-in-a-feedforward-neural-netw
-        # https://towardsdatascience.com/beginners-ask-how-many-hidden-layers-neurons-to-use-in-artificial-neural-networks-51466afa0d3e
-        # Results:
-        # number of hidden layer: in most cases one hidden layer is sufficient
-        # number of neurons in hidden layer: we use the following rule:
-        # 2/3 the size of the input layer + size of output layer
-        # = 2/3 * 5 + 2 = 5.333 = 6
-
-        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=6)
-        self.out = nn.Linear(in_features=6, out_features=number_of_actions)
+        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=2)
+        self.out = nn.Linear(in_features=2, out_features=number_of_actions)
 
     def forward(self, t):
         t = F.relu(self.fc1(t))

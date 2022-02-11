@@ -28,9 +28,7 @@ class EnvironmentManager:
 
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
-        # TODO: make dynamic
-        return [state.avg_rtt_list[0], state.avg_rtt_list[1], state.avg_rtt_list[2], state.avg_rtt_list[3],
-                state.problem_complexity]
+        return state.avg_rtt_list + [state.problem_complexity]
 
     def get_number_of_indicators(self):
         return len(self.__get_state_tuple(None))
