@@ -4,7 +4,6 @@ from collections import namedtuple
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 Experience = namedtuple(
     'Experience',
@@ -31,13 +30,15 @@ class DQN(nn.Module):
     def __init__(self, number_of_indicators, number_of_actions):
         super().__init__()
 
-        self.fc1 = nn.Linear(in_features=number_of_indicators, out_features=2)
-        self.out = nn.Linear(in_features=2, out_features=number_of_actions)
+        self.layers = nn.Sequential(
+            nn.Linear(in_features=number_of_indicators, out_features=96),
+            nn.BatchNorm1d(96),
+            nn.ReLU(),
+            nn.Linear(96, out_features=number_of_actions)
+        )
 
     def forward(self, t):
-        t = F.relu(self.fc1(t))
-        t = self.out(t)
-        return t
+        return self.layers(t)
 
 
 class QValues:

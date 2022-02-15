@@ -44,12 +44,13 @@ def evaluate_rpi():
         iterations = int(sys.argv[2])
     approach = sys.argv[3]
 
-    simulated_latencies = [0, 400]
-    simulation = Simulation.get_instance()
-    for simulated_latency in simulated_latencies:
-        logger.info(simulated_latency)
-        simulation.simulate_latency(simulated_latency)
-        for problem_directory in problem_directories:
+    for problem_directory in problem_directories:
+        logger.info('set: %s', problem_directory)
+        simulated_latencies = [0, 400]
+        simulation = Simulation.get_instance()
+        for simulated_latency in simulated_latencies:
+            logger.info('additional latency: %s', simulated_latency)
+            simulation.simulate_latency(simulated_latency)
             problems_solved = 0
             start_time = time.time()
             if goal == 'time':
