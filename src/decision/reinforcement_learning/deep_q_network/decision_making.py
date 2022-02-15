@@ -43,7 +43,7 @@ if isfile(neural_network_location):
 target_net.load_state_dict(policy_net.state_dict())
 target_net.eval()
 
-# TODO: specify learning rate?
+# default learning rate is used lr = 0.001
 optimizer = optim.Adam(params=policy_net.parameters())
 
 
@@ -66,11 +66,11 @@ def optimize_model():
     states, actions, rewards, next_states = extract_tensors(experiences)
 
     current_q_values = QValues.get_current(policy_net, states, actions)
-    next_q_values = QValues.get_next(target_net, next_states)
-    target_q_values = (next_q_values * hyper_parameters['gamma']) + rewards
+    target_q_values = rewards
+    logger.info('difference: %s', torch.sum(torch.abs(current_q_values.squeeze(1) - target_q_values)))
 
-    # mse = mean squared error
-    loss = F.mse_loss(current_q_values, target_q_values.unsqueeze(1))
+    # l1_loss = MEA = mean absolute error
+    loss = F.l1_loss(current_q_values, target_q_values.unsqueeze(1))
     optimizer.zero_grad()  # gradients of all weights and biases in policy_net are set to zero
     loss.backward()
     # updates the weights and biases with the gradients that were computed when called backward() on loss
@@ -96,12 +96,10 @@ def training():
             action = agent.select_action(state, policy_net)
             reward, response = environment_manager.take_action(action, smt_problem)
             rewards_current_episode += reward.item()
-            # TODO:
-            # next_state = environment_manager.get_state(
-            #    environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
+            # next state does not influence training
             next_state = state
             experience = Experience(state, action, next_state, reward)
-            logger.info(experience)
+            logger.info('episode: %s, experience: %s', episode, experience)
             memory.push(experience)
 
             optimize_model()
