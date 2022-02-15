@@ -47,7 +47,7 @@ def get_current_state(smt_problem):
 def map_detailed_state(monitor, simple=False):
     if simple:
         state = State()
-        normalized_avg_rtt = monitor.avg_rtt / 3  # TODO: make 3 configurable?
+        normalized_avg_rtt = monitor.avg_rtt_list[0] / 3  # TODO: make 3 configurable?
         state.avg_rtt = __get_rating(normalized_avg_rtt)
         state.offload_cost = __get_rating(monitor.offload_cost)
         state.problem_complexity = __get_rating(monitor.problem_complexity)

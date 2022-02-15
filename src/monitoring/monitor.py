@@ -21,7 +21,6 @@ class State:
     def __init__(self):
         self.offload_cost = 0
         self.problem_complexity = 0
-        self.avg_rtt = 0
         self.avg_rtt_list = [0] * len(config.get_connectivity_checking_hosts())
 
 
@@ -36,10 +35,10 @@ class ExtendedMonitor(State):
 class Monitor(State):
     def __init__(self):
         super().__init__()
-        self.avg_rtt = get_rtt(config.get_connectivity_checking_host())
+        self.avg_rtt_list[0] = get_rtt(config.get_connectivity_checking_host())
 
     def log_state(self):
-        logger.info('avg rtt (in ms): %f', self.avg_rtt)
+        logger.info('avg rtt (in ms): %f', self.avg_rtt_list[0])
         logger.info('problem complexity: %f', self.problem_complexity)
 
 

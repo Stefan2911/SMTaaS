@@ -57,8 +57,8 @@ decision:
 
     deep-q-network:
       hyper-parameters:
-        batch-size: 8
-        target-update: 16 # defines how frequently (in terms of episodes), the target network weights are updated
+        batch-size: 32
+        target-update: 32 # defines how frequently (in terms of episodes), the target network weights are updated
         memory-size: 1000 # capacity of replay memory
       neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
 
