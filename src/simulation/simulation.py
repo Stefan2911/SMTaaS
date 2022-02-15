@@ -5,7 +5,7 @@ from src.config.config import Config
 
 config = Config()
 connectivity_checking_hosts = config.get_connectivity_checking_hosts()
-latencies = [0, 400]
+latencies = [0, 100, 200, 300, 400]
 
 
 class Simulation:
