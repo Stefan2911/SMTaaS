@@ -121,7 +121,7 @@ def process(smt_problem):
     # exploration is only done during training
     action = agent.select_action(state, target_net, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
-    logger.info("state: %s, action: %s, reward: %s", state, action, reward)
+    logger.debug("state: %s, action: %s, reward: %s", state, action, reward)
     # updating model not meaningful as next state does not know problem complexity
     return response
 

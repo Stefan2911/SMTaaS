@@ -31,10 +31,13 @@ class DQN(nn.Module):
         super().__init__()
 
         self.layers = nn.Sequential(
-            nn.Linear(in_features=number_of_indicators, out_features=96),
-            nn.BatchNorm1d(96),
+            nn.Linear(in_features=number_of_indicators, out_features=24),
+            nn.BatchNorm1d(24),
             nn.ReLU(),
-            nn.Linear(96, out_features=number_of_actions)
+            nn.Linear(in_features=24, out_features=24),
+            nn.BatchNorm1d(24),
+            nn.ReLU(),
+            nn.Linear(24, out_features=number_of_actions)
         )
 
     def forward(self, t):
