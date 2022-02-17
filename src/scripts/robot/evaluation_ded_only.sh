@@ -1,7 +1,7 @@
 #!/bin/bash
 
 evaluate () {
-  ssh robot@10.0.18 "python3 -m time 10 ded_only src.evaluation.evaluation src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple /home/robot/src/smt/sets/evaluation/medium /home/robot/src/smt/sets/evaluation/hard /home/robot/src/smt/sets/evaluation/mixed"
+  ssh robot@10.0.18 "python3 -m time 5 ded_only src.evaluation.evaluation src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple /home/robot/src/smt/sets/evaluation/medium /home/robot/src/smt/sets/evaluation/hard /home/robot/src/smt/sets/evaluation/mixed"
 }
 
 evaluate_with_additional_latency(){

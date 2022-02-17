@@ -183,7 +183,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 1.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> robot_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 robot_only`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 robot_only`
 
 ### Dedicated Edge Device (DED only / RaspberryPi only)
 
@@ -194,7 +194,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 3.
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> ded_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 ded_only`
+      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 ded_only`
 
 ### Cloud only
 
@@ -204,7 +204,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> cloud_only`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 cloud_only`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 cloud_only`
 
 ### Q-Learning
 
@@ -219,7 +219,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 q_learning`
 
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
@@ -234,7 +234,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 10 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 q_learning`
 
 ### Training Q-Learning
 

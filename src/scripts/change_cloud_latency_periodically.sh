@@ -26,7 +26,7 @@ while true
     change_latency 50
     change_latency 100
     change_latency 200
-    change_latency 300
+    change_latency 400
   done
 
 

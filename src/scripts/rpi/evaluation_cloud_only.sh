@@ -1,8 +1,7 @@
 #!/bin/bash
 
 evaluate () {
-  ssh pi@10.0.0.3 "python3.7 -m src.evaluation.evaluation time 10 cloud_only /home/pi/src/smt/sets/evaluation/simple /home/pi/src/smt/sets/evaluation/medium /home/pi/src/smt/sets/evaluation/hard /home/pi/src/smt/sets/evaluation/mixed"
-  ssh pi@10.0.0.3 "python3.7 -m src.evaluation.evaluation time 10 cloud_only /home/pi/src/smt/sets/training_dqn_one"
+  ssh pi@10.0.0.3 "python3.7 -m src.evaluation.evaluation_rpi time 5 cloud_only /home/pi/src/smt/sets/evaluation/simple /home/pi/src/smt/sets/evaluation/medium /home/pi/src/smt/sets/evaluation/hard /home/pi/src/smt/sets/evaluation/mixed"
 }
 
 add_latency () {
@@ -29,7 +28,7 @@ evaluate_with_additional_latency() {
 echo "0ms additional latency"
 evaluate
 
-evaluate_with_additional_latency 50
 evaluate_with_additional_latency 100
 evaluate_with_additional_latency 200
 evaluate_with_additional_latency 300
+evaluate_with_additional_latency 400
