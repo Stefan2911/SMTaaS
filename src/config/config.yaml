@@ -46,10 +46,10 @@ decision:
           - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
     common-hyper-parameters:
       gamma: 0            # discount factor used in the Bellman equation (we only value immediate rewards)
-      eps-start: 0.9      # starting value of epsilon (epsilon = exploration rate)
-      eps-end: 0.9        # ending value of epsilon (for training, we always want exploring)
+      eps-start: 1        # starting value of epsilon (epsilon = exploration rate) (for training we want always explore)
+      eps-end: 1          # ending value of epsilon (for training, we always want exploring)
       eps-decay: 0.001    # decay rate used to decay epsilon over time
-      lr: 0.1             # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
+      lr: 0.01            # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
       num-episodes: 40    # number of episodes
 
     q-learning:

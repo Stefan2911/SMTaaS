@@ -31,6 +31,3 @@ class EnvironmentManager:
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
         return [state.avg_rtt_list[0], state.problem_complexity]
-
-    def get_next_smt_problem(self, current_index, problems, path):
-        return self.env.get_next_smt_problem(current_index, problems, path)

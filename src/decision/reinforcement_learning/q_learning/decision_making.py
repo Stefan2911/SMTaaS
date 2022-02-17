@@ -10,6 +10,7 @@ from src.decision.reinforcement_learning.epsilon_greedy_strategy import EpsilonG
 from src.decision.reinforcement_learning.q_learning.agent import Agent
 from src.decision.reinforcement_learning.q_learning.environment_manager import EnvironmentManager
 from src.decision.state import Rating
+from src.simulation.simulation import Simulation
 
 config = Config()
 
@@ -27,6 +28,8 @@ agent = Agent(strategy, environment_manager.num_actions_available())
 
 action_space_size = environment_manager.num_actions_available()
 state_space_size = environment_manager.num_states_available()
+
+simulation = Simulation.get_instance()
 
 q_table_location = config.get_q_table_location()
 if isfile(q_table_location):
@@ -57,29 +60,25 @@ def training():
     training_problem_directory = config.get_training_problem_directory()
     problems = os.listdir(training_problem_directory)
 
+    environment_manager.reset()
     for episode in range(hyper_parameters['num-episodes']):
-        environment_manager.reset()
-
         rewards_current_episode = 0
 
         for i, problem in enumerate(problems):
+            simulation.simulate_random_latency()
             smt_problem = training_problem_directory + os.sep + problem
             state = environment_manager.get_state(smt_problem)
             action = agent.select_action(map_state_to_index(state), q_table)
             reward, response = environment_manager.take_action(action, smt_problem)
-            update_state_and_q_table(action, reward, state,
-                                     environment_manager.get_next_smt_problem(i, problems, training_problem_directory))
+            # next state does not influence q table, therefore state can be used as next state (gamma is 0)
+            logger.info('state: %s, action: %s, reward: %s', state, action, reward)
+            update_q_table(state, action, reward, state)
             rewards_current_episode += reward
 
         logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
 
     environment_manager.close()
     persist_q_table(q_table)
-
-
-def update_state_and_q_table(action, reward, state, next_smt_problem):
-    next_state = environment_manager.get_state(next_smt_problem)
-    update_q_table(state, action, reward, next_state)
 
 
 def persist_q_table(table):
@@ -91,7 +90,7 @@ def process(smt_problem):
     # exploration is only done during training
     action = agent.select_action(map_state_to_index(state), q_table, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
-    # updating q table not meaningful as next state does not know problem complexity
+    # TODO: Q-Table could be updated (next state does not influence)
     return response
 
 

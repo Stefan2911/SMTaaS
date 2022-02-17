@@ -1,6 +1,5 @@
 import datetime
 import logging
-import os
 from enum import Enum
 
 from src.communication.client import post_smt_problem
@@ -99,9 +98,3 @@ class Environment:
     def update_state(self, smt_problem):
         self.detailed_state = get_current_state(smt_problem)
         self.state = map_detailed_state(self.detailed_state, self.simple)
-
-    def get_next_smt_problem(self, current_index, problems, path):
-        if current_index == len(problems):
-            return path + os.sep + problems[0]
-        else:
-            return path + os.sep + problems[++current_index]

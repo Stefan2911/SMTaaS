@@ -2,11 +2,6 @@ import torch
 
 from src.decision.reinforcement_learning.environment import Environment
 
-# TODO: maybe not the most efficient solution?
-# TODO: maybe move to config?
-MAX_RTT = 450
-MAX_PROBLEM_COMPLEXITY = 120
-
 
 class EnvironmentManager:
     def __init__(self, device):
@@ -33,8 +28,7 @@ class EnvironmentManager:
 
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
-        return list(map(lambda rtt: rtt / MAX_RTT, state.avg_rtt_list)) + \
-               [state.problem_complexity / MAX_PROBLEM_COMPLEXITY]
+        return state.avg_rtt_list + [state.problem_complexity]
 
     def get_number_of_indicators(self):
         return len(self.__get_state_tuple(None))

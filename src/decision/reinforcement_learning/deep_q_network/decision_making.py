@@ -84,12 +84,11 @@ def training():
     training_problem_directory = config.get_training_problem_directory()
     problems = os.listdir(training_problem_directory)
 
-    environment_manager.reset()  # TODO: maybe should be inside for loop
+    environment_manager.reset()
     for episode in range(hyper_parameters['num-episodes']):
         rewards_current_episode = 0
 
         for i, problem in enumerate(problems):
-            # TODO: maybe should be moved outside of the loop?
             simulation.simulate_random_latency()
             smt_problem = training_problem_directory + os.sep + problem
             state = environment_manager.get_state(smt_problem)
@@ -122,7 +121,7 @@ def process(smt_problem):
     action = agent.select_action(state, target_net, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
     logger.debug("state: %s, action: %s, reward: %s", state, action, reward)
-    # updating model not meaningful as next state does not know problem complexity
+    # TODO: DQN could be updated (next state does not influence)
     return response
 
 

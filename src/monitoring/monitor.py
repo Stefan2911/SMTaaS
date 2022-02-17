@@ -61,5 +61,5 @@ def get_monitor():
     return global_monitor
 
 
-if training_active == False:
+if not training_active:
     tl.start()
