@@ -1,12 +1,12 @@
 import logging
 import os
 import random
-import sys
 import time
 
 from src.communication.client import post_smt_problem
 from src.config.config import Config
 from src.decision.processing_ev3 import process
+from src.evaluation.evaluation_common import print_results, get_setup
 from src.smt.smt_solver.native.solver import call_solver
 
 config = Config()
@@ -14,14 +14,6 @@ config = Config()
 logging.basicConfig()
 logger = logging.getLogger('evaluation')
 logger.setLevel(level=config.get_logging_level())
-
-
-def print_results(start_time, end_time, problems_solved):
-    time_needed = end_time - start_time
-    logger.info('start time: %s, end time: %s, time needed: %s' % (time.asctime(time.localtime(start_time)),
-                                                                   time.asctime(time.localtime(end_time)),
-                                                                   time_needed))
-    logger.info('problems solved: %s, time needed per problem: %s' % (problems_solved, (time_needed / problems_solved)))
 
 
 def process_file(approach, problem_directory, filename):
@@ -36,28 +28,28 @@ def process_file(approach, problem_directory, filename):
 
 
 def evaluate():
-    problem_directories = sys.argv[4:]
-    goal = sys.argv[1]
-    iterations = 0
-    if goal == 'time':
-        iterations = int(sys.argv[2])
-    approach = sys.argv[3]
+    problem_directories, goal, iterations, approach, simulation, simulated_latencies = get_setup()
 
     for problem_directory in problem_directories:
-        problems_solved = 0
+        logger.info('set: %s', problem_directory)
 
-        start_time = time.time()
-        if goal == 'time':
-            for i in range(0, int(iterations)):
-                for filename in os.listdir(problem_directory):
-                    process_file(approach, problem_directory, filename)
-            problems_solved = iterations * len(os.listdir(problem_directory))
-        else:
-            logging.error('Goal %s is currently not supported' % goal)
+        for simulated_latency in simulated_latencies:
+            logger.info('additional latency: %s', simulated_latency)
+            simulation.simulate_latency(simulated_latency)
+            problems_solved = 0
 
-        end_time = time.time()
+            start_time = time.time()
+            if goal == 'time':
+                for i in range(0, int(iterations)):
+                    for filename in os.listdir(problem_directory):
+                        process_file(approach, problem_directory, filename)
+                problems_solved = iterations * len(os.listdir(problem_directory))
+            else:
+                logging.error('Goal %s is currently not supported' % goal)
 
-        print_results(start_time, end_time, problems_solved)
+            end_time = time.time()
+
+            print_results(start_time, end_time, problems_solved)
 
 
 if __name__ == "__main__":

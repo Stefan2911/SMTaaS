@@ -33,10 +33,10 @@ class DQN(nn.Module):
         self.layers = nn.Sequential(
             nn.Linear(in_features=number_of_indicators, out_features=24),
             nn.BatchNorm1d(24),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(in_features=24, out_features=24),
             nn.BatchNorm1d(24),
-            nn.ReLU(),
+            nn.LeakyReLU(),
             nn.Linear(24, out_features=number_of_actions)
         )
 
