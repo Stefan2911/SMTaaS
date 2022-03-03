@@ -163,14 +163,23 @@ It is important that IP addresses are not used twice!
 * Copy/Deploy evaluation & training sets on robot
 * Configuration file is located in: `src/config/config.yaml`
 * Set `smt.solver-location` to solver location e.g. `/usr/bin/cvc4`
-* Set `monitor.connectivity.hosts` to hosts which are randomly chosen for connectivity check (possible improvement would
-  be to add a state for each offload instance)
+* Set `monitoring.connectivity.hosts` to hosts which are randomly chosen for connectivity check (possible improvement
+  would be to add a state for each offload instance)
+* Set `evaluation.cloud-instances` and `evaluation.ded-instances`
+* Set `smt.decision-mode` to `q_learning` or `deep_q_network`
 
 ### Evaluation CLI on robot:
 
-`python3 -m src.evaluation.evaluation <problem-directory> <goal> <set repetition> <approach>`
+`python3 -m src.evaluation.evaluation <problem-directories> <goal> <set repetition> <approach>`
 Goals: `time`
 Approaches: `robot_only`, `ded_only`, `cloud_only`, `q_learning`
+If goal is `time` 3rd parameter is set repetition
+
+### Evaluation CLI on RPi's:
+
+`python3 -m src.evaluation.evaluation_rpi <problem-directories> <goal> <set repetition> <approach>`
+Goals: `time`
+Approaches: `rpi_only`, `cloud_only`, `q_learning`, `dqn`
 If goal is `time` 3rd parameter is set repetition
 
 ### Evaluation automation:
@@ -182,8 +191,8 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 
 1.
    1. Goal time: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> robot_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 robot_only`
+      robot: `python3 -m src.evaluation.evaluation time <set repetition> robot_only <problem-directories>`
+      * e.g. `python3 -m src.evaluation.evaluation time 5 robot_only /home/robot/src/smt/sets/evaluation/simple `
 
 ### Dedicated Edge Device (DED only / RaspberryPi only)
 
@@ -193,8 +202,8 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 3.
    1. Goal time: Start on
-      robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> ded_only`
-      * e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 ded_only`
+      robot `python3 -m src.evaluation.evaluation_rpi time <set repetition> ded_only <problem-directories> `
+      * e.g. `python3 -m src.evaluation.evaluation_rpi time 5 ded_only /home/robot/src/smt/sets/evaluation/simple`
 
 ### Cloud only
 
@@ -202,9 +211,9 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 2. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 3.
    1. Goal time: Start on
-      robot `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> cloud_only`
+      robot `python3 -m src.evaluation.evaluation time <set repetition> cloud_only <problem-directories>`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 cloud_only`
+      e.g. `python3 -m src.evaluation.evaluation time 5 cloud_only /home/robot/src/smt/sets/evaluation/simple`
 
 ### Q-Learning
 
@@ -217,7 +226,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 6. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 7.
    1. Goal time: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
+      robot: `python3 -m src.evaluation.evaluation time <set repetition> q_learning <problem-directories>`
       *
       e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 q_learning`
 
@@ -232,15 +241,16 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 4. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
 5.
    1. Goal time: Start on
-      robot: `python3 -m src.evaluation.evaluation <problem-directory> time <set repetition> q_learning`
+      robot: `python3 -m src.evaluation.evaluation time <set repetition> q_learning <problem-directories>`
       *
-      e.g. `python3 -m src.evaluation.evaluation /home/robot/src/smt/sets/evaluation/simple time 5 q_learning`
+      e.g. `python3 -m src.evaluation.evaluation time 5 q_learning /home/robot/src/smt/sets/evaluation/simple`
 
 ### Training Q-Learning
 
 1. Define reward model `decision.reinforcement-learning.reward-modes`
 2. Define hyper parameters `decision.reinforcement-learning.common-hyper-parameters`
-3.
+3. Set training set: `decision.training-smt-problem-directory-edge` / `decision.training-smt-problem-directory-robot`
+4.
    * On robot: `python3 -m src.decision.reinforcement_learning.q_learning.decision_making`
    * On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.q_learning.decision_making`
 
@@ -248,15 +258,15 @@ Printing Q-Table on EV3/RaspberryPi:
 
 1. `python3` (EV3), `python3.7` (RaspberryPi)
 2. `import numpy as np`
-3. `table = np.load("src/decision/reinforcement_learning/q_learning/q_table.npy")`
-4. `print(table)`
+3. `print(np.load("src/decision/reinforcement_learning/q_learning/q_table.npy"))`
 
 ### Training DQN
 
 1. Define reward model `decision.reinforcement-learning.reward-modes`
 2. Define hyper parameters `decision.reinforcement-learning.common-hyper-parameters`
 3. Define dqn specific hyper parameters `decision.reinforcement-learning.deep-q-network.hyper-parameters`
-4. On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making` (DQN on EV3 not
+4. Set training set: `decision.training-smt-problem-directory-edge` / `decision.training-smt-problem-directory-robot`
+5. On RaspberryPi: `python3.7 -m src.decision.reinforcement_learning.deep_q_network.decision_making` (DQN on EV3 not
    possible)
 
 Printing DQN on EV3/RaspberryPi:
@@ -267,9 +277,16 @@ Printing DQN on EV3/RaspberryPi:
 
 ## Simulation
 
-### RaspberryPis
+#### Latency (application level) - recommended
 
-#### Latency
+We use the module simulation.py which is called in training and evaluation. The latency is randomly set and the
+additional response time is calculated with additional_latency * 0.005
+
+### Latency (netem level)
+
+#### RPI's
+
+The following latency simulation is based on netem
 
 Add latency:
 `sudo tc qdisc add dev eth0 root netem delay <additional latency>ms`
@@ -286,9 +303,7 @@ Add latency IP-specific:
 
 Or call created script: `./change_latency.sh <latency>ms`
 
-### Cloud
-
-#### Latency
+#### Cloud
 
 Same as for RaspberryPi but use `eth0` as device for external VM and `ens3` for TU VM's Additional steps for TU VM's:
 
