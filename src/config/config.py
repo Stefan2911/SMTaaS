@@ -119,6 +119,12 @@ class Config:
     def is_training_active(self):
         return self.data['monitoring']['is-training-active']
 
+    def get_max_rtt(self):
+        return self.data['monitoring']['connectivity']['max-rtt']
+
+    def get_max_problem_complexity(self):
+        return self.data['monitoring']['max-problem-complexity']
+
     # smt
     def get_solver_location(self):
         return self.data['smt']['solver-location']

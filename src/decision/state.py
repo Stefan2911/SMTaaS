@@ -9,9 +9,8 @@ from src.monitoring.monitor import get_monitor, State
 config = Config()
 
 # TODO: maybe not the most efficient solution?
-# TODO: maybe move to config?
-MAX_RTT = 450
-MAX_PROBLEM_COMPLEXITY = 120
+MAX_RTT = config.get_max_rtt()
+MAX_PROBLEM_COMPLEXITY = config.get_max_problem_complexity()
 
 
 class Rating(Enum):
