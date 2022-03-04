@@ -147,6 +147,8 @@ On other RPi use:
 2. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.122 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.5:10.10.20.5`
 3. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.103 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.6:10.10.20.6`
 
+To kill processes: `sudo pkill -f pppd`
+
 It is important that IP addresses are not used twice!
 
 # Evaluation
