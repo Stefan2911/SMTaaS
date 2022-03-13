@@ -29,18 +29,18 @@ class Simulation:
         self.additional_latency_general = 0
         self.additional_waiting_time_general = 0
 
-    def get_additional_latency(self, host):
+    def get_additional_latency(self, host=None):
         if host is None:
             return self.additional_latency_general
-        return self.additional_latency.get(host, 0)
+        return self.additional_latency.get(host, self.additional_latency_general)
 
     def set_additional_latency(self, host, additional_latency):
         self.additional_latency[host] = additional_latency
 
-    def get_additional_waiting_time(self, host):
+    def get_additional_waiting_time(self, host=None):
         if host is None:
-            return self.additional_waiting_time_general
-        return datetime.timedelta(seconds=self.additional_waiting_time.get(host, 0))
+            return datetime.timedelta(seconds=self.additional_waiting_time_general)
+        return datetime.timedelta(seconds=self.additional_waiting_time.get(host, self.additional_waiting_time_general))
 
     def set_additional_waiting_time(self, host, additional_waiting_time):
         self.additional_waiting_time[host] = additional_waiting_time

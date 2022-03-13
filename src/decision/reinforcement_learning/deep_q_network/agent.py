@@ -9,12 +9,8 @@ def exploit(state, policy_net, device):
 
 
 def explore(num_actions, device):
-    offload = random.getrandbits(1)  # randomly select between offload and solve locally
-    if offload:  # if offload is selected, select randomly between offload options
-        action = random.randrange(1, num_actions)
-        return torch.tensor([action]).to(device)
-    else:
-        return torch.tensor([0]).to(device)
+    action = random.randrange(0, num_actions)
+    return torch.tensor([action]).to(device)  # randomly select between offload options and solve locally
 
 
 class Agent:

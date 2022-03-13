@@ -8,11 +8,7 @@ def exploit(q_table, state_index):
 
 
 def explore(num_actions):
-    offload = random.getrandbits(1)  # randomly select between offload and solve locally
-    if offload:  # if offload is selected, select randomly between offload options
-        return random.randrange(1, num_actions)
-    else:
-        return 0
+    return random.randrange(0, num_actions)  # randomly select between offload options and solve locally
 
 
 class Agent:
