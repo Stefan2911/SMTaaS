@@ -35,7 +35,7 @@ q_table_location = config.get_q_table_location()
 if isfile(q_table_location):
     q_table = np.load(q_table_location)
 else:
-    q_table = np.zeros((state_space_size, action_space_size))
+    q_table = np.ones((state_space_size, action_space_size))
 
 
 def map_state_to_index(state):
@@ -61,21 +61,24 @@ def training():
     problems = os.listdir(training_problem_directory)
 
     environment_manager.reset()
-    for episode in range(hyper_parameters['num-episodes']):
-        rewards_current_episode = 0
 
-        for i, problem in enumerate(problems):
-            simulation.simulate_random_latency()
-            smt_problem = training_problem_directory + os.sep + problem
-            state = environment_manager.get_state(smt_problem)
-            action = agent.select_action(map_state_to_index(state), q_table)
-            reward, response = environment_manager.take_action(action, smt_problem)
-            # next state does not influence q table, therefore state can be used as next state (gamma is 0)
-            logger.info('state: %s, action: %s, reward: %s', state, action, reward)
-            update_q_table(state, action, reward, state)
-            rewards_current_episode += reward
-
-        logger.debug('episode: %s, reward: %s', episode, rewards_current_episode)
+    latencies = [0, 100, 200, 300, 400]
+    for latency in latencies:
+        simulation.simulate_latency(latency)
+        # TODO: number of episodes must be dividable with number of possible actions
+        for episode in range(hyper_parameters['num-episodes']):
+            for i, problem in enumerate(problems):
+                smt_problem = training_problem_directory + os.sep + problem
+                state = environment_manager.get_state(smt_problem)
+                # We do not want to randomly explore during training as the following effect can occur:
+                # If we select one action more times than other actions and the reward is quite similar
+                # (which influences the q-value) then the q-value for more times selected options
+                # is automatically higher
+                action = int(episode % action_space_size)
+                reward, response = environment_manager.take_action(action, smt_problem)
+                # next state does not influence q table, therefore state can be used as next state (gamma is 0)
+                logger.info('state: %s, action: %s, reward: %s', state, action, reward)
+                update_q_table(state, action, reward, state)
 
     environment_manager.close()
     persist_q_table(q_table)
