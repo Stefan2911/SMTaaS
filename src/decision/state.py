@@ -5,12 +5,15 @@ from enum import Enum
 from src.config.config import Config
 from src.decision.problem_classifier import get_problem_complexity
 from src.monitoring.monitor import get_monitor, State
+from src.simulation.simulation import Simulation
 
 config = Config()
 
 # TODO: maybe not the most efficient solution?
 MAX_RTT = config.get_max_rtt()
 MAX_PROBLEM_COMPLEXITY = config.get_max_problem_complexity()
+
+simulation = Simulation.get_instance()
 
 
 class Rating(Enum):
@@ -38,7 +41,8 @@ def _get_offload_cost(problem_size):
 def get_current_state(smt_problem):
     monitor = get_monitor()
     current_state = State()
-    current_state.avg_rtt_list = list(map(lambda rtt: rtt / MAX_RTT, monitor.avg_rtt_list))
+    current_state.avg_rtt_list = list(map(lambda rtt: (rtt + simulation.get_additional_latency()) / MAX_RTT,
+                                          monitor.avg_rtt_list))
     if smt_problem is not None:
         offload_cost = _get_offload_cost(os.stat(smt_problem).st_size / 1000)  # problem size in KB
         problem_complexity = get_problem_complexity(smt_problem, config.is_ev3()) / MAX_PROBLEM_COMPLEXITY

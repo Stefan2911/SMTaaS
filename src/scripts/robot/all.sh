@@ -7,6 +7,9 @@ ssh robot@10.0.18 "python3 -m src.decision.reinforcement_learning.q_learning.dec
 # evaluation robot only
 ssh robot@10.0.18 "python3 -m src.evaluation.evaluation time 5 robot_only /home/robot/src/smt/sets/evaluation/simple /home/robot/src/smt/sets/evaluation/medium /home/robot/src/smt/sets/evaluation/hard /home/robot/src/smt/sets/evaluation/mixed"
 
+# evaluation ded only
+ssh robot@10.0.18 "python3 -m src.evaluation.evaluation time 5 ded_only /home/robot/src/smt/sets/evaluation/simple /home/robot/src/smt/sets/evaluation/medium /home/robot/src/smt/sets/evaluation/hard /home/robot/src/smt/sets/evaluation/mixed"
+
 # evaluation cloud only
 ssh robot@10.0.18 "python3 -m src.evaluation.evaluation time 5 cloud_only /home/robot/src/smt/sets/evaluation/simple /home/robot/src/smt/sets/evaluation/medium /home/robot/src/smt/sets/evaluation/hard /home/robot/src/smt/sets/evaluation/mixed"
 

@@ -17,5 +17,5 @@ def post_smt_problem(smt_file, url):
     with open(smt_file, 'rb') as file:
         response = requests.post(url, files={FORM_DATA_PARAM_KEY: file}, timeout=60)  # 1 minute
         if is_evaluation:
-            time.sleep(simulation.get_additional_waiting_time(url).total_seconds())
+            time.sleep(simulation.get_additional_waiting_time().total_seconds())
         return response.text

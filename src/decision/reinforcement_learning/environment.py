@@ -89,7 +89,7 @@ class Environment:
             response = _solve_locally(smt_problem)
         else:
             solver_instance = config.get_solver_instance(action - 1)
-            waiting_time = simulation.get_additional_waiting_time(solver_instance)
+            waiting_time = simulation.get_additional_waiting_time()
             timestamp_before_action = timestamp_before_action - waiting_time
             response = _offload(solver_instance, smt_problem)
 

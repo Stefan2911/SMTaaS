@@ -26,14 +26,20 @@ class Simulation:
             Simulation.__instance = self
         self.additional_latency = {}  # dictionary with host:additional_latency
         self.additional_waiting_time = {}
+        self.additional_latency_general = 0
+        self.additional_waiting_time_general = 0
 
     def get_additional_latency(self, host):
+        if host is None:
+            return self.additional_latency_general
         return self.additional_latency.get(host, 0)
 
     def set_additional_latency(self, host, additional_latency):
         self.additional_latency[host] = additional_latency
 
     def get_additional_waiting_time(self, host):
+        if host is None:
+            return self.additional_waiting_time_general
         return datetime.timedelta(seconds=self.additional_waiting_time.get(host, 0))
 
     def set_additional_waiting_time(self, host, additional_waiting_time):
@@ -44,7 +50,8 @@ class Simulation:
         self.simulate_latency(random_latency)
 
     def simulate_latency(self, latency):
-        # TODO: maybe not for all instances
+        self.additional_latency_general = latency
+        self.additional_waiting_time_general = latency * 0.005
         for host in connectivity_checking_hosts:
             self.set_additional_latency(host, latency)
             self.set_additional_waiting_time('http://' + host + ':5000/formulae', latency * 0.005)

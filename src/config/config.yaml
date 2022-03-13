@@ -49,7 +49,7 @@ decision:
       eps-start: 1        # starting value of epsilon (epsilon = exploration rate) (for training we want always explore)
       eps-end: 1          # ending value of epsilon (for training, we always want exploring)
       eps-decay: 0.001    # decay rate used to decay epsilon over time
-      lr: 0.01            # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
+      lr: 0.001           # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
       num-episodes: 40    # number of episodes
 
     q-learning:
