@@ -37,6 +37,9 @@ class DQN(nn.Module):
             nn.Linear(in_features=24, out_features=24),
             nn.BatchNorm1d(24),
             nn.LeakyReLU(),
+            nn.Linear(in_features=24, out_features=24),
+            nn.BatchNorm1d(24),
+            nn.LeakyReLU(),
             nn.Linear(24, out_features=number_of_actions)
         )
 
