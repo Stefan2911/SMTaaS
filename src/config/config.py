@@ -58,9 +58,6 @@ class Config:
             return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['ranges']
         return []
 
-    def is_native_solver(self):
-        return self.data['decision']['reinforcement-learning']['solver']['native']
-
     def get_solver_instances(self):
         if self.is_ev3():
             return self.data['instances']['edge']

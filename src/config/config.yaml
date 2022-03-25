@@ -32,8 +32,6 @@ decision:
     training-smt-problem-directory-edge: src/smt/sets/training_edge
     training-smt-problem-directory-robot: src/smt/sets/training_robot
 
-    solver:
-      native: True
     common-hyper-parameters:
       gamma: 0            # discount factor used in the Bellman equation (we only value immediate rewards)
       eps-start: 1        # starting value of epsilon (epsilon = exploration rate) (for training we want always explore)

@@ -35,10 +35,7 @@ def _offload(solver_instance, smt_problem):
 
 def _solve_locally(smt_problem):
     logger.debug("solve locally")
-    if config.is_native_solver():
-        response = call_solver(smt_problem)
-    else:
-        response = post_smt_problem(smt_problem, 'http://127.0.0.1:5000/formulae')
+    response = call_solver(smt_problem)
     return response
 
 
