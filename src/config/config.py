@@ -63,13 +63,11 @@ class Config:
 
     def get_solver_instances(self):
         if self.is_ev3():
-            return self.data['decision']['reinforcement-learning']['solver']['instances']['edge']
-        return self.data['decision']['reinforcement-learning']['solver']['instances']['cloud']
+            return self.data['instances']['edge']
+        return self.data['instances']['cloud']
 
     def get_solver_instance(self, index):
-        if self.is_ev3():
-            return self.data['decision']['reinforcement-learning']['solver']['instances']['edge'][index]
-        return self.data['decision']['reinforcement-learning']['solver']['instances']['cloud'][index]
+        return self.get_solver_instances()[index]
 
     def get_action_space(self):
         return len(self.get_solver_instances()) + 1  # number of instances to offload + solve locally
@@ -103,10 +101,7 @@ class Config:
             return self.data['monitoring']['connectivity']['hosts']['cloud']
 
     def get_connectivity_checking_host(self):
-        if self.is_ev3():
-            hosts = self.data['monitoring']['connectivity']['hosts']['edge']
-        else:
-            hosts = self.data['monitoring']['connectivity']['hosts']['cloud']
+        hosts = self.get_connectivity_checking_hosts()
         random_index = random.randrange(len(hosts))
         return hosts[random_index]
 
@@ -132,12 +127,12 @@ class Config:
     def get_decision_mode(self):
         return self.data['smt']['decision-mode']
 
-    # evaluation
+    # instances
     def get_cloud_instances(self):
-        return self.data['evaluation']['cloud-instances']
+        return self.data['instances']['cloud']
 
-    def get_ded_instances(self):
-        return self.data['evaluation']['ded-instances']
+    def get_edge_instances(self):
+        return self.data['instances']['edge']
 
     def get_uplink_cost(self):
         return self.data['uplink-cost']

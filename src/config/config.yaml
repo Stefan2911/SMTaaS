@@ -10,15 +10,15 @@ ev3:
   smt:
     watch-directory: /home/robot/watch/  # in this directory the SMT problems are added
 
-evaluation:
-  cloud-instances:
+instances:
+  cloud:
     - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
     - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
     - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
     - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
-  ded-instances:
-    - http://10.0.0.1:5000/formulae
-    - http://10.0.0.3:5000/formulae
+  edge:
+    - http://10.0.0.1:5000/formulae       # RPi
+    - http://10.0.0.3:5000/formulae       # RPi
 
 decision:
   reinforcement-learning:
@@ -34,15 +34,6 @@ decision:
 
     solver:
       native: True
-      instances:
-        edge:
-          - http://10.0.0.1:5000/formulae      # RPi
-          - http://10.0.0.3:5000/formulae      # RPi
-        cloud:
-          - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
-          - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
-          - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
-          - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
     common-hyper-parameters:
       gamma: 0            # discount factor used in the Bellman equation (we only value immediate rewards)
       eps-start: 1        # starting value of epsilon (epsilon = exploration rate) (for training we want always explore)
@@ -69,14 +60,14 @@ monitoring:
   is-training-active: False
   connectivity:
     hosts:
-      edge:
-        - 10.0.0.1     # RPi
-        - 10.0.0.3     # RPi
       cloud:
         - 194.182.171.9 # Ubuntu VM at Frankfurt
         - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
         - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
         - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
+      edge:
+        - 10.0.0.1     # RPi
+        - 10.0.0.3     # RPi
     max-rtt: 450
   max-problem-complexity: 120
 

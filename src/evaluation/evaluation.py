@@ -20,7 +20,7 @@ def process_file(approach, problem_directory, filename):
     if approach == 'robot_only':
         call_solver(problem_directory + os.sep + filename)
     elif approach == 'ded_only':
-        post_smt_problem(problem_directory + os.sep + filename, random.choice(config.get_ded_instances()))
+        post_smt_problem(problem_directory + os.sep + filename, random.choice(config.get_edge_instances()))
     elif approach == 'cloud_only':
         post_smt_problem(problem_directory + os.sep + filename, random.choice(config.get_cloud_instances()))
     elif approach == 'q_learning':
