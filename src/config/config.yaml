@@ -80,3 +80,11 @@ monitoring:
         - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
     max-rtt: 450
   max-problem-complexity: 120
+
+simulation:
+  latencies:
+    - 0
+    - 100
+    - 200
+    - 300
+    - 400

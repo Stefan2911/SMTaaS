@@ -147,3 +147,7 @@ class Config:
 
     def get_invocation_cost(self):
         return self.data['invocation-cost']
+
+    # simulation
+    def get_simulation_latencies(self):
+        return self.data['simulation']['latencies']
