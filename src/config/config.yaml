@@ -2,9 +2,8 @@ logging-level: 20 # logging.DEBUG
 
 smt:
   solver-location: "/usr/bin/cvc4"
-  final-node: False # if True -> no further decision-making
-  decision-mode: q_learning
   # decision-mode: deep_q_network
+  # decision-mode: none
 
 ev3:
   in-use: False

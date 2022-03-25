@@ -129,9 +129,6 @@ class Config:
     def get_solver_location(self):
         return self.data['smt']['solver-location']
 
-    def is_final_node(self):
-        return self.data['smt']['final-node']
-
     def get_decision_mode(self):
         return self.data['smt']['decision-mode']
 
