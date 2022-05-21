@@ -53,11 +53,6 @@ class Config:
     def is_mode_active(self, mode):
         return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['active']
 
-    def get_reward_ranges(self, mode):
-        if 'ranges' in self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]:
-            return self.data['decision']['reinforcement-learning']['reward-modes'][mode.value]['ranges']
-        return []
-
     def get_solver_instances(self):
         if self.is_ev3():
             return self.data['instances']['edge']
@@ -67,6 +62,8 @@ class Config:
         return self.get_solver_instances()[index]
 
     def get_action_space(self):
+        if self.get_solver_instances() is None:
+            return 1  # solve locally
         return len(self.get_solver_instances()) + 1  # number of instances to offload + solve locally
 
     def get_common_hyper_parameters(self):
@@ -99,11 +96,10 @@ class Config:
 
     def get_connectivity_checking_host(self):
         hosts = self.get_connectivity_checking_hosts()
+        if hosts is None:
+            return -1
         random_index = random.randrange(len(hosts))
         return hosts[random_index]
-
-    def get_indicator_ranges(self, indicator):
-        return self.data['monitoring']['indicators'][indicator]
 
     def get_state_update_period(self):
         return self.data['monitoring']['update-period']
@@ -116,6 +112,9 @@ class Config:
 
     def get_max_problem_complexity(self):
         return self.data['monitoring']['max-problem-complexity']
+
+    def get_max_offload_cost(self):
+        return self.data['monitoring']['max-offload-cost']
 
     # smt
     def get_solver_location(self):
