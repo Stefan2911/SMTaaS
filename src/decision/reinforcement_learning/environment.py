@@ -11,7 +11,7 @@ from src.smt.smt_solver.native.solver import call_solver
 
 class RewardMode(Enum):
     time_aware = "time-aware"
-    traffic_aware = "traffic-aware"
+    energy_aware = "energy-aware"
 
 
 config = Config()
@@ -21,6 +21,12 @@ logger = logging.getLogger('environment')
 logger.setLevel(level=config.get_logging_level())
 
 simulation = Simulation.get_instance()
+
+MAX_TIME = 4
+MAX_ENERGY = 1
+
+LOCALLY_ENERGY_COST_FACTOR = 1.0
+OFFLOAD_ENERGY_COST_FACTOR = 1.0
 
 
 def get_rating_classes():
@@ -50,15 +56,22 @@ def _get_custom_reward(mode, difference):
 def _calculate_custom_reward_time(timestamp_before_action):
     timestamp_after_action = datetime.datetime.now()
     difference = timestamp_after_action - timestamp_before_action
-    # TODO: call _get_custom_reward, if configuration is used
-    time_reward = 4 - difference.total_seconds()
+    time_reward = MAX_TIME - difference.total_seconds()
     return time_reward
 
 
-def _calculate_custom_reward(starting_timestamp_before_action):
+def _calculate_custom_reward_energy(state, action):
+    if action == 0:
+        return MAX_ENERGY - state.problem_complexity * LOCALLY_ENERGY_COST_FACTOR
+    return MAX_ENERGY - state.offload_cost * OFFLOAD_ENERGY_COST_FACTOR
+
+
+def _calculate_custom_reward(starting_timestamp_before_action, state, action):
     reward = 0
     if config.is_mode_active(RewardMode.time_aware):
         reward += _calculate_custom_reward_time(starting_timestamp_before_action)
+    if config.is_mode_active(RewardMode.energy_aware):
+        reward += _calculate_custom_reward_energy(state, action)
     return reward
 
 
@@ -90,7 +103,7 @@ class Environment:
             timestamp_before_action = timestamp_before_action - waiting_time
             response = _offload(solver_instance, smt_problem)
 
-        return _calculate_custom_reward(timestamp_before_action), False, response
+        return _calculate_custom_reward(timestamp_before_action, self.detailed_state, action), False, response
 
     def update_state(self, smt_problem):
         self.detailed_state = get_current_state(smt_problem)
