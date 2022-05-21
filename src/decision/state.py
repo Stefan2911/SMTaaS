@@ -12,6 +12,7 @@ config = Config()
 # TODO: maybe not the most efficient solution?
 MAX_RTT = config.get_max_rtt()
 MAX_PROBLEM_COMPLEXITY = config.get_max_problem_complexity()
+MAX_OFFLOAD_COST = config.get_max_offload_cost()
 
 simulation = Simulation.get_instance()
 
@@ -44,7 +45,7 @@ def get_current_state(smt_problem):
     current_state.avg_rtt_list = list(map(lambda rtt: (rtt + simulation.get_additional_latency()) / MAX_RTT,
                                           monitor.avg_rtt_list))
     if smt_problem is not None:
-        offload_cost = _get_offload_cost(os.stat(smt_problem).st_size / 1000)  # problem size in KB
+        offload_cost = _get_offload_cost(math.ceil(os.stat(smt_problem).st_size / 1000)) / MAX_OFFLOAD_COST
         problem_complexity = get_problem_complexity(smt_problem, config.is_ev3()) / MAX_PROBLEM_COMPLEXITY
         current_state.offload_cost = offload_cost
         current_state.problem_complexity = problem_complexity
