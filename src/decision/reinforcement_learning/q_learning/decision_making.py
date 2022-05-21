@@ -62,7 +62,7 @@ def training():
 
     environment_manager.reset()
 
-    latencies = [0, 100, 200, 300, 400]
+    latencies = config.get_simulation_latencies()
     for latency in latencies:
         simulation.simulate_latency(latency)
         # TODO: number of episodes must be dividable with number of possible actions
