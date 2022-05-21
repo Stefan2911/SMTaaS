@@ -2,7 +2,7 @@ logging-level: 20 # logging.DEBUG
 
 smt:
   solver-location: "/usr/bin/cvc4"
-  # decision-mode: deep_q_network
+  decision-mode: q_learning
   # decision-mode: none
 
 ev3:
@@ -12,10 +12,11 @@ ev3:
 
 instances:
   cloud:
-    - http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
-    - http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
-    - http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
-    - http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
+    - 8.8.8.8
+    #- http://194.182.171.9:5000/formulae  # Ubuntu VM at Frankfurt
+    #- http://10.10.20.1:5000/formulae     # 8 core VM at TU Wien (128.131.57.123)
+    #- http://10.10.20.2:5000/formulae     # 4 core VM at TU Wien (128.131.57.122)
+    #- http://10.10.20.3:5000/formulae     # 2 core VM at TU Wien (128.131.57.103)
   edge:
     - http://10.0.0.1:5000/formulae       # RPi
     - http://10.0.0.3:5000/formulae       # RPi
@@ -24,12 +25,11 @@ decision:
   reinforcement-learning:
     reward-modes:
       time-aware:
-        active: True
-        ranges: # start inclusive, # end exclusive, currently dynamic mode is used
-      traffic-aware:
         active: False
+      energy-aware:
+        active: True
 
-    training-smt-problem-directory-edge: src/smt/sets/training_edge
+    training-smt-problem-directory-edge: src/smt/sets/all
     training-smt-problem-directory-robot: src/smt/sets/training_robot
 
     common-hyper-parameters:
@@ -37,8 +37,8 @@ decision:
       eps-start: 1        # starting value of epsilon (epsilon = exploration rate) (for training we want always explore)
       eps-end: 1          # ending value of epsilon (for training, we always want exploring)
       eps-decay: 0.001    # decay rate used to decay epsilon over time
-      lr: 0.001           # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
-      num-episodes: 40    # number of episodes
+      lr: 0.1             # learning rate (alpha) (learning rate for DQN is set by Adam optimizer)
+      num-episodes: 2     # number of episodes
 
     q-learning:
       q-table-location: src/decision/reinforcement_learning/q_learning/q_table.npy
@@ -51,7 +51,7 @@ decision:
       neural-network-location: src/decision/reinforcement_learning/deep_q_network/neural_network
 
 uplink-cost: 1 # costs per KB
-invocation-cost: 10 # costs per invocation
+invocation-cost: 0 # costs per invocation
 
 monitoring:
   update-period: 5 # in seconds
@@ -59,20 +59,18 @@ monitoring:
   connectivity:
     hosts:
       cloud:
-        - 194.182.171.9 # Ubuntu VM at Frankfurt
-        - 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
-        - 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
-        - 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
+        - 8.8.8.8
+        #- 194.182.171.9 # Ubuntu VM at Frankfurt
+        #- 10.10.20.1    # 8 core VM at TU Wien (128.131.57.123)
+        #- 10.10.20.2    # 4 core VM at TU Wien (128.131.57.122)
+        #- 10.10.20.3    # 2 core VM at TU Wien (128.131.57.103)
       edge:
         - 10.0.0.1     # RPi
         - 10.0.0.3     # RPi
     max-rtt: 450
-  max-problem-complexity: 120
+  max-problem-complexity: 3000 # 4829
+  max-offload-cost: 200 # 668
 
 simulation:
   latencies:
     - 0
-    - 100
-    - 200
-    - 300
-    - 400

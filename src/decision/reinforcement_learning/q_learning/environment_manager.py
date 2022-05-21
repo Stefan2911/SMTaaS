@@ -30,4 +30,5 @@ class EnvironmentManager:
 
     def __get_state_tuple(self, smt_problem):
         state = self.env.get_state(smt_problem)
-        return [state.avg_rtt_list[0], state.problem_complexity]
+        return [state.offload_cost, state.problem_complexity]
+        # return [state.avg_rtt_list[0], state.problem_complexity]

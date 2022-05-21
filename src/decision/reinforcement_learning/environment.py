@@ -2,11 +2,9 @@ import datetime
 import logging
 from enum import Enum
 
-from src.communication.client import post_smt_problem
 from src.config.config import Config
 from src.decision.state import map_detailed_state, get_current_state, get_number_of_rating_classes
 from src.simulation.simulation import Simulation
-from src.smt.smt_solver.native.solver import call_solver
 
 
 class RewardMode(Enum):
@@ -35,22 +33,14 @@ def get_rating_classes():
 
 def _offload(solver_instance, smt_problem):
     logger.debug("offload")
-    response = post_smt_problem(smt_problem, solver_instance)
-    return response
+    # response = post_smt_problem(smt_problem, solver_instance)
+    return True
 
 
 def _solve_locally(smt_problem):
     logger.debug("solve locally")
-    response = call_solver(smt_problem)
-    return response
-
-
-def _get_custom_reward(mode, difference):
-    reward_ranges = config.get_reward_ranges(mode)
-    for reward_range in reward_ranges:
-        if reward_range.get('start', float('-inf')) <= difference < reward_range.get('end', float('inf')):
-            return reward_range.get('reward', 0)
-    return 0
+    # response = call_solver(smt_problem)
+    return True
 
 
 def _calculate_custom_reward_time(timestamp_before_action):

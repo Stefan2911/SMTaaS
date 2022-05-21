@@ -19,11 +19,25 @@ simulation = Simulation.get_instance()
 
 class Rating(Enum):
     poor = 0
-    fair = 1
-    average = 2
-    good = 3
-    excellent = 4
-
+    poor1 = 1
+    poor2 = 2
+    poor3 = 3
+    fair = 4
+    fair1 = 5
+    fair2 = 6
+    fair3 = 7
+    average = 8
+    average1 = 9
+    average2 = 10
+    average3 = 11
+    good = 12
+    good1 = 13
+    good2 = 14
+    good3 = 15
+    excellent = 16
+    excellent1 = 17
+    excellent2 = 18
+    excellent3 = 19
 
 def __get_rating(value):
     if value is None:

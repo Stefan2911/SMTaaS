@@ -93,6 +93,7 @@ def process(smt_problem):
     # exploration is only done during training
     action = agent.select_action(map_state_to_index(state), q_table, always_exploit=True)
     reward, response = environment_manager.take_action(action, smt_problem)
+    logger.info('smt_problem: %s, energy: %s', smt_problem, (1 - reward))
     # TODO: Q-Table could be updated (next state does not influence)
     return response
 

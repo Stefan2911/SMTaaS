@@ -93,6 +93,7 @@ problems_ev3 = {
 
 def get_problem_complexity(smt_problem, is_ev3):
     name = os.path.basename(smt_problem)
-    if is_ev3:
-        return problems_ev3.get(name, 99)
-    return problems.get(name, 99)
+    return problems_ev3.get(name, 99)
+    # if is_ev3:
+    # return problems_ev3.get(name, 99)
+    # return problems.get(name, 99)
