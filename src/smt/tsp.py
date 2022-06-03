@@ -35,12 +35,6 @@ def calculate_costs(start, v1, v2, v3):
 
 
 def is_minimum_distance(start, destinations, minimum):
-    # start - g1 - g2 - g3 - start
-    # start - g1 - g3 - g2 - start
-    # start - g2 - g1 - g3 - start
-    # start - g2 - g3 - g1 - start
-    # start - g3 - g1 - g2 - start
-    # start - g3 - g2 - g1 - start
     for permutation in itertools.permutations([destinations[0], destinations[1], destinations[2]]):
         if calculate_costs(start, permutation[0], permutation[1], permutation[2]) <= minimum:
             return permutation
