@@ -17,19 +17,19 @@ def move(value):
     forward = 1
     if value < 0:
         forward = -1
-    motor.on_for_seconds(left_speed=30 * forward, right_speed=30 * forward, seconds=abs(value))
+    motor.on_for_seconds(left_speed=40 * forward, right_speed=40 * forward, seconds=abs(value))
 
 
 def change_direction_to_right():
     motor.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1.5)
     motor.on_for_seconds(left_speed=0, right_speed=10, seconds=3)
-    motor.on_for_seconds(left_speed=-10, right_speed=0, seconds=0.5)
+    motor.on_for_seconds(left_speed=-10, right_speed=0, seconds=0.35)
 
 
 def change_direction_to_down():
     motor.on_for_seconds(left_speed=-10, right_speed=-10, seconds=1.5)
     motor.on_for_seconds(left_speed=10, right_speed=0, seconds=3)
-    motor.on_for_seconds(left_speed=0, right_speed=-10, seconds=0.5)
+    motor.on_for_seconds(left_speed=0, right_speed=-10, seconds=0.35)
 
 
 def move_to(starting_point, destination, looking_direction):
