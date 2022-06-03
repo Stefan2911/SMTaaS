@@ -42,7 +42,7 @@ def is_minimum_distance(start, destinations, minimum):
 
 
 min_distance = 4
-max_distance = 8
+max_distance = 12
 
 
 def find_shortest_path(start, destinations):
