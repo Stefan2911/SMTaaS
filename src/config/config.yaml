@@ -25,7 +25,6 @@ decision:
     reward-modes:
       time-aware:
         active: True
-        ranges: # start inclusive, # end exclusive, currently dynamic mode is used
       traffic-aware:
         active: False
 

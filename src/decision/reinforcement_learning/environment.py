@@ -44,15 +44,6 @@ def _solve_locally(smt_problem):
     response = call_solver(smt_problem)
     return response
 
-
-def _get_custom_reward(mode, difference):
-    reward_ranges = config.get_reward_ranges(mode)
-    for reward_range in reward_ranges:
-        if reward_range.get('start', float('-inf')) <= difference < reward_range.get('end', float('inf')):
-            return reward_range.get('reward', 0)
-    return 0
-
-
 def _calculate_custom_reward_time(timestamp_before_action):
     timestamp_after_action = datetime.datetime.now()
     difference = timestamp_after_action - timestamp_before_action
