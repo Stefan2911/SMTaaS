@@ -200,7 +200,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 
 1. Configure instances `evaluation.ded-instances`
 2. RaspberryPi's:
-   * Set `smt.final-node` to `True`
+   * Set `smt.decision-mode` to `None`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 3.
    1. Goal time: Start on
@@ -222,7 +222,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 1. Configure model
 3. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
 5. RaspberryPi's:
-   * Set `smt.final-node` to `False`
+   * Set `smt.decision-mode` to `None`
    * Set `smt.decision-mode` to `q-learning`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 6. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
@@ -237,7 +237,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 1. Define reward model `decision.reinforcement-learning.reward-modes`
 2. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
 3. RaspberryPi's:
-   * Set `smt.final-node` to `False`
+   * Set `smt.decision-mode` to `None`
    * Set `smt.decision-mode` to `deep_q_network`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
 4. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
