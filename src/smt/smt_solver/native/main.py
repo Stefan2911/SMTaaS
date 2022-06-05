@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import tempfile
 
 from flask import Flask, request
@@ -13,9 +14,13 @@ config = Config()
 
 @app.route("/formulae", methods=["POST"])
 def solve_formula():
-    with tempfile.NamedTemporaryFile() as tf:
-        tf.write(request.files['formula_file'].read())
-        return process(tf.name, config.get_decision_mode())
+    with tempfile.NamedTemporaryFile(delete=False) as tf:
+        try:
+            tf.write(request.files['formula_file'].read())
+            tf.close()
+            return process(tf.name, config.get_decision_mode())
+        finally:
+            os.remove(tf.name)
 
 
 if __name__ == "__main__":
