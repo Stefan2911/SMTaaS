@@ -1,6 +1,5 @@
 import os
 import re
-import tempfile
 
 from src.decision.decision_mode import DecisionMode
 from src.decision.processing_ev3 import process
@@ -63,19 +62,17 @@ graph_simple = {
 
 
 def solve_hamiltonian(graph_simple):
-    temp = tempfile.TemporaryFile(mode="w+t", delete=False)
+    temp = open("temp.smt2", "w+t")
     try:
         fill_temporary_file(graph_simple, temp)
         temp.close()
-        # result = subprocess.run(["C:\\Users\\Acer\\Desktop\\cvc4.exe", temp.name, '--lang', 'smtlib'], check=True,
-        #                         stdout=subprocess.PIPE, universal_newlines=True).stdout
         result = process(temp.name, decision_mode=DecisionMode.q_learning)
         nodes_as_strings = re.findall("v\d+", result)
         order_as_strings = re.findall(" \d+", result)
         nodes = [0] * len(nodes_as_strings)
         for i in range(len(order_as_strings)):
             nodes[int(order_as_strings[i])] = int(nodes_as_strings[i][1:])
-        print(nodes)
+        return nodes
     finally:
         os.remove(temp.name)
 
