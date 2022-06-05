@@ -61,4 +61,4 @@ def move_with_stops(stops):
 
 
 # an example
-move_with_stops([0, 3, 6, 7, 4, 5, 2, 1])
+# move_with_stops([0, 3, 6, 7, 4, 5, 2, 1])

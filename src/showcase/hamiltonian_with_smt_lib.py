@@ -2,11 +2,11 @@ import os
 import re
 import tempfile
 
-# Input a graph as an adjacency list, e.g. {0:[1,2], 1:[2], 2:[1,0]}.
-# from src.decision.processing_ev3 import process
+from src.decision.decision_mode import DecisionMode
 from src.decision.processing_ev3 import process
 
 
+# Input a graph as an adjacency list, e.g. {0:[1,2], 1:[2], 2:[1,0]}.
 def fill_temporary_file(graph, temp_file):
     temp_file.writelines("(set-option :produce-models true)\n")
     temp_file.writelines("(set-logic QF_LIA)\n")
@@ -69,7 +69,7 @@ def solve_hamiltonian(graph_simple):
         temp.close()
         # result = subprocess.run(["C:\\Users\\Acer\\Desktop\\cvc4.exe", temp.name, '--lang', 'smtlib'], check=True,
         #                         stdout=subprocess.PIPE, universal_newlines=True).stdout
-        result = process(temp.name)
+        result = process(temp.name, decision_mode=DecisionMode.q_learning)
         nodes_as_strings = re.findall("v\d+", result)
         order_as_strings = re.findall(" \d+", result)
         nodes = [0] * len(nodes_as_strings)
