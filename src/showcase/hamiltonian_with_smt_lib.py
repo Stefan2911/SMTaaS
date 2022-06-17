@@ -1,7 +1,6 @@
 import os
 import re
 
-from src.decision.decision_mode import DecisionMode
 from src.decision.processing_ev3 import process
 
 
@@ -26,47 +25,12 @@ def fill_temporary_file(graph, temp_file):
     temp_file.writelines("(get-model)\n")
 
 
-graph = {
-    0: [1, 4, 5],
-    1: [0, 7, 2],
-    2: [1, 9, 3],
-    3: [2, 11, 4],
-    4: [3, 13, 0],
-    5: [0, 14, 6],
-    6: [5, 16, 7],
-    7: [6, 8, 1],
-    8: [7, 17, 9],
-    9: [8, 10, 2],
-    10: [9, 18, 11],
-    11: [10, 3, 12],
-    12: [11, 19, 13],
-    13: [12, 14, 4],
-    14: [13, 15, 5],
-    15: [14, 16, 19],
-    16: [6, 17, 15],
-    17: [16, 8, 18],
-    18: [10, 19, 17],
-    19: [18, 12, 15]
-}
-
-graph_simple = {
-    0: [1, 3],
-    1: [0, 2, 4],
-    2: [1, 5],
-    3: [0, 4, 6],
-    4: [1, 3, 5, 7],
-    5: [2, 4],
-    6: [3, 7],
-    7: [4, 6]
-}
-
-
-def solve_hamiltonian(graph_simple):
+def solve_hamiltonian(graph, decision_mode):
     temp = open("temp.smt2", "w+t")
     try:
-        fill_temporary_file(graph_simple, temp)
+        fill_temporary_file(graph, temp)
         temp.close()
-        result = process(temp.name, decision_mode=DecisionMode.q_learning)
+        result = process(temp.name, decision_mode)
         nodes_as_strings = re.findall("v\d+", result)
         order_as_strings = re.findall(" \d+", result)
         nodes = [0] * len(nodes_as_strings)
@@ -75,5 +39,3 @@ def solve_hamiltonian(graph_simple):
         return nodes
     finally:
         os.remove(temp.name)
-
-# solve_hamiltonian(graph_simple)
