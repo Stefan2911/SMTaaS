@@ -5,6 +5,7 @@ import time
 
 from src.communication.client import post_smt_problem
 from src.config.config import Config
+from src.decision.decision_mode import DecisionMode
 from src.decision.processing_ev3 import process
 from src.evaluation.evaluation_common import print_results, get_setup
 from src.smt.smt_solver.native.solver import call_solver
@@ -24,7 +25,7 @@ def process_file(approach, problem_directory, filename):
     elif approach == 'cloud_only':
         post_smt_problem(problem_directory + os.sep + filename, random.choice(config.get_cloud_instances()))
     elif approach == 'q_learning':
-        process(problem_directory + os.sep + filename)
+        process(problem_directory + os.sep + filename, decision_mode=DecisionMode.q_learning)
 
 
 def evaluate():
