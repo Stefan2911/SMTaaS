@@ -106,13 +106,6 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 
 # Cloud
 
-### VM's
-
-* 4 core, 8 GB RAM VM at Frankfurt (194.182.171.9)
-* 2 core, 8 GB RAM VM at TU Wien (128.131.57.103)
-* 4 core, 8 GB RAM VM at TU Wien (128.131.57.122)
-* 8 core, 8 GB RAM VM at TU Wien (128.131.57.123)
-
 ### Setup
 
 #### Ubuntu based VM:
@@ -120,8 +113,8 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 1. Connect via ssh
 2. `sudo apt-get update`
 3. `sudo apt install docker.io`
-4. `sudo docker pull stefanh96/master-thesis:latest`
-5. `sudo docker run -p 5000:5000 stefanh96/master-thesis:latest`
+4. `sudo docker pull <imagename>`
+5. `sudo docker run -p 5000:5000 <imagename>`
 6. Open necessary ports to make service reachable remotely
 
 #### CentOS based VM:
@@ -130,11 +123,11 @@ of RaspbianOS is 3.9. Therefore we need to install Python3.7.
 2. `sudo yum update`
 3. `sudo yum install docker`
 4. (Maybe necessary: `systemctl start docker`)
-5. `sudo docker pull stefanh96/master-thesis:latest` and select docker.io repository
-6. `sudo docker run -p 5000:5000 stefanh96/master-thesis:latest`
+5. `sudo docker pull <imagename>` and select docker.io repository
+6. `sudo docker run -p 5000:5000 <imagename>`
 7. `sudo systemctl disable --now firewalld.service`
 
-### TU Wien Cloud VM's
+### VM's
 
 1. Install ppp on RaspberryPi's/EV3: `sudo apt-get install ppp`
 2. `sudo pppd updetach noauth silent nodeflate pty "/usr/bin/ssh root@128.131.57.123 /usr/sbin/pppd nodetach notty noauth" ipparam vpn 10.10.10.1:10.10.20.1`
@@ -210,7 +203,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 ### Cloud only
 
 1. Configure instances `evaluation.cloud-instances`
-2. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
+2. Start on Cloud-VMs: `sudo docker run <imagename>`
 3.
    1. Goal time: Start on
       robot `python3 -m src.evaluation.evaluation time <set repetition> cloud_only <problem-directories>`
@@ -225,7 +218,7 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
    * Set `smt.decision-mode` to `None`
    * Set `smt.decision-mode` to `q-learning`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
-6. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
+6. Start on Cloud-VMs: `sudo docker run <imagename>`
 7.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation time <set repetition> q_learning <problem-directories>`
@@ -235,12 +228,12 @@ Use scripts in `sm/scripts`. You need to copy public key to not have to enter th
 ### Q-Learning (EV3) & DQN (RaspberryPis)
 
 1. Define reward model `decision.reinforcement-learning.reward-modes`
-2. Set `decision.reinforcement-learning.solver.instances` on RaspberryPis and EV3
+2. Set `decision.reinforcement-learning.solver.insftances` on RaspberryPis and EV3
 3. RaspberryPi's:
    * Set `smt.decision-mode` to `None`
    * Set `smt.decision-mode` to `deep_q_network`
    * Start: `python3.7 -m src.smt.smt_solver.native.main`
-4. Start on Cloud-VMs: `sudo docker run stefanh96/master-thesis:latest`
+4. Start on Cloud-VMs: `sudo docker run <imagename>`
 5.
    1. Goal time: Start on
       robot: `python3 -m src.evaluation.evaluation time <set repetition> q_learning <problem-directories>`
@@ -307,7 +300,7 @@ Or call created script: `./change_latency.sh <latency>ms`
 
 #### Cloud
 
-Same as for RaspberryPi but use `eth0` as device for external VM and `ens3` for TU VM's Additional steps for TU VM's:
+Same as for RaspberryPi but use `eth0` as device for external VM and `ens3` for VM's Additional steps for VM's:
 
 1. `sudo yum install iproute-tc`
 2. `sudo yum install -y kernel-modules-extra` (not that easy, you need to download correct rpm file for used kernel
